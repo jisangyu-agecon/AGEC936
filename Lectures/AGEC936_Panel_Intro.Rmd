@@ -313,10 +313,13 @@ reg d.y d.d, nocon
 - FE/FD is inconsistent with $N \rightarrow \infty$ with fixed $T$
 
 - Possible solution: Panel GMM with previous outcomes as instruments [@arellano1991some]. The moment conditions are 
-    $$
+  $$
   \begin{align}
   E(y_{is}\Delta \varepsilon_{it})=0\;\;\text{for}\;\;s\leq t-2
   \end{align}
   $$
-  
+
+```{stata fourth, collectcode=TRUE}
+*xtabond...
+```
 # References
