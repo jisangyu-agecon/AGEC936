@@ -8,7 +8,6 @@ output:
    font_adjustment: -1
    toc: false
    footer: "AGEC 936 - Jisang Yu"
-   css: "/Users/jisangyu/AGEC936/Lectures/styles.css"
 bibliography: references.bib
 ---
 ```{r setup, include=FALSE}
