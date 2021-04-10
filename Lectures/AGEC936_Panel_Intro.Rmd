@@ -320,8 +320,4 @@ reg d.y d.d, nocon
   \end{align}
   $$
 
-```{stata fourth, collectcode=TRUE}
-*xtabond...
-```
-
 # References
