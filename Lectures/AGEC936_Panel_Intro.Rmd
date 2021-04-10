@@ -6,8 +6,9 @@ date: "4/12/2021"
 output:
  slidy_presentation:
    font_adjustment: -1
-   mouse_click_enabled: false
+   toc: false
    footer: "AGEC 936 - Jisang Yu"
+   css: "/Users/jisangyu/AGEC936/Lectures/styles.css"
 bibliography: references.bib
 ---
 ```{r setup, include=FALSE}
@@ -319,5 +320,49 @@ reg d.y d.d, nocon
   E(y_{is}\Delta \varepsilon_{it})=0\;\;\text{for}\;\;s\leq t-2
   \end{align}
   $$
+
+# Extending the simple simulation
+
+```{stata dynamic1, collectcode=TRUE, results="hide"}
+clear all
+set more off
+set obs 250
+
+*Generate panel data
+set seed 1234
+gen id=_n
+gen x=runiform(1,10)
+expand 4
+bys id: gen t=_n
+
+*DGP (t<3)
+gen v=0.5*rnormal()
+gen d=0.75*x+v if t<3
+gen e=rnormal()
+gen y=0.5+0.2*d+0.5*x+e if t<3
+
+*Panel set up
+xtset id t
+
+*Past treatment and outcomes affect the current treatment (DGP for t>2)
+forval i=3/4{
+replace d=0.25*l.y+0.15*l2.y+0.5*l.d+0.75*x+v if t==`i'
+replace y=0.5+0.2*d+0.5*x+e if t==`i'
+}
+```
+
+# Violation of the strict exogeneity (Feedback)
+
+```{stata dynamic2, collectcode=TRUE}
+*FE regressions
+xtreg y d, fe
+
+xtreg y d if t>2, fe
+```
+
+```{stata dynamic3, collectcode=TRUE}
+*Arellano-Bond regression
+xtabond y d, lag(1)
+```
 
 # References

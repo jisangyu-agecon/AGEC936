@@ -507,6 +507,7 @@ list-style-type: none;
   });
 })()
 </script>
+  <link href="data:text/css;charset=utf-8,pre%20code%2C%20pre%2C%20code%20%7B%0Awhite%2Dspace%3A%20pre%20%21important%3B%0Aoverflow%2Dx%3A%20scroll%20%21important%3B%0Aword%2Dbreak%3A%20keep%2Dall%20%21important%3B%0Aword%2Dwrap%3A%20initial%20%21important%3B%0A%7D" rel="stylesheet" type="text/css" media="screen, projection, print" />
 </head>
 <body>
 <div class="slide titlepage">
@@ -879,6 +880,114 @@ E(y_{is}\Delta \varepsilon_{it})=0\;\;\text{for}\;\;s\leq t-2
 \end{align}
 \]</span></p></li>
 </ul>
+</div>
+<div id="extending-the-simple-simulation" class="slide section level1">
+<h1>Extending the simple simulation</h1>
+<div class="sourceCode" id="cb8"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="kw">set</span> <span class="kw">more</span> <span class="kw">off</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="kw">set</span> <span class="kw">obs</span> 250</span>
+<span id="cb8-4"><a href="#cb8-4"></a></span>
+<span id="cb8-5"><a href="#cb8-5"></a>*Generate panel <span class="kw">data</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="kw">set</span> <span class="dv">seed</span> 1234</span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="kw">gen</span> id=<span class="dt">_n</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="kw">gen</span> x=runiform(1,10)</span>
+<span id="cb8-9"><a href="#cb8-9"></a>expand 4</span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="kw">bys</span> id: <span class="kw">gen</span> t=<span class="dt">_n</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a></span>
+<span id="cb8-12"><a href="#cb8-12"></a>*DGP (t&lt;3)</span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="kw">gen</span> v=0.5*rnormal()</span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="kw">gen</span> <span class="kw">d</span>=0.75*x+v <span class="kw">if</span> t&lt;3</span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="kw">gen</span> <span class="fu">e</span>=rnormal()</span>
+<span id="cb8-16"><a href="#cb8-16"></a><span class="kw">gen</span> <span class="fu">y</span>=0.5+0.2*<span class="kw">d</span>+0.5*x+<span class="fu">e</span> <span class="kw">if</span> t&lt;3</span>
+<span id="cb8-17"><a href="#cb8-17"></a></span>
+<span id="cb8-18"><a href="#cb8-18"></a>*Panel <span class="kw">set</span> up</span>
+<span id="cb8-19"><a href="#cb8-19"></a>xtset id t</span>
+<span id="cb8-20"><a href="#cb8-20"></a></span>
+<span id="cb8-21"><a href="#cb8-21"></a>*Past treatment and outcomes affect the current treatment (DGP <span class="kw">for</span> t&gt;2)</span>
+<span id="cb8-22"><a href="#cb8-22"></a>forval i=3/4{</span>
+<span id="cb8-23"><a href="#cb8-23"></a><span class="kw">replace</span> <span class="kw">d</span>=0.25*<span class="ot">l</span>.<span class="fu">y</span>+0.15*l2.<span class="fu">y</span>+0.5*<span class="ot">l</span>.<span class="kw">d</span>+0.75*x+v <span class="kw">if</span> t==<span class="ot">`i&#39;</span></span>
+<span id="cb8-24"><a href="#cb8-24"></a><span class="kw">replace</span> <span class="fu">y</span>=0.5+0.2*<span class="kw">d</span>+0.5*x+<span class="fu">e</span> <span class="kw">if</span> t==<span class="ot">`i&#39;</span></span>
+<span id="cb8-25"><a href="#cb8-25"></a>}</span></code></pre></div>
+</div>
+<div id="violation-of-the-strict-exogeneity-feedback" class="slide section level1">
+<h1>Violation of the strict exogeneity (Feedback)</h1>
+<div class="sourceCode" id="cb9"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb9-1"><a href="#cb9-1"></a>*FE regressions</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="kw">xtreg</span> <span class="fu">y</span> <span class="kw">d</span>, <span class="kw">fe</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="kw">xtreg</span> <span class="fu">y</span> <span class="kw">d</span> <span class="kw">if</span> t&gt;2, <span class="kw">fe</span></span></code></pre></div>
+<pre><code>Fixed-effects (within) regression               Number of obs     =      1,000
+Group variable: id                              Number of groups  =        250
+
+R-sq:                                           Obs per group:
+     within  = 0.2623                                         min =          4
+     between = 0.9396                                         avg =        4.0
+     overall = 0.6420                                         max =          4
+
+                                                F(1,749)          =     266.30
+corr(u_i, Xb)  = 0.7055                         Prob &gt; F          =     0.0000
+
+------------------------------------------------------------------------------
+           y |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           d |   .1794747    .010998    16.32   0.000      .157884    .2010653
+       _cons |   3.347767   .0768799    43.55   0.000     3.196841    3.498693
+-------------+----------------------------------------------------------------
+     sigma_u |  1.4603845
+     sigma_e |  .94979916
+         rho |  .70274609   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(249, 749) = 4.75                    Prob &gt; F = 0.0000
+
+
+Fixed-effects (within) regression               Number of obs     =        500
+Group variable: id                              Number of groups  =        250
+
+R-sq:                                           Obs per group:
+     within  = 0.0444                                         min =          2
+     between = 0.9178                                         avg =        2.0
+     overall = 0.7997                                         max =          2
+
+                                                F(1,249)          =      11.58
+corr(u_i, Xb)  = 0.8928                         Prob &gt; F          =     0.0008
+
+------------------------------------------------------------------------------
+           y |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           d |   .1352647   .0397554     3.40   0.001      .056965    .2135644
+       _cons |   3.778906   .3519867    10.74   0.000     3.085655    4.472156
+-------------+----------------------------------------------------------------
+     sigma_u |   1.648421
+     sigma_e |  1.0096246
+         rho |  .72720318   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(249, 249) = 1.08                    Prob &gt; F = 0.2670</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb11-1"><a href="#cb11-1"></a>*Arellano-Bond regression</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="kw">xtabond</span> <span class="fu">y</span> <span class="kw">d</span>, lag(1)</span></code></pre></div>
+<pre><code>Arellano-Bond dynamic panel-data estimation     Number of obs     =        500
+Group variable: id                              Number of groups  =        250
+Time variable: t
+                                                Obs per group:
+                                                              min =          2
+                                                              avg =          2
+                                                              max =          2
+
+Number of instruments =      5                  Wald chi2(2)      =     215.51
+                                                Prob &gt; chi2       =     0.0000
+One-step results
+------------------------------------------------------------------------------
+           y |      Coef.   Std. Err.      z    P&gt;|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           y |
+         L1. |  -.1793292   .0686562    -2.61   0.009    -.3138928   -.0447656
+             |
+           d |   .1982623   .0139796    14.18   0.000     .1708628    .2256618
+       _cons |   3.979179   .2695213    14.76   0.000     3.450927    4.507431
+------------------------------------------------------------------------------
+Instruments for differenced equation
+        GMM-type: L(2/.).y
+        Standard: D.d
+Instruments for level equation
+        Standard: _cons</code></pre>
 </div>
 <div id="references" class="slide section level1 unnumbered">
 <h1>References</h1>
