@@ -6,6 +6,7 @@ date: "4/12/2021"
 output:
  slidy_presentation:
    font_adjustment: -1
+   mouse_click_enabled: false
    footer: "AGEC 936 - Jisang Yu"
 bibliography: references.bib
 ---
@@ -322,4 +323,5 @@ reg d.y d.d, nocon
 ```{stata fourth, collectcode=TRUE}
 *xtabond...
 ```
+
 # References
