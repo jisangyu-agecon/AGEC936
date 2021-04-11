@@ -364,4 +364,14 @@ xtreg y d if t>2, fe
 xtabond y d, lag(1)
 ```
 
+# Other empirical issues in Panel analyses (which we will not cover)
+
+* Unbalanced panel/attrition
+
+* Nonlinear models: Incidental problem with MLE
+
+* "Long" panel: panel unit-root/cointegration
+
+* Standard errors
+
 # References
