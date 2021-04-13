@@ -219,7 +219,7 @@ Note that equation (3) is the **within** average of equation (1) (i.e. average o
 - **First Difference (FD)** estimator:
 $$
 \begin{align}
-y_{it}-y_{it-1}=\rho (d_{it}-d_{it})+ (u_{it}-u_{it-1})
+y_{it}-y_{it-1}=\rho (d_{it}-d_{it-1})+ (u_{it}-u_{it-1})
 \end{align}
 $$
   + With $T=2$, LSDV, FE, and FD are identical.
