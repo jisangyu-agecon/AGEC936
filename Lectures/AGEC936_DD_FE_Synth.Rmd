@@ -1,0 +1,114 @@
+---
+title: "AGEC 936 - Module 4"
+subtitle: "Difference-in-Differences <br> Two-way Fixed Effects <br> Synthetic Control"
+author: "Jisang Yu"
+date: "4/19/2021"
+output:
+ slidy_presentation:
+   font_adjustment: -1
+   toc: false
+   footer: "AGEC 936 - Jisang Yu"
+bibliography: references.bib
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Ideal research design 
+
+# Difference-in-differences (DinD): Potential outcome representation
+
+# DinD and two-way fixed effects
+
+# A simple example on DinD vs TWFE
+
+```{r simple, collectcode=TRUE}
+# set seed
+set.seed(11123)
+
+# 100 units
+N<-500
+unit<-1:500
+
+# Define treatment effect
+tau<-4
+
+# Treatment groups
+d <- c(rep(0, N/2), rep(1, N/2))
+
+# DGP
+X <- d*0.5+rnorm(N)
+# Pre
+Y_0 <- 5+0.2*X+0.3*rnorm(N)
+# Post
+Y_1 <- 5+0.2*X+tau*d+0.3*rnorm(N)
+
+# DinD
+(mean(Y_1[d == 1]) - mean(Y_0[d == 1])) - (mean(Y_1[d == 0]) - mean(Y_0[d == 0]))
+```
+
+```{r simple2, collectcode=TRUE}
+# Two-way Fixed Effects
+# Data prep
+dind_data <- data.frame("Y"=c(Y_0, Y_1),
+                        "Treat"=c(rep(0,N), d),
+                        "Unit"=c(unit, unit),
+                        "Time"=c(rep(1,N), rep(2,N)))
+
+# Two-way FE regression
+
+TWFE <- lm(Y ~ Treat + Time + as.factor(Unit), data = dind_data)
+coef(TWFE)[c("Treat")]
+```
+
+# Violation of parellel-trend assumption
+
+```{r simple_nonparellel}
+# set seed
+set.seed(11123)
+
+# 100 units
+N<-500
+unit<-1:500
+
+# Define treatment effect
+tau<-4
+
+# Treatment groups
+d <- c(rep(0, N/2), rep(1, N/2))
+
+# Adding the differential trend: 0.5*(t+1)*d
+# DGP
+X <- d*0.5+rnorm(N)
+# Pre
+Y_0 <- 5+0.2*X+0.5*d+0.3*rnorm(N)
+# Post
+Y_1 <- 5+0.2*X+tau*d+d+0.3*rnorm(N)
+
+# DinD
+(mean(Y_1[d == 1]) - mean(Y_0[d == 1])) - (mean(Y_1[d == 0]) - mean(Y_0[d == 0]))
+
+# Two-way Fixed Effects
+# Data prep
+dind_data <- data.frame("Y"=c(Y_0, Y_1),
+                        "Treat"=c(rep(0,N), d),
+                        "Unit"=c(unit, unit),
+                        "Time"=c(rep(1,N), rep(2,N)))
+
+# Two-way FE regression
+
+TWFE <- lm(Y ~ Treat + Time + as.factor(Unit), data = dind_data)
+coef(TWFE)[c("Treat")]
+```
+
+
+# What if we have "$T>2$"?
+
+# Recent discussion on DinD/Two-way FEs
+
+# Few treated and many controls
+
+# Synthetic control methods
+
+# References
+
