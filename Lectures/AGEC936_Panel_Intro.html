@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <meta name="author" content="Jisang Yu" />
+  <meta name="author" content="Jisang Yu   Kansas State University" />
   <meta name="copyright" content="AGEC 936 - Jisang Yu" />
   <meta name="font-size-adjustment" content="-1" />
   <title>AGEC 936 - Module 4</title>
@@ -513,7 +513,7 @@ list-style-type: none;
   <h1 class="title">AGEC 936 - Module 4</h1>
   <h1 class="subtitle">Introduction of Panel Data Analysis</h1>
   <p class="author">
-Jisang Yu
+Jisang Yu <br> Kansas State University
   </p>
   <p class="date">4/12/2021</p>
 </div>
@@ -711,27 +711,18 @@ y_{it}-\bar{y}_{i}=\rho (d_{it}-\bar{d}_{i})+ u_{it} \tag{2}
 \end{align}
 \]</span> where <span class="math display">\[
 \begin{align}
-\bar{y}_{i}=\alpha+\rho\bar{d}_{i}+v_i+ u_{it}. \tag{3}
+\bar{y}_{i}=\alpha+\rho\bar{d}_{i}+v_i+ \bar{u}_{i}. \tag{3}
 \end{align}
-\]</span> Note that equation (3) is the <strong>within</strong> average of equation (1) (i.e. average over <span class="math inline">\(t\)</span> within <span class="math inline">\(i\)</span>) and equation (2) is equation (1) minus equation (3).</p></li>
+\]</span> with <span class="math inline">\(\bar{x}_{i}=\frac{1}{T}\sum_t x_{i}\)</span>. Note that equation (3) is the <strong>within</strong> average of equation (1) (i.e. average over <span class="math inline">\(t\)</span> within <span class="math inline">\(i\)</span>) and equation (2) is equation (1) minus equation (3).</p></li>
 <li><p><strong>LSDV</strong> vs <strong>FE</strong></p>
 <ul>
 <li>Two estimators are <strong>numerically identical</strong>.</li>
 <li>LSDV can be computationally expensive.</li>
 </ul></li>
-<li><p><strong>First Difference (FD)</strong> estimator: <span class="math display">\[
-\begin{align}
-y_{it}-y_{it-1}=\rho (d_{it}-d_{it-1})+ (u_{it}-u_{it-1})
-\end{align}
-\]</span></p>
-<ul>
-<li>With <span class="math inline">\(T=2\)</span>, LSDV, FE, and FD are identical.</li>
-<li>With <span class="math inline">\(T&gt;2\)</span>, LSDV and FE are in general more efficient.</li>
-</ul></li>
 </ul>
 </div>
-<div id="identifying-assumptions-and-some-asymptotics" class="slide section level1">
-<h1>Identifying assumptions and some asymptotics</h1>
+<div id="felsdv-identifying-assumptions-and-some-asymptotics" class="slide section level1">
+<h1>FE/LSDV: Identifying assumptions and some asymptotics</h1>
 <p><span class="math display">\[
 \begin{align}
 y_{it}=\alpha+\rho d_{it}+v_i + u_{it}
@@ -740,7 +731,7 @@ y_{it}=\alpha+\rho d_{it}+v_i + u_{it}
 <ul>
 <li>Identifying assumptions
 <ol style="list-style-type: decimal">
-<li>Conditional strict exogeneity: <span class="math inline">\(E(u_{it}|d_{i1}, d_{2t},...,d_{iT},x_i)=0\)</span></li>
+<li>Strict exogeneity: <span class="math inline">\(E(u_{it}|d_{i1}, d_{i2},...,d_{iT})=0\)</span></li>
 <li>The regressor, <span class="math inline">\(d_{it}\)</span>, needs to vary within each cross-sectional unit over time.</li>
 </ol></li>
 <li>Unbiasedness and asymptotics
@@ -751,8 +742,21 @@ y_{it}=\alpha+\rho d_{it}+v_i + u_{it}
 </ul></li>
 </ul>
 </div>
-<div id="fe-lsdv-and-fd" class="slide section level1">
-<h1>FE, LSDV, and FD</h1>
+<div id="a-couple-of-notes-on-first-difference-fd-estimator" class="slide section level1">
+<h1>A couple of notes on First Difference (FD) estimator</h1>
+<p><span class="math display">\[
+\begin{align}
+y_{it}-y_{it-1}=\rho (d_{it}-d_{it-1})+ (u_{it}-u_{it-1})
+\end{align}
+\]</span></p>
+<ul>
+<li>With <span class="math inline">\(T=2\)</span>, LSDV, FE, and FD are identical.</li>
+<li>With <span class="math inline">\(T&gt;2\)</span>, LSDV and FE are in general more efficient.</li>
+<li>Weaker identifying assumption than FE/LSDV: <span class="math inline">\(E(u_{it}|d_{it}, d_{it-1})=0\)</span></li>
+</ul>
+</div>
+<div id="fe-lsdv-and-fd-an-example" class="slide section level1">
+<h1>FE, LSDV, and FD: An example</h1>
 <div class="sourceCode" id="cb6"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb6-1"><a href="#cb6-1"></a>*Declare the <span class="kw">data</span> <span class="kw">as</span> panel</span>
 <span id="cb6-2"><a href="#cb6-2"></a>xtset id t</span>
 <span id="cb6-3"><a href="#cb6-3"></a></span>
@@ -833,17 +837,22 @@ F test of absorbed indicators: F(499, 499) = 51.864           Prob &gt; F = 0.00
 \begin{align}
 y_{it}=\alpha+\rho d_{it}+v_i+\eta_{it}+ u_{it}\;\;\text{and}\;\;Cov(d_{it},\eta_{it}) \neq 0
 \end{align}
-\]</span> <em>It violates the (conditional) strict exogeneity.</em> <em>Possible solutions: time fixed effects (multiway fixed effects – we will discuss this more later), time trends, unit- or group-specific time trends</em></p></li>
+\]</span></p></li>
+<li><p><em>It violates the strict exogeneity.</em></p></li>
+<li><p><em>Possible solutions?: time fixed effects (multiway fixed effects – we will discuss this more later), time trends, unit- or group-specific time trends</em></p></li>
 <li><p>Time-invariant regressors (violating the identifying assumption 2): <span class="math display">\[
 \begin{align}
 y_{it}=\alpha+\rho d_{i}+v_i+ u_{it}
 \end{align}
-\]</span> <em>We cannot distinguish the effect of <span class="math inline">\(d_i\)</span> from <span class="math inline">\(v_i\)</span>.</em></p></li>
+\]</span></p></li>
+<li><p><em>We cannot distinguish the effect of <span class="math inline">\(d_i\)</span> from <span class="math inline">\(v_i\)</span>.</em></p></li>
+<li><p><em>Possible solution?: Correlated Random Effects (but different identifying assumption)</em></p></li>
 <li><p>Violating the linearity assumption: Instead of equation (1), we can have <span class="math display">\[
 \begin{align}
 y_{it}=g(d_{it},v_i,u_{it})
 \end{align}
-\]</span> <em>Alternative approach: Panel matching estimator <span class="citation">(Imai and Kim 2019)</span></em></p></li>
+\]</span></p></li>
+<li><p><em>Alternative approach: Panel matching estimator <span class="citation">(Imai and Kim 2019)</span></em></p></li>
 </ul></li>
 </ul>
 </div>

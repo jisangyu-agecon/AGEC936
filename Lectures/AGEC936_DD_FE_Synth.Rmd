@@ -1,7 +1,7 @@
 ---
 title: "AGEC 936 - Module 4"
 subtitle: "Difference-in-Differences <br> Two-way Fixed Effects <br> Synthetic Control"
-author: "Jisang Yu"
+author: "Jisang Yu <br> Kansas State University"
 date: "4/19/2021"
 output:
  slidy_presentation:

@@ -1,7 +1,7 @@
 ---
 title: "AGEC 936 - Module 4"
 subtitle: "Introduction of Panel Data Analysis"
-author: "Jisang Yu"
+author: "Jisang Yu <br> Kansas State University"
 date: "4/12/2021"
 output:
  slidy_presentation:
@@ -207,25 +207,16 @@ $$
 where
 $$
 \begin{align}
-\bar{y}_{i}=\alpha+\rho\bar{d}_{i}+v_i+ u_{it}. \tag{3}
+\bar{y}_{i}=\alpha+\rho\bar{d}_{i}+v_i+ \bar{u}_{i}. \tag{3}
 \end{align}
 $$
-Note that equation (3) is the **within** average of equation (1) (i.e. average over $t$ within $i$) and equation (2) is equation (1) minus equation (3).
+with $\bar{x}_{i}=\frac{1}{T}\sum_t x_{i}$. Note that equation (3) is the **within** average of equation (1) (i.e. average over $t$ within $i$) and equation (2) is equation (1) minus equation (3).
 
 - **LSDV** vs **FE**
   + Two estimators are **numerically identical**.
   + LSDV can be computationally expensive.
   
-- **First Difference (FD)** estimator:
-$$
-\begin{align}
-y_{it}-y_{it-1}=\rho (d_{it}-d_{it-1})+ (u_{it}-u_{it-1})
-\end{align}
-$$
-  + With $T=2$, LSDV, FE, and FD are identical.
-  + With $T>2$, LSDV and FE are in general more efficient.
-  
-# Identifying assumptions and some asymptotics
+# FE/LSDV: Identifying assumptions and some asymptotics
 $$
 \begin{align}
 y_{it}=\alpha+\rho d_{it}+v_i + u_{it}
@@ -233,7 +224,7 @@ y_{it}=\alpha+\rho d_{it}+v_i + u_{it}
 $$
 
 - Identifying assumptions
-  1. Conditional strict exogeneity: $E(u_{it}|d_{i1}, d_{2t},...,d_{iT},x_i)=0$
+  1. Strict exogeneity: $E(u_{it}|d_{i1}, d_{i2},...,d_{iT})=0$
   2. The regressor, $d_{it}$, needs to vary within each cross-sectional unit over time.
 
 - Unbiasedness and asymptotics
@@ -241,7 +232,19 @@ $$
   + With $N \rightarrow \infty$, $\hat{\rho}$ is **consistent**.
   + With $N \rightarrow \infty$, $\hat{c}_i$ is **inconsistent** (we need $T \rightarrow \infty$). Why? The number of parameters increases as $N \rightarrow \infty$.
 
-# FE, LSDV, and FD
+# A couple of notes on First Difference (FD) estimator
+$$
+\begin{align}
+y_{it}-y_{it-1}=\rho (d_{it}-d_{it-1})+ (u_{it}-u_{it-1})
+\end{align}
+$$
+
+* With $T=2$, LSDV, FE, and FD are identical.
+* With $T>2$, LSDV and FE are in general more efficient.
+* Weaker identifying assumption than FE/LSDV: $E(u_{it}|d_{it}, d_{it-1})=0$
+  
+
+# FE, LSDV, and FD: An example
 
 ```{stata third, collectcode=TRUE}
 *Declare the data as panel
@@ -268,8 +271,9 @@ reg d.y d.d, nocon
   y_{it}=\alpha+\rho d_{it}+v_i+\eta_{it}+ u_{it}\;\;\text{and}\;\;Cov(d_{it},\eta_{it}) \neq 0
   \end{align}
   $$
-  *It violates the (conditional) strict exogeneity.*
-  *Possible solutions: time fixed effects (multiway fixed effects -- we will discuss this more later), time trends, unit- or group-specific time trends*
+  
+   + *It violates the strict exogeneity.*
+   + *Possible solutions?: time fixed effects (multiway fixed effects -- we will discuss this more later), time trends, unit- or group-specific time trends*
   
   + Time-invariant regressors (violating the identifying assumption 2):
   $$
@@ -277,7 +281,9 @@ reg d.y d.d, nocon
   y_{it}=\alpha+\rho d_{i}+v_i+ u_{it}
   \end{align}
   $$
-  *We cannot distinguish the effect of $d_i$ from $v_i$.*
+  
+   + *We cannot distinguish the effect of $d_i$ from $v_i$.*
+   + *Possible solution?: Correlated Random Effects (but different identifying assumption)*
   
   + Violating the linearity assumption: Instead of equation (1), we can have
   $$
@@ -285,7 +291,8 @@ reg d.y d.d, nocon
   y_{it}=g(d_{it},v_i,u_{it})
   \end{align}
   $$
-  *Alternative approach: Panel matching estimator [@imai2019should]*
+  
+   + *Alternative approach: Panel matching estimator [@imai2019should]*
   
 # Less obvious ones, especially when $T>2$, [@imai2019should]
  
