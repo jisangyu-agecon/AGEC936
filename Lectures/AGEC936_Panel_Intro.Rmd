@@ -306,10 +306,10 @@ reg d.y d.d, nocon
 
 *These all lead to the violation of Assumption 1, conditional strict exogeneity ($E(u_{it}|d_{i1}, d_{2t},...,d_{iT},x_i)=0$).*
 
-*Possible solutions*
+**Possible solutions?**
 
-  + Controlling for past $d_{it}$: Can mitigate 1 and 2... but how many lags?
-  + Controlling for past $y_{it}$: Can mitigate 3, but needs instruments and additional assumptions.
+   - Controlling for past $d_{it}$: Can mitigate 1 and 2... but how many lags?
+   - Controlling for past $y_{it}$: Can mitigate 3, but needs instruments and additional assumptions.
   
 # Dynamic panel
   $$
