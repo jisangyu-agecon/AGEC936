@@ -283,7 +283,7 @@ reg d.y d.d, nocon
   $$
   
     + *We cannot distinguish the effect of $d_i$ from $v_i$.*
-    + *Possible solution?: Correlated Random Effects if you have both* **time-variant** *and* **time-invariant** *covariates (but different identifying assumption)*
+    + *Possible solution?: Correlated Random Effects if you have both* **time-variant** *and* **time-invariant** *covariates (but different identifying assumption: $E(v_i|\bar{z}_i)=0$ where $\bar{z}_i$ is the time-average of observable time-variant covariates)*
   
   + Violating the linearity assumption: Instead of equation (1), we can have
   $$
