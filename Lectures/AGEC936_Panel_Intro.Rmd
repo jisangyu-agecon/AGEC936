@@ -272,8 +272,8 @@ reg d.y d.d, nocon
   \end{align}
   $$
   
-   + *It violates the strict exogeneity.*
-   + *Possible solutions?: time fixed effects (multiway fixed effects -- we will discuss this more later), time trends, unit- or group-specific time trends*
+    + *It violates the strict exogeneity.*
+    + *Possible solutions?: time fixed effects (multiway fixed effects -- we will discuss this more later), time trends, unit- or group-specific time trends*
   
   + Time-invariant regressors (violating the identifying assumption 2):
   $$
@@ -282,8 +282,8 @@ reg d.y d.d, nocon
   \end{align}
   $$
   
-   + *We cannot distinguish the effect of $d_i$ from $v_i$.*
-   + *Possible solution?: Correlated Random Effects (but different identifying assumption)*
+    + *We cannot distinguish the effect of $d_i$ from $v_i$.*
+    + *Possible solution?: Correlated Random Effects (but different identifying assumption)*
   
   + Violating the linearity assumption: Instead of equation (1), we can have
   $$
@@ -292,7 +292,7 @@ reg d.y d.d, nocon
   \end{align}
   $$
   
-   + *Alternative approach: Panel matching estimator [@imai2019should]*
+    + *Alternative approach: Panel matching estimator [@imai2019should]*
   
 # Less obvious ones, especially when $T>2$, [@imai2019should]
  
