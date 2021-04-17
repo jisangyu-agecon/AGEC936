@@ -1,7 +1,7 @@
 ---
 title: "AGEC 936 - Module 4"
-subtitle: "Difference-in-Differences <br> Two-way Fixed Effects <br> Synthetic Control"
-author: "Jisang Yu <br> Kansas State University"
+subtitle: "Difference-in-Differences<br>Two-way Fixed Effects<br>Synthetic Control"
+author: "Jisang Yu<br>Kansas State University"
 date: "4/19/2021"
 output:
  slidy_presentation:
@@ -14,13 +14,126 @@ bibliography: references.bib
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Ideal research design 
+# This week
 
-# Difference-in-differences (DinD): Potential outcome representation
+* Previous week: [DinD, TWFE, and Synthetic Control](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html)
 
-# DinD and two-way fixed effects
+# Potential outcome representation
 
-# A simple example on DinD vs TWFE
+With a binary treatment, $d_i=\{0,\;1\}$, let us denote the outcome of interest as
+
+$$
+y_i(0)\;\text{if}\;d_i=0 \\
+y_i(1)\;\text{if}\;d_i=1
+$$
+
+With an *ideal* research design, the difference, 
+$$
+y_i(1)-y_i(0)
+$$ 
+can be interpreted as **causal effect** [@rubin1974estimating]. In practice, **do we observe both $y_i(0)$ and $y_i(1)$**? 
+
+Instead, we observe 
+
+$$
+y_i=y_i(0)+(y_i(1)-y_i(0))d_{i}.
+$$
+
+The *ideal* average treatment (causal) effect is defined as
+
+$$
+E(y_i(1)-y_i(0)=E(y_{1i})-E(Y_{0i}).
+$$
+
+What we observe is
+
+$$
+E(y_{i}|d_i=1)-E(y_{i}|d_i=0).
+$$
+
+What happens if $y_i(0)$, $y_i(1)$, and $d_i$ are not independent?
+
+$$
+E(y_{i}|d_i=1)-E(y_{i}|d_i=0) \\
+=E(y_i(0)+(y_i(1)-y_i(0))|d_i=1)-E(y_i(0)|d_i=0) \\
+=\underbrace{\{E(y_i(1)|d_i=1)-E(y_i(0)|d_i=1)\}}_{ATT}+\underbrace{\{E(y_i(0)|d_i=1)-E(y_i(0)|d_i=0)\}}_{(Selection)\; Bias}.
+$$
+
+If the **Bias** term is non-zero, what should we do?
+
+# Difference-in-differences (DinD)
+
+* **Set-up** 
+Let's consider 2 x 2 case (two-period, $t={1,2}$, N-unit, $i={1,...,N}$, and two-group, $g={T,C}$ case). Potential outcomes are
+$$
+y_{it}(0)=\alpha_i+\gamma_t+\varepsilon_{it} \\
+y_{it}(1)=\alpha_i+\gamma_t+\tau_i d_{it}+\varepsilon_{it}
+$$
+For $i \in T$, $d_{i1}=0$ and $d_{i2}=1$ and for $i \in C$, $d_{i1}=0$ and $d_{i2}=0$.
+
+* **Average Treatment Effect on Treated (ATT)**
+$$
+E(\tau_i|i \in T)
+$$
+This is normally what we want!
+
+* **First differences**
+$$
+y_{i2}-y_{i1}=(\alpha_i+\gamma_2+\tau_i d_{i2}+\varepsilon_{i2}) - (\alpha_i+\gamma_1+\tau_i d_{i1}+\varepsilon_{i1}) \\
+=(\gamma_2-\gamma_1)+\tau_i (d_{i2}-d_{i1})+(\varepsilon_{i2}-\varepsilon_{i1})
+$$
+Conditional expectations by group:
+$$
+E(y_{i2}-y_{i1}|i \in T)=(\gamma_2-\gamma_1)+E(\tau_i (d_{i2}-d_{i1})|i \in T)+E(\varepsilon_{i2}-\varepsilon_{i1}|i \in T) \\
+=(\gamma_2-\gamma_1)+E(\tau_i |i \in T)
+$$
+$$
+E(y_{i2}-y_{i1}|i \in C)=(\gamma_2-\gamma_1)+E(\tau_i (d_{i2}-d_{i1})|i \in C)+E(\varepsilon_{i2}-\varepsilon_{i1}|i \in C) \\
+=(\gamma_2-\gamma_1)
+$$
+
+* **Difference-in-Differences**
+$$
+E(y_{i2}-y_{i1}|i \in T)-E(y_{i2}-y_{i1}|i \in C)
+=\{(\gamma_2-\gamma_1)+E(\tau_i |i \in T)\}-(\gamma_2-\gamma_1) \\
+=E(\tau_i |i \in T)
+$$
+
+# Two-way Fixed Effects
+* **Two-way Fixed Effects** We can also use the following regression equation:
+$$
+y_{it}=\alpha_i+\gamma_t+\tau_i d_{it}+\varepsilon_{it}
+$$
+With $T=2$, the OLS estimator for the equation above, denoted by $\hat{\tau}_{FE}$, is consistently estimating *ATT*. Need the following assumptions:
+  + Strict exogeneity
+  + Parallel trend 
+
+* "Parallel trend" assumption: Revisit the DinD expression,
+$$
+E(y_{i2}-y_{i1}|i \in T)-E(y_{i2}-y_{i1}|i \in C)
+=\{(\gamma_2-\gamma_1)+E(\tau_i |i \in T)\}-(\gamma_2-\gamma_1) \\
+=E(\tau_i |i \in T)
+$$
+This is valid if 
+$$
+\gamma_{it}=\gamma_{t}\;\text{for}\;\forall\;i.
+$$
+
+# A simple simulation on the equivalence between DinD and TWFE
+
+* DGP
+$$
+y_{it}=5+2(t-1)+4d_{it}+0.2x_{i}+u_{it}\;\;\text{with}\;\;i=\{1,2,...,500\}\;\;\text{and}\;\;t=\{1,2\} \\
+d_{it}= \begin{cases}
+1\;\;\text{if}\;\;x_{i}>5.5 \\
+0\;\;\text{otherwise}
+\end{cases}
+$$
+$$
+\begin{align}
+x_{i}\;\sim\;U(1,10),\;\;\text{and}\;\;u_{it}\;\sim\;N(0,1)
+\end{align}
+$$
 
 ```{r simple, collectcode=TRUE}
 # set seed
@@ -41,7 +154,7 @@ X <- d*0.5+rnorm(N)
 # Pre
 Y_0 <- 5+0.2*X+0.3*rnorm(N)
 # Post
-Y_1 <- 5+0.2*X+tau*d+0.3*rnorm(N)
+Y_1 <- 5+2+0.2*X+tau*d+0.3*rnorm(N)
 
 # DinD
 (mean(Y_1[d == 1]) - mean(Y_0[d == 1])) - (mean(Y_1[d == 0]) - mean(Y_0[d == 0]))
@@ -96,13 +209,18 @@ dind_data <- data.frame("Y"=c(Y_0, Y_1),
                         "Time"=c(rep(1,N), rep(2,N)))
 
 # Two-way FE regression
-
 TWFE <- lm(Y ~ Treat + Time + as.factor(Unit), data = dind_data)
 coef(TWFE)[c("Treat")]
 ```
 
-
 # What if we have "$T>2$"?
+* Single treatment timing
+
+* Staggered treatment timing
+
+# Pre-trend testing and "Honest" DinD
+
+# An Example
 
 # Recent discussion on DinD/Two-way FEs
 

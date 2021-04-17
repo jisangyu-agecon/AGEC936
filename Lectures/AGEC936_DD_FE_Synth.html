@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <meta name="author" content="Jisang Yu   Kansas State University" />
+  <meta name="author" content="Jisang Yu Kansas State University" />
   <meta name="copyright" content="AGEC 936 - Jisang Yu" />
   <meta name="font-size-adjustment" content="-1" />
   <title>AGEC 936 - Module 4</title>
@@ -511,23 +511,109 @@ list-style-type: none;
 <body>
 <div class="slide titlepage">
   <h1 class="title">AGEC 936 - Module 4</h1>
-  <h1 class="subtitle">Difference-in-Differences <br> Two-way Fixed Effects <br> Synthetic Control</h1>
+  <h1 class="subtitle">Difference-in-Differences<br>Two-way Fixed Effects<br>Synthetic Control</h1>
   <p class="author">
-Jisang Yu <br> Kansas State University
+Jisang Yu<br>Kansas State University
   </p>
   <p class="date">4/19/2021</p>
 </div>
-<div id="ideal-research-design" class="slide section level1">
-<h1>Ideal research design</h1>
+<div id="this-week" class="slide section level1">
+<h1>This week</h1>
+<ul>
+<li>Previous week: <a href="https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html">DinD, TWFE, and Synthetic Control</a></li>
+</ul>
 </div>
-<div id="difference-in-differences-dind-potential-outcome-representation" class="slide section level1">
-<h1>Difference-in-differences (DinD): Potential outcome representation</h1>
+<div id="potential-outcome-representation" class="slide section level1">
+<h1>Potential outcome representation</h1>
+<p>With a binary treatment, <span class="math inline">\(d_i=\{0,\;1\}\)</span>, let us denote the outcome of interest as</p>
+<p><span class="math display">\[
+y_i(0)\;\text{if}\;d_i=0 \\
+y_i(1)\;\text{if}\;d_i=1
+\]</span></p>
+<p>With an <em>ideal</em> research design, the difference, <span class="math display">\[
+y_i(1)-y_i(0)
+\]</span> can be interpreted as <strong>causal effect</strong> <span class="citation">(Rubin 1974)</span>. In practice, <strong>do we observe both <span class="math inline">\(y_i(0)\)</span> and <span class="math inline">\(y_i(1)\)</span></strong>?</p>
+<p>Instead, we observe</p>
+<p><span class="math display">\[
+y_i=y_i(0)+(y_i(1)-y_i(0))d_{i}.
+\]</span></p>
+<p>The <em>ideal</em> average treatment (causal) effect is defined as</p>
+<p><span class="math display">\[
+E(y_i(1)-y_i(0)=E(y_{1i})-E(Y_{0i}).
+\]</span></p>
+<p>What we observe is</p>
+<p><span class="math display">\[
+E(y_{i}|d_i=1)-E(y_{i}|d_i=0).
+\]</span></p>
+<p>What happens if <span class="math inline">\(y_i(0)\)</span>, <span class="math inline">\(y_i(1)\)</span>, and <span class="math inline">\(d_i\)</span> are not independent?</p>
+<p><span class="math display">\[
+E(y_{i}|d_i=1)-E(y_{i}|d_i=0) \\
+=E(y_i(0)+(y_i(1)-y_i(0))|d_i=1)-E(y_i(0)|d_i=0) \\
+=\underbrace{\{E(y_i(1)|d_i=1)-E(y_i(0)|d_i=1)\}}_{ATT}+\underbrace{\{E(y_i(0)|d_i=1)-E(y_i(0)|d_i=0)\}}_{(Selection)\; Bias}.
+\]</span></p>
+<p>If the <strong>Bias</strong> term is non-zero, what should we do?</p>
 </div>
-<div id="dind-and-two-way-fixed-effects" class="slide section level1">
-<h1>DinD and two-way fixed effects</h1>
+<div id="difference-in-differences-dind" class="slide section level1">
+<h1>Difference-in-differences (DinD)</h1>
+<ul>
+<li><p><strong>Set-up</strong> Let’s consider 2 x 2 case (two-period, <span class="math inline">\(t={1,2}\)</span>, N-unit, <span class="math inline">\(i={1,...,N}\)</span>, and two-group, <span class="math inline">\(g={T,C}\)</span> case). Potential outcomes are <span class="math display">\[
+y_{it}(0)=\alpha_i+\gamma_t+\varepsilon_{it} \\
+y_{it}(1)=\alpha_i+\gamma_t+\tau_i d_{it}+\varepsilon_{it}
+\]</span> For <span class="math inline">\(i \in T\)</span>, <span class="math inline">\(d_{i1}=0\)</span> and <span class="math inline">\(d_{i2}=1\)</span> and for <span class="math inline">\(i \in C\)</span>, <span class="math inline">\(d_{i1}=0\)</span> and <span class="math inline">\(d_{i2}=0\)</span>.</p></li>
+<li><p><strong>Average Treatment Effect on Treated (ATT)</strong> <span class="math display">\[
+E(\tau_i|i \in T)
+\]</span> This is normally what we want!</p></li>
+<li><p><strong>First differences</strong> <span class="math display">\[
+y_{i2}-y_{i1}=(\alpha_i+\gamma_2+\tau_i d_{i2}+\varepsilon_{i2}) - (\alpha_i+\gamma_1+\tau_i d_{i1}+\varepsilon_{i1}) \\
+=(\gamma_2-\gamma_1)+\tau_i (d_{i2}-d_{i1})+(\varepsilon_{i2}-\varepsilon_{i1})
+\]</span> Conditional expectations by group: <span class="math display">\[
+E(y_{i2}-y_{i1}|i \in T)=(\gamma_2-\gamma_1)+E(\tau_i (d_{i2}-d_{i1})|i \in T)+E(\varepsilon_{i2}-\varepsilon_{i1}|i \in T) \\
+=(\gamma_2-\gamma_1)+E(\tau_i |i \in T)
+\]</span> <span class="math display">\[
+E(y_{i2}-y_{i1}|i \in C)=(\gamma_2-\gamma_1)+E(\tau_i (d_{i2}-d_{i1})|i \in C)+E(\varepsilon_{i2}-\varepsilon_{i1}|i \in C) \\
+=(\gamma_2-\gamma_1)
+\]</span></p></li>
+<li><p><strong>Difference-in-Differences</strong> <span class="math display">\[
+E(y_{i2}-y_{i1}|i \in T)-E(y_{i2}-y_{i1}|i \in C)
+=\{(\gamma_2-\gamma_1)+E(\tau_i |i \in T)\}-(\gamma_2-\gamma_1) \\
+=E(\tau_i |i \in T)
+\]</span></p></li>
+</ul>
 </div>
-<div id="a-simple-example-on-dind-vs-twfe" class="slide section level1">
-<h1>A simple example on DinD vs TWFE</h1>
+<div id="two-way-fixed-effects" class="slide section level1">
+<h1>Two-way Fixed Effects</h1>
+<ul>
+<li><strong>Two-way Fixed Effects</strong> We can also use the following regression equation: <span class="math display">\[
+y_{it}=\alpha_i+\gamma_t+\tau_i d_{it}+\varepsilon_{it}
+\]</span> With <span class="math inline">\(T=2\)</span>, the OLS estimator for the equation above, denoted by <span class="math inline">\(\hat{\tau}_{FE}\)</span>, is consistently estimating <em>ATT</em>. Need the following assumptions:
+<ul>
+<li>Strict exogeneity</li>
+<li>Parallel trend</li>
+</ul></li>
+<li>“Parallel trend” assumption: Revisit the DinD expression, <span class="math display">\[
+E(y_{i2}-y_{i1}|i \in T)-E(y_{i2}-y_{i1}|i \in C)
+=\{(\gamma_2-\gamma_1)+E(\tau_i |i \in T)\}-(\gamma_2-\gamma_1) \\
+=E(\tau_i |i \in T)
+\]</span> This is valid if <span class="math display">\[
+\gamma_{it}=\gamma_{t}\;\text{for}\;\forall\;i.
+\]</span></li>
+</ul>
+</div>
+<div id="a-simple-simulation-on-the-equivalence-between-dind-and-twfe" class="slide section level1">
+<h1>A simple simulation on the equivalence between DinD and TWFE</h1>
+<ul>
+<li>DGP <span class="math display">\[
+y_{it}=5+2(t-1)+4d_{it}+0.2x_{i}+u_{it}\;\;\text{with}\;\;i=\{1,2,...,500\}\;\;\text{and}\;\;t=\{1,2\} \\
+d_{it}= \begin{cases}
+1\;\;\text{if}\;\;x_{i}&gt;5.5 \\
+0\;\;\text{otherwise}
+\end{cases}
+\]</span> <span class="math display">\[
+\begin{align}
+x_{i}\;\sim\;U(1,10),\;\;\text{and}\;\;u_{it}\;\sim\;N(0,1)
+\end{align}
+\]</span></li>
+</ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># set seed</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="kw">set.seed</span>(<span class="dv">11123</span>)</span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
@@ -546,7 +632,7 @@ Jisang Yu <br> Kansas State University
 <span id="cb1-16"><a href="#cb1-16"></a><span class="co"># Pre</span></span>
 <span id="cb1-17"><a href="#cb1-17"></a>Y_<span class="dv">0</span> &lt;-<span class="st"> </span><span class="dv">5</span><span class="fl">+0.2</span><span class="op">*</span>X<span class="fl">+0.3</span><span class="op">*</span><span class="kw">rnorm</span>(N)</span>
 <span id="cb1-18"><a href="#cb1-18"></a><span class="co"># Post</span></span>
-<span id="cb1-19"><a href="#cb1-19"></a>Y_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="dv">5</span><span class="fl">+0.2</span><span class="op">*</span>X<span class="op">+</span>tau<span class="op">*</span>d<span class="fl">+0.3</span><span class="op">*</span><span class="kw">rnorm</span>(N)</span>
+<span id="cb1-19"><a href="#cb1-19"></a>Y_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="dv">5</span><span class="op">+</span><span class="dv">2</span><span class="fl">+0.2</span><span class="op">*</span>X<span class="op">+</span>tau<span class="op">*</span>d<span class="fl">+0.3</span><span class="op">*</span><span class="kw">rnorm</span>(N)</span>
 <span id="cb1-20"><a href="#cb1-20"></a></span>
 <span id="cb1-21"><a href="#cb1-21"></a><span class="co"># DinD</span></span>
 <span id="cb1-22"><a href="#cb1-22"></a>(<span class="kw">mean</span>(Y_<span class="dv">1</span>[d <span class="op">==</span><span class="st"> </span><span class="dv">1</span>]) <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(Y_<span class="dv">0</span>[d <span class="op">==</span><span class="st"> </span><span class="dv">1</span>])) <span class="op">-</span><span class="st"> </span>(<span class="kw">mean</span>(Y_<span class="dv">1</span>[d <span class="op">==</span><span class="st"> </span><span class="dv">0</span>]) <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(Y_<span class="dv">0</span>[d <span class="op">==</span><span class="st"> </span><span class="dv">0</span>]))</span></code></pre></div>
@@ -599,14 +685,23 @@ Jisang Yu <br> Kansas State University
 <span id="cb7-6"><a href="#cb7-6"></a>                        <span class="st">&quot;Time&quot;</span>=<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">1</span>,N), <span class="kw">rep</span>(<span class="dv">2</span>,N)))</span>
 <span id="cb7-7"><a href="#cb7-7"></a></span>
 <span id="cb7-8"><a href="#cb7-8"></a><span class="co"># Two-way FE regression</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a></span>
-<span id="cb7-10"><a href="#cb7-10"></a>TWFE &lt;-<span class="st"> </span><span class="kw">lm</span>(Y <span class="op">~</span><span class="st"> </span>Treat <span class="op">+</span><span class="st"> </span>Time <span class="op">+</span><span class="st"> </span><span class="kw">as.factor</span>(Unit), <span class="dt">data =</span> dind_data)</span>
-<span id="cb7-11"><a href="#cb7-11"></a><span class="kw">coef</span>(TWFE)[<span class="kw">c</span>(<span class="st">&quot;Treat&quot;</span>)]</span></code></pre></div>
+<span id="cb7-9"><a href="#cb7-9"></a>TWFE &lt;-<span class="st"> </span><span class="kw">lm</span>(Y <span class="op">~</span><span class="st"> </span>Treat <span class="op">+</span><span class="st"> </span>Time <span class="op">+</span><span class="st"> </span><span class="kw">as.factor</span>(Unit), <span class="dt">data =</span> dind_data)</span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="kw">coef</span>(TWFE)[<span class="kw">c</span>(<span class="st">&quot;Treat&quot;</span>)]</span></code></pre></div>
 <pre><code>##    Treat 
 ## 4.527091</code></pre>
 </div>
 <div id="what-if-we-have-t2" class="slide section level1">
 <h1>What if we have “<span class="math inline">\(T&gt;2\)</span>”?</h1>
+<ul>
+<li><p>Single treatment timing</p></li>
+<li><p>Staggered treatment timing</p></li>
+</ul>
+</div>
+<div id="pre-trend-testing-and-honest-dind" class="slide section level1">
+<h1>Pre-trend testing and “Honest” DinD</h1>
+</div>
+<div id="an-example" class="slide section level1">
+<h1>An Example</h1>
 </div>
 <div id="recent-discussion-on-dindtwo-way-fes" class="slide section level1">
 <h1>Recent discussion on DinD/Two-way FEs</h1>
@@ -617,8 +712,13 @@ Jisang Yu <br> Kansas State University
 <div id="synthetic-control-methods" class="slide section level1">
 <h1>Synthetic control methods</h1>
 </div>
-<div id="references" class="slide section level1">
+<div id="references" class="slide section level1 unnumbered">
 <h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-rubin1974estimating">
+<p>Rubin, Donald B. 1974. “Estimating Causal Effects of Treatments in Randomized and Nonrandomized Studies.” <em>Journal of Educational Psychology</em> 66 (5): 688.</p>
+</div>
+</div>
 </div>
 
   <!-- dynamically load mathjax for compatibility with self-contained -->

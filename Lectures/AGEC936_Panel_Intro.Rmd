@@ -381,4 +381,8 @@ xtabond y d, lag(1)
 
 * Standard errors
 
+# Next week
+
+[DinD, TWFE, and Synthetic Control](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html)
+
 # References
