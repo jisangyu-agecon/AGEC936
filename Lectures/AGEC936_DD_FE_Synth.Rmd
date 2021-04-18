@@ -15,40 +15,29 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 ```
 
 # This week
-
 * (Previous week: [Panel data introduction](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_Panel_Intro.html))
-
 * Difference-in-differences (DinD) in potential outcome framework
-
 * Two-way Fixed Effects (TWFE)
-
 * Parallel trend assumption
-
 * Staggered treatment timing: When can TWFE fail
-
 * Matching estimator
-
 * Synthetic control methods
 
 # Potential outcome representation
-
 * With a binary treatment, $d_i=\{0,\;1\}$, let us denote the outcome of interest as
 $$
 y_i(0)\;\text{if}\;d_i=0 \\
 y_i(1)\;\text{if}\;d_i=1
 $$
-
 * With an *ideal* research design, the difference, 
 $$
 y_i(1)-y_i(0)
 $$ 
 can be interpreted as **causal effect** [@rubin1974estimating]. In practice, **do we observe both $y_i(0)$ and $y_i(1)$**? 
-
 * The *ideal* average treatment (causal) effect is defined as
 $$
 E(y_i(1)-y_i(0))=E(y_{i}(1))-E(Y_{i}(0)).
 $$
-
 * Instead, we observe 
 $$
 y_i=y_i(0)+(y_i(1)-y_i(0))d_{i}.
@@ -57,7 +46,6 @@ and can estimate
 $$
 E(y_{i}|d_i=1)-E(y_{i}|d_i=0).
 $$
-
 * What happens if $y_i(0)$, $y_i(1)$, and $d_i$ are not independent?
 $$
 E(y_{i}|d_i=1)-E(y_{i}|d_i=0) \\
@@ -67,7 +55,6 @@ $$
 If the **Bias** term is non-zero, what should we do?
 
 # Difference-in-differences (DinD)
-
 * **Set-up** 
 Let's consider 2 x 2 case (two-period, $t={1,2}$, N-unit, $i={1,...,N}$, and two-group, $g={T,C}$ case). Potential outcomes are
 $$
@@ -75,13 +62,11 @@ y_{it}(0)=\alpha_i+\gamma_t+\varepsilon_{it} \\
 y_{it}(1)=\alpha_i+\gamma_t+\tau_i d_{it}+\varepsilon_{it}
 $$
 For $i \in T$, $d_{i1}=0$ and $d_{i2}=1$ and for $i \in C$, $d_{i1}=0$ and $d_{i2}=0$.
-
 * **Average Treatment Effect on Treated (ATT)**
 $$
 E(\tau_i|i \in T)
 $$
 This is normally what we want!
-
 * **First differences**
 $$
 y_{i2}-y_{i1}=(\alpha_i+\gamma_2+\tau_i d_{i2}+\varepsilon_{i2}) - (\alpha_i+\gamma_1+\tau_i d_{i1}+\varepsilon_{i1}) \\
@@ -96,7 +81,6 @@ $$
 E(y_{i2}-y_{i1}|i \in C)=(\gamma_2-\gamma_1)+E(\tau_i (d_{i2}-d_{i1})|i \in C)+E(\varepsilon_{i2}-\varepsilon_{i1}|i \in C) \\
 =(\gamma_2-\gamma_1)
 $$
-
 * **Difference-in-differences**
 $$
 E(y_{i2}-y_{i1}|i \in T)-E(y_{i2}-y_{i1}|i \in C)
@@ -112,7 +96,6 @@ $$
 With $T=2$, the OLS estimator for the equation above, denoted by $\hat{\tau}_{FE}$, is consistently estimating *ATT*. Need the following assumptions:
   + Strict exogeneity
   + Parallel trend 
-
 * **"Parallel-trend" assumption**: Revisit the DinD expression,
 $$
 E(y_{i2}-y_{i1}|i \in T)-E(y_{i2}-y_{i1}|i \in C)
@@ -209,7 +192,7 @@ $$
 # set seed
 set.seed(11123)
 
-# 100 units
+# 500 units
 N<-500
 unit<-1:500
 
@@ -253,7 +236,6 @@ E(y_{i2}-y_{i1}|i \in T)-E(y_{i2}-y_{i1}|i \in C) \\
 =E((\gamma_{i2}-\gamma_{i1})+\tau_i |i \in T)-E(\gamma_{i2}-\gamma_{i1}|i \in C) \\
 =E(\tau_i|i \in T)+\underbrace{\{E(\gamma_{i2}-\gamma_{i1}|i \in T)-E(\gamma_{i2}-\gamma_{i1}|i \in C)\}}_{\text{Non-parallel trend bias}}.
 $$
-
 * In the previous example, we had
 $$
 \gamma_{it}=2(t-1)d_{it}
@@ -275,7 +257,6 @@ y_{it}=\alpha_i+\gamma_t+\sum_t \delta_t \mathbb{1}_i (i \in T) + \varepsilon_{i
 $$
   + **Issues**: Under-powered and may can lead to a biased estimate [@roth2019pre]
   + **Alternative approach**: "Honest" approach [@rambachan2019honest]
-
 * Staggered treatment timing and (dynamic) heterogeneous treatment effects: **TWFE** fails if the treatment is **staggered** AND the treatment effects are **heterogeneous**. Many recent papers discuss this issue. Two papers/approaches we will focus on
   + @de2020two
   + @callaway2020difference
@@ -287,7 +268,6 @@ $$
   3. Sample period: 2000 - 2008
   4. Here, let's focus on a production variable - Area of tobacco production.
   5. Disclaimer: I modified the original dataset -- kept only tobacco producers and restricted the sample to the households with all 9 year of data.
-
 * Data set-up
 ```{r cai2016, results="hide"}
 #libraries

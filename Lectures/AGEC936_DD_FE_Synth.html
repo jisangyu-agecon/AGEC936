@@ -520,51 +520,51 @@ Jisang Yu<br>Kansas State University
 <div id="this-week" class="slide section level1">
 <h1>This week</h1>
 <ul>
-<li><p>(Previous week: <a href="https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_Panel_Intro.html">Panel data introduction</a>)</p></li>
-<li><p>Difference-in-differences (DinD) in potential outcome framework</p></li>
-<li><p>Two-way Fixed Effects (TWFE)</p></li>
-<li><p>Parallel trend assumption</p></li>
-<li><p>Staggered treatment timing: When can TWFE fail</p></li>
-<li><p>Matching estimator</p></li>
-<li><p>Synthetic control methods</p></li>
+<li>(Previous week: <a href="https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_Panel_Intro.html">Panel data introduction</a>)</li>
+<li>Difference-in-differences (DinD) in potential outcome framework</li>
+<li>Two-way Fixed Effects (TWFE)</li>
+<li>Parallel trend assumption</li>
+<li>Staggered treatment timing: When can TWFE fail</li>
+<li>Matching estimator</li>
+<li>Synthetic control methods</li>
 </ul>
 </div>
 <div id="potential-outcome-representation" class="slide section level1">
 <h1>Potential outcome representation</h1>
 <ul>
-<li><p>With a binary treatment, <span class="math inline">\(d_i=\{0,\;1\}\)</span>, let us denote the outcome of interest as <span class="math display">\[
+<li>With a binary treatment, <span class="math inline">\(d_i=\{0,\;1\}\)</span>, let us denote the outcome of interest as <span class="math display">\[
 y_i(0)\;\text{if}\;d_i=0 \\
 y_i(1)\;\text{if}\;d_i=1
-\]</span></p></li>
-<li><p>With an <em>ideal</em> research design, the difference, <span class="math display">\[
+\]</span></li>
+<li>With an <em>ideal</em> research design, the difference, <span class="math display">\[
 y_i(1)-y_i(0)
-\]</span> can be interpreted as <strong>causal effect</strong> <span class="citation">(Rubin 1974)</span>. In practice, <strong>do we observe both <span class="math inline">\(y_i(0)\)</span> and <span class="math inline">\(y_i(1)\)</span></strong>?</p></li>
-<li><p>The <em>ideal</em> average treatment (causal) effect is defined as <span class="math display">\[
+\]</span> can be interpreted as <strong>causal effect</strong> <span class="citation">(Rubin 1974)</span>. In practice, <strong>do we observe both <span class="math inline">\(y_i(0)\)</span> and <span class="math inline">\(y_i(1)\)</span></strong>?</li>
+<li>The <em>ideal</em> average treatment (causal) effect is defined as <span class="math display">\[
 E(y_i(1)-y_i(0))=E(y_{i}(1))-E(Y_{i}(0)).
-\]</span></p></li>
-<li><p>Instead, we observe <span class="math display">\[
+\]</span></li>
+<li>Instead, we observe <span class="math display">\[
 y_i=y_i(0)+(y_i(1)-y_i(0))d_{i}.
 \]</span> and can estimate <span class="math display">\[
 E(y_{i}|d_i=1)-E(y_{i}|d_i=0).
-\]</span></p></li>
-<li><p>What happens if <span class="math inline">\(y_i(0)\)</span>, <span class="math inline">\(y_i(1)\)</span>, and <span class="math inline">\(d_i\)</span> are not independent? <span class="math display">\[
+\]</span></li>
+<li>What happens if <span class="math inline">\(y_i(0)\)</span>, <span class="math inline">\(y_i(1)\)</span>, and <span class="math inline">\(d_i\)</span> are not independent? <span class="math display">\[
 E(y_{i}|d_i=1)-E(y_{i}|d_i=0) \\
 =E(y_i(0)+(y_i(1)-y_i(0))|d_i=1)-E(y_i(0)|d_i=0) \\
 =\underbrace{\{E(y_i(1)|d_i=1)-E(y_i(0)|d_i=1)\}}_{ATT}+\underbrace{\{E(y_i(0)|d_i=1)-E(y_i(0)|d_i=0)\}}_{(Selection)\; Bias}.
-\]</span> If the <strong>Bias</strong> term is non-zero, what should we do?</p></li>
+\]</span> If the <strong>Bias</strong> term is non-zero, what should we do?</li>
 </ul>
 </div>
 <div id="difference-in-differences-dind" class="slide section level1">
 <h1>Difference-in-differences (DinD)</h1>
 <ul>
-<li><p><strong>Set-up</strong> Let’s consider 2 x 2 case (two-period, <span class="math inline">\(t={1,2}\)</span>, N-unit, <span class="math inline">\(i={1,...,N}\)</span>, and two-group, <span class="math inline">\(g={T,C}\)</span> case). Potential outcomes are <span class="math display">\[
+<li><strong>Set-up</strong> Let’s consider 2 x 2 case (two-period, <span class="math inline">\(t={1,2}\)</span>, N-unit, <span class="math inline">\(i={1,...,N}\)</span>, and two-group, <span class="math inline">\(g={T,C}\)</span> case). Potential outcomes are <span class="math display">\[
 y_{it}(0)=\alpha_i+\gamma_t+\varepsilon_{it} \\
 y_{it}(1)=\alpha_i+\gamma_t+\tau_i d_{it}+\varepsilon_{it}
-\]</span> For <span class="math inline">\(i \in T\)</span>, <span class="math inline">\(d_{i1}=0\)</span> and <span class="math inline">\(d_{i2}=1\)</span> and for <span class="math inline">\(i \in C\)</span>, <span class="math inline">\(d_{i1}=0\)</span> and <span class="math inline">\(d_{i2}=0\)</span>.</p></li>
-<li><p><strong>Average Treatment Effect on Treated (ATT)</strong> <span class="math display">\[
+\]</span> For <span class="math inline">\(i \in T\)</span>, <span class="math inline">\(d_{i1}=0\)</span> and <span class="math inline">\(d_{i2}=1\)</span> and for <span class="math inline">\(i \in C\)</span>, <span class="math inline">\(d_{i1}=0\)</span> and <span class="math inline">\(d_{i2}=0\)</span>.</li>
+<li><strong>Average Treatment Effect on Treated (ATT)</strong> <span class="math display">\[
 E(\tau_i|i \in T)
-\]</span> This is normally what we want!</p></li>
-<li><p><strong>First differences</strong> <span class="math display">\[
+\]</span> This is normally what we want!</li>
+<li><strong>First differences</strong> <span class="math display">\[
 y_{i2}-y_{i1}=(\alpha_i+\gamma_2+\tau_i d_{i2}+\varepsilon_{i2}) - (\alpha_i+\gamma_1+\tau_i d_{i1}+\varepsilon_{i1}) \\
 =(\gamma_2-\gamma_1)+\tau_i (d_{i2}-d_{i1})+(\varepsilon_{i2}-\varepsilon_{i1})
 \]</span> Conditional expectations by group: <span class="math display">\[
@@ -573,12 +573,12 @@ E(y_{i2}-y_{i1}|i \in T)=(\gamma_2-\gamma_1)+E(\tau_i (d_{i2}-d_{i1})|i \in T)+E
 \]</span> <span class="math display">\[
 E(y_{i2}-y_{i1}|i \in C)=(\gamma_2-\gamma_1)+E(\tau_i (d_{i2}-d_{i1})|i \in C)+E(\varepsilon_{i2}-\varepsilon_{i1}|i \in C) \\
 =(\gamma_2-\gamma_1)
-\]</span></p></li>
-<li><p><strong>Difference-in-differences</strong> <span class="math display">\[
+\]</span></li>
+<li><strong>Difference-in-differences</strong> <span class="math display">\[
 E(y_{i2}-y_{i1}|i \in T)-E(y_{i2}-y_{i1}|i \in C)
 =\{(\gamma_2-\gamma_1)+E(\tau_i |i \in T)\}-(\gamma_2-\gamma_1) \\
 =E(\tau_i |i \in T)
-\]</span></p></li>
+\]</span></li>
 </ul>
 </div>
 <div id="two-way-fixed-effects-twfe" class="slide section level1">
@@ -679,7 +679,7 @@ u_{i}\;\;\text{otherwise}
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># set seed</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="kw">set.seed</span>(<span class="dv">11123</span>)</span>
 <span id="cb5-3"><a href="#cb5-3"></a></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="co"># 100 units</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co"># 500 units</span></span>
 <span id="cb5-5"><a href="#cb5-5"></a>N&lt;-<span class="dv">500</span></span>
 <span id="cb5-6"><a href="#cb5-6"></a>unit&lt;-<span class="dv">1</span><span class="op">:</span><span class="dv">500</span></span>
 <span id="cb5-7"><a href="#cb5-7"></a></span>
@@ -716,20 +716,20 @@ u_{i}\;\;\text{otherwise}
 <div id="what-did-we-just-estimate" class="slide section level1">
 <h1>What did we just estimate?</h1>
 <ul>
-<li><p>Now, we no longer have <span class="math display">\[
+<li>Now, we no longer have <span class="math display">\[
 \gamma_{it}=\gamma_{t}\;\text{for}\;\forall\;i.
 \]</span> Thus, <span class="math display">\[
 E(y_{i2}-y_{i1}|i \in T)-E(y_{i2}-y_{i1}|i \in C) \\
 =E((\gamma_{i2}-\gamma_{i1})+\tau_i |i \in T)-E(\gamma_{i2}-\gamma_{i1}|i \in C) \\
 =E(\tau_i|i \in T)+\underbrace{\{E(\gamma_{i2}-\gamma_{i1}|i \in T)-E(\gamma_{i2}-\gamma_{i1}|i \in C)\}}_{\text{Non-parallel trend bias}}.
-\]</span></p></li>
-<li><p>In the previous example, we had <span class="math display">\[
+\]</span></li>
+<li>In the previous example, we had <span class="math display">\[
 \gamma_{it}=2(t-1)d_{it}
 \]</span> which means <span class="math display">\[
 \gamma_{i2}-\gamma_{i1}=2d_{i2}.
 \]</span> Therefore, the “non-parallel trend bias” term becomes, <span class="math display">\[
 E(2d_{i2}|i \in T)-E(2d_{i2}|i \in C)=2
-\]</span> since <span class="math inline">\(E(d_{i2}|i \in T)=1\)</span> and <span class="math inline">\(E(d_{i2}|i \in C)=0\)</span>.</p></li>
+\]</span> since <span class="math inline">\(E(d_{i2}|i \in T)=1\)</span> and <span class="math inline">\(E(d_{i2}|i \in C)=0\)</span>.</li>
 </ul>
 </div>
 <div id="what-if-we-have-t2" class="slide section level1">
