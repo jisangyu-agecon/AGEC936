@@ -1,6 +1,6 @@
 ---
 title: "AGEC 936 - Module 4"
-subtitle: "Difference-in-Differences<br>Two-way Fixed Effects<br>Synthetic Control"
+subtitle: "Difference-in-Differences (DinD)<br>Two-way Fixed Effects (TWFE)<br>Synthetic Control Methods"
 author: "Jisang Yu<br>Kansas State University"
 date: "4/19/2021"
 output:
@@ -11,54 +11,59 @@ output:
 bibliography: references.bib
 ---
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 ```
 
 # This week
 
-* Previous week: [DinD, TWFE, and Synthetic Control](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html)
+* (Previous week: [Panel data introduction](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_Panel_Intro.html))
+
+* Difference-in-differences (DinD) in potential outcome framework
+
+* Two-way Fixed Effects (TWFE)
+
+* Parallel trend assumption
+
+* Staggered treatment timing: When can TWFE fail
+
+* Matching estimator
+
+* Synthetic control methods
 
 # Potential outcome representation
 
-With a binary treatment, $d_i=\{0,\;1\}$, let us denote the outcome of interest as
-
+* With a binary treatment, $d_i=\{0,\;1\}$, let us denote the outcome of interest as
 $$
 y_i(0)\;\text{if}\;d_i=0 \\
 y_i(1)\;\text{if}\;d_i=1
 $$
 
-With an *ideal* research design, the difference, 
+* With an *ideal* research design, the difference, 
 $$
 y_i(1)-y_i(0)
 $$ 
 can be interpreted as **causal effect** [@rubin1974estimating]. In practice, **do we observe both $y_i(0)$ and $y_i(1)$**? 
 
-Instead, we observe 
+* The *ideal* average treatment (causal) effect is defined as
+$$
+E(y_i(1)-y_i(0))=E(y_{i}(1))-E(Y_{i}(0)).
+$$
 
+* Instead, we observe 
 $$
 y_i=y_i(0)+(y_i(1)-y_i(0))d_{i}.
 $$
-
-The *ideal* average treatment (causal) effect is defined as
-
-$$
-E(y_i(1)-y_i(0)=E(y_{1i})-E(Y_{0i}).
-$$
-
-What we observe is
-
+and can estimate
 $$
 E(y_{i}|d_i=1)-E(y_{i}|d_i=0).
 $$
 
-What happens if $y_i(0)$, $y_i(1)$, and $d_i$ are not independent?
-
+* What happens if $y_i(0)$, $y_i(1)$, and $d_i$ are not independent?
 $$
 E(y_{i}|d_i=1)-E(y_{i}|d_i=0) \\
 =E(y_i(0)+(y_i(1)-y_i(0))|d_i=1)-E(y_i(0)|d_i=0) \\
 =\underbrace{\{E(y_i(1)|d_i=1)-E(y_i(0)|d_i=1)\}}_{ATT}+\underbrace{\{E(y_i(0)|d_i=1)-E(y_i(0)|d_i=0)\}}_{(Selection)\; Bias}.
 $$
-
 If the **Bias** term is non-zero, what should we do?
 
 # Difference-in-differences (DinD)
@@ -92,14 +97,14 @@ E(y_{i2}-y_{i1}|i \in C)=(\gamma_2-\gamma_1)+E(\tau_i (d_{i2}-d_{i1})|i \in C)+E
 =(\gamma_2-\gamma_1)
 $$
 
-* **Difference-in-Differences**
+* **Difference-in-differences**
 $$
 E(y_{i2}-y_{i1}|i \in T)-E(y_{i2}-y_{i1}|i \in C)
 =\{(\gamma_2-\gamma_1)+E(\tau_i |i \in T)\}-(\gamma_2-\gamma_1) \\
 =E(\tau_i |i \in T)
 $$
 
-# Two-way Fixed Effects
+# Two-way Fixed Effects (TWFE)
 * **Two-way Fixed Effects** We can also use the following regression equation:
 $$
 y_{it}=\alpha_i+\gamma_t+\tau_i d_{it}+\varepsilon_{it}
@@ -108,7 +113,7 @@ With $T=2$, the OLS estimator for the equation above, denoted by $\hat{\tau}_{FE
   + Strict exogeneity
   + Parallel trend 
 
-* "Parallel trend" assumption: Revisit the DinD expression,
+* **"Parallel-trend" assumption**: Revisit the DinD expression,
 $$
 E(y_{i2}-y_{i1}|i \in T)-E(y_{i2}-y_{i1}|i \in C)
 =\{(\gamma_2-\gamma_1)+E(\tau_i |i \in T)\}-(\gamma_2-\gamma_1) \\
@@ -119,20 +124,24 @@ $$
 \gamma_{it}=\gamma_{t}\;\text{for}\;\forall\;i.
 $$
 
-# A simple simulation on the equivalence between DinD and TWFE
-
-* DGP
+# A simulation - the equivalence between DinD and TWFE
+* **DGP**
 $$
-y_{it}=5+2(t-1)+4d_{it}+0.2x_{i}+u_{it}\;\;\text{with}\;\;i=\{1,2,...,500\}\;\;\text{and}\;\;t=\{1,2\} \\
-d_{it}= \begin{cases}
-1\;\;\text{if}\;\;x_{i}>5.5 \\
+y_{it}=5+2(t-1)+4d_{it}+0.2x_{i}+\varepsilon_{it}\;\;\text{with}\;\;i=\{1,2,...,500\}\;\;\text{and}\;\;t=\{1,2\}
+$$
+$$
+d_{i1}=0,\;\;
+d_{i2}= \begin{cases}
+1\;\;\text{if}\;\;i=\{1,...,250\} \\
 0\;\;\text{otherwise}
 \end{cases}
 $$
 $$
-\begin{align}
-x_{i}\;\sim\;U(1,10),\;\;\text{and}\;\;u_{it}\;\sim\;N(0,1)
-\end{align}
+x_{i}=\begin{cases}
+0.5+u_{i}\;\;\text{if}\;\;i=\{1,...,250\} \\
+u_{i}\;\;\text{otherwise}
+\end{cases}
+\;\;\text{and}\;\;u_i \sim N(0,1)
 $$
 
 ```{r simple, collectcode=TRUE}
@@ -152,29 +161,49 @@ d <- c(rep(0, N/2), rep(1, N/2))
 # DGP
 X <- d*0.5+rnorm(N)
 # Pre
-Y_0 <- 5+0.2*X+0.3*rnorm(N)
+Y_1 <- 5+0.2*X+0.3*rnorm(N)
 # Post
-Y_1 <- 5+2+0.2*X+tau*d+0.3*rnorm(N)
+Y_2 <- 5+2+0.2*X+tau*d+0.3*rnorm(N)
 
 # DinD
-(mean(Y_1[d == 1]) - mean(Y_0[d == 1])) - (mean(Y_1[d == 0]) - mean(Y_0[d == 0]))
+(mean(Y_2[d == 1]) - mean(Y_1[d == 1])) - (mean(Y_2[d == 0]) - mean(Y_1[d == 0]))
 ```
 
 ```{r simple2, collectcode=TRUE}
 # Two-way Fixed Effects
 # Data prep
-dind_data <- data.frame("Y"=c(Y_0, Y_1),
+dind_data <- data.frame("Y"=c(Y_1, Y_2),
                         "Treat"=c(rep(0,N), d),
                         "Unit"=c(unit, unit),
                         "Time"=c(rep(1,N), rep(2,N)))
 
 # Two-way FE regression
 
-TWFE <- lm(Y ~ Treat + Time + as.factor(Unit), data = dind_data)
+TWFE <- lm(Y ~ Treat + as.factor(Time) + as.factor(Unit), data = dind_data)
 coef(TWFE)[c("Treat")]
 ```
 
+**With $T=2$, DinD and TWFE are numerically identical**
+
 # Violation of parellel-trend assumption
+* **DGP**
+$$
+y_{it}=5+2(t-1)(d_{it}+1)+4d_{it}+0.2x_{i}+\varepsilon_{it}\;\;\text{with}\;\;i=\{1,2,...,500\}\;\;\text{and}\;\;t=\{1,2\}
+$$
+$$
+d_{i1}=0,\;\;
+d_{i2}= \begin{cases}
+1\;\;\text{if}\;\;i=\{1,...,250\} \\
+0\;\;\text{otherwise}
+\end{cases}
+$$
+$$
+x_{i}=\begin{cases}
+0.5+u_{i}\;\;\text{if}\;\;i=\{1,...,250\} \\
+u_{i}\;\;\text{otherwise}
+\end{cases}
+\;\;\text{and}\;\;u_i \sim N(0,1)
+$$
 
 ```{r simple_nonparellel}
 # set seed
@@ -194,35 +223,157 @@ d <- c(rep(0, N/2), rep(1, N/2))
 # DGP
 X <- d*0.5+rnorm(N)
 # Pre
-Y_0 <- 5+0.2*X+0.5*d+0.3*rnorm(N)
+Y_1 <- 5+0.2*X+0.3*rnorm(N)
 # Post
-Y_1 <- 5+0.2*X+tau*d+d+0.3*rnorm(N)
+Y_2 <- 5+2*(d+1)+0.2*X+tau*d+0.3*rnorm(N)
 
 # DinD
-(mean(Y_1[d == 1]) - mean(Y_0[d == 1])) - (mean(Y_1[d == 0]) - mean(Y_0[d == 0]))
+(mean(Y_2[d == 1]) - mean(Y_1[d == 1])) - (mean(Y_2[d == 0]) - mean(Y_1[d == 0]))
 
 # Two-way Fixed Effects
 # Data prep
-dind_data <- data.frame("Y"=c(Y_0, Y_1),
+dind_data <- data.frame("Y"=c(Y_1, Y_2),
                         "Treat"=c(rep(0,N), d),
                         "Unit"=c(unit, unit),
                         "Time"=c(rep(1,N), rep(2,N)))
 
 # Two-way FE regression
-TWFE <- lm(Y ~ Treat + Time + as.factor(Unit), data = dind_data)
+TWFE <- lm(Y ~ Treat + as.factor(Time) + as.factor(Unit), data = dind_data)
 coef(TWFE)[c("Treat")]
 ```
 
+# What did we just estimate?
+* Now, we no longer have
+$$
+\gamma_{it}=\gamma_{t}\;\text{for}\;\forall\;i.
+$$
+Thus,
+$$
+E(y_{i2}-y_{i1}|i \in T)-E(y_{i2}-y_{i1}|i \in C) \\
+=E((\gamma_{i2}-\gamma_{i1})+\tau_i |i \in T)-E(\gamma_{i2}-\gamma_{i1}|i \in C) \\
+=E(\tau_i|i \in T)+\underbrace{\{E(\gamma_{i2}-\gamma_{i1}|i \in T)-E(\gamma_{i2}-\gamma_{i1}|i \in C)\}}_{\text{Non-parallel trend bias}}.
+$$
+
+* In the previous example, we had
+$$
+\gamma_{it}=2(t-1)d_{it}
+$$
+which means
+$$
+\gamma_{i2}-\gamma_{i1}=2d_{i2}.
+$$
+Therefore, the "non-parallel trend bias" term becomes,
+$$
+E(2d_{i2}|i \in T)-E(2d_{i2}|i \in C)=2
+$$
+since $E(d_{i2}|i \in T)=1$ and $E(d_{i2}|i \in C)=0$.
+
 # What if we have "$T>2$"?
-* Single treatment timing
+* Single treatment timing: We can test for parellel-trend assumption if we have more than one "pre-treatment" periods. One way to do the pre-trend testing is to estimate
+$$
+y_{it}=\alpha_i+\gamma_t+\sum_t \delta_t \mathbb{1}_i (i \in T) + \varepsilon_{it}
+$$
+  + **Issues**: Under-powered and may can lead to a biased estimate [@roth2019pre]
+  + **Alternative approach**: "Honest" approach [@rambachan2019honest]
 
-* Staggered treatment timing
+* Staggered treatment timing and (dynamic) heterogeneous treatment effects: **TWFE** fails if the treatment is **staggered** AND the treatment effects are **heterogeneous**. Many recent papers discuss this issue. Two papers/approaches we will focus on
+  + @de2020two
+  + @callaway2020difference
 
-# Pre-trend testing and "Honest" DinD
+# An example [@cai2016impact]
+* Background
 
-# An Example
+  1. The *experiment*: In 2003, the People's Insurance Company of China (PICC) started to offer a highly subsidized crop insurance program to tobacco producers in Guangchang county.
+  2. @cai2016impact uses DinD (and Triple difference) estimator to assess the impact of insurance provision on production and financail variables.
+  3. Sample period: 2000 - 2008
+  4. Here, let's focus on a production variable - Area of tobacco production.
+  5. Disclaimer: I modified the original dataset -- kept only tobacco producers and restricted the sample to the households with all 9 year of data.
 
-# Recent discussion on DinD/Two-way FEs
+* Data set-up
+```{r cai2016, results="hide"}
+#libraries
+library(tidyverse)
+library(foreign)
+library(plm)
+library(lmtest)
+
+#read data
+cai_data<-read.dta("/Users/jisangyu/Dropbox/AGEC936/data/cai_AEJ_sample_balanced_tob_only.dta") %>%
+  mutate(
+    treatment=as_factor(treatment),
+    hhno=as_factor(hhno),
+    year=as_factor(year),
+  )
+```
+
+* DinD and TWFE give us equal estimates
+```{r cai2016_2, collectcode=TRUE}
+#Manual DinD
+#define subsets
+pre_treated<-filter(cai_data, treatment==1, policy2==0)
+pre_control<-filter(cai_data, treatment==0, policy2==0)
+post_treated<-filter(cai_data, treatment==1, policy2==1)
+post_control<-filter(cai_data, treatment==0, policy2==1)
+#DinD
+(mean(post_treated$area_tob)-mean(pre_treated$area_tob))-(mean(post_control$area_tob)-mean(pre_control$area_tob))
+
+#TWFE
+TWFE<-plm(area_tob ~ did + as.factor(year),
+          data=cai_data,
+          index=c("hhno"),
+          model="within")
+
+coeftest(TWFE, vcov=function(x) vcovHC(x, cluster=c("group")))
+```
+
+# Testing for "pre-trend"
+* Simply ploting means by year
+```{r cai2016_mean, collectcode=TRUE}
+ggplot(cai_data, aes(x=year, y=area_tob, color=treatment)) + 
+  stat_summary(aes(group = treatment), fun = mean, geom = 'line', size=2, alpha=0.9) 
+```
+
+* Regression-based: Estimate
+$$
+y_{it}=\alpha_i+\gamma_t+\sum_t \delta_t \mathbb{1}_i (i \in T) + \varepsilon_{it}
+$$
+and plot $\delta_t$.
+
+```{r cai2016_3, collectcode=TRUE}
+#Year x treatment
+DT <- sapply(2000:2008, function(l) {
+   1*( (cai_data$year == l) & (cai_data$treatment == 1) )
+})
+DT <-as.data.frame(DT)
+colnames(DT)<-c(paste0("DT",2000:2008))
+cai_data<-cbind.data.frame(cai_data,DT)
+
+#Pre-trend regression
+pretrend_reg <- cai_data %>% 
+  plm(area_tob ~ year  + DT2001 + DT2002 + DT2003 + DT2004 + DT2005 + DT2006 + DT2007 + DT2008, 
+      data=., model="within",
+      index=c("hhno"))
+results<-coeftest(pretrend_reg, vcov=function(x) vcovHC(x, cluster=c("group"))) 
+results<-as.data.frame.matrix(results)
+
+#plot
+plot <- tibble(
+  sd = results[[2]][9:16],
+  mean = results[[1]][9:16],
+  year = c(2001:2008))
+
+plot %>% 
+  ggplot(aes(x = year, y = mean)) + 
+  ylab(expression(delta[t]))+
+  geom_rect(aes(xmin=2003, xmax=2008, ymin=-Inf, ymax=Inf), fill = "cyan", alpha = 0.01)+
+  geom_point()+
+  geom_text(aes(label = year), hjust=-0.002, vjust = -0.03)+
+  geom_hline(yintercept = 0) +
+  geom_errorbar(aes(ymin = mean - sd*1.96, ymax = mean + sd*1.96), width = 0.2,
+                position = position_dodge(0.05))
+```
+
+# Recent discussion related to "Staggered" treatment
 
 # Few treated and many controls
 
