@@ -1,6 +1,6 @@
 ---
 title: "AGEC 936 - Module 4"
-subtitle: "Difference-in-Differences (DinD)<br>Two-way Fixed Effects (TWFE)<br>Synthetic Control Methods"
+subtitle: "Difference-in-Differences (DID)<br>Two-way Fixed Effects (TWFE)<br>Synthetic Control Methods"
 author: "Jisang Yu<br>Kansas State University"
 date: "4/19/2021"
 output:
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 
 # This week
 * (Previous week: [Panel data introduction](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_Panel_Intro.html))
-* Difference-in-differences (DinD) in potential outcome framework
+* Difference-in-differences (DID) in potential outcome framework
 * Two-way Fixed Effects (TWFE)
 * Parallel trend assumption
 * Staggered treatment timing: When can TWFE fail
@@ -54,7 +54,7 @@ E(y_{i}|d_i=1)-E(y_{i}|d_i=0) \\
 $$
 If the **Bias** term is non-zero, what should we do?
 
-# Difference-in-differences (DinD)
+# Difference-in-differences (DID)
 * **Set-up** 
 Let's consider 2 x 2 case (two-period, $t={1,2}$, N-unit, $i={1,...,N}$, and two-group, $g={T,C}$ case). Potential outcomes are
 $$
@@ -107,7 +107,7 @@ $$
 \gamma_{it}=\gamma_{t}\;\text{for}\;\forall\;i.
 $$
 
-# A simulation - the equivalence between DinD and TWFE
+# A simulation: the equivalence between DID and TWFE
 * **DGP**
 $$
 y_{it}=5+2(t-1)+4d_{it}+0.2x_{i}+\varepsilon_{it}\;\;\text{with}\;\;i=\{1,2,...,500\}\;\;\text{and}\;\;t=\{1,2\}
@@ -166,7 +166,7 @@ TWFE <- lm(Y ~ Treat + as.factor(Time) + as.factor(Unit), data = dind_data)
 coef(TWFE)[c("Treat")]
 ```
 
-**With $T=2$, DinD and TWFE are numerically identical**
+**With $T=2$, DID and TWFE are numerically identical**
 
 # Violation of parellel-trend assumption
 * **DGP**
@@ -250,21 +250,22 @@ E(2d_{i2}|i \in T)-E(2d_{i2}|i \in C)=2
 $$
 since $E(d_{i2}|i \in T)=1$ and $E(d_{i2}|i \in C)=0$.
 
-# What if we have "$T>2$"?
-* Single treatment timing: We can test for parellel-trend assumption if we have more than one "pre-treatment" periods. One way to do the pre-trend testing is to estimate
+# What if we have $T>2$?
+* **Single treatment timing**: We can test for parellel-trend assumption if we have more than one "pre-treatment" periods. One way to do the pre-trend testing is to estimate
 $$
 y_{it}=\alpha_i+\gamma_t+\sum_t \delta_t \mathbb{1}_i (i \in T) + \varepsilon_{it}
 $$
-  + **Issues**: Under-powered and may can lead to a biased estimate [@roth2019pre]
-  + **Alternative approach**: "Honest" approach [@rambachan2019honest]
-* Staggered treatment timing and (dynamic) heterogeneous treatment effects: **TWFE** fails if the treatment is **staggered** AND the treatment effects are **heterogeneous**. Many recent papers discuss this issue. Two papers/approaches we will focus on
+  + *Issues*: Can be under-powered and may lead to a biased estimate [@roth2019pre]
+  + *Alternative approach*: "Honest" approach [@rambachan2019honest]
+  + Functional forms? Theory?
+* **Staggered treatment timing** and (dynamic) **heterogeneous treatment effects**: TWFE fails if the treatment is staggered AND the treatment effects are heterogeneous. Many recent papers discuss this issue. Two papers/approaches we will focus on
   + @de2020two
   + @callaway2020difference
 
 # An example [@cai2016impact]
 * Background
   1. The *experiment*: In 2003, the People's Insurance Company of China (PICC) started to offer a highly subsidized crop insurance program to tobacco producers in Guangchang county.
-  2. @cai2016impact uses DinD (and Triple difference) estimator to assess the impact of insurance provision on production and financail variables.
+  2. @cai2016impact uses DID (and Triple difference) estimator to assess the impact of insurance provision on production and financail variables.
   3. Sample period: 2000 - 2008
   4. Here, let's focus on a production variable - Area of tobacco production.
   5. Disclaimer: I modified the original dataset -- kept only tobacco producers and restricted the sample to the households with all 9 year of data.
@@ -285,15 +286,15 @@ cai_data<-read.dta("/Users/jisangyu/Dropbox/AGEC936/data/cai_AEJ_sample_balanced
   )
 ```
 
-* DinD and TWFE give us equal estimates
+* DID and TWFE give us equal estimates
 ```{r cai2016_2, collectcode=TRUE}
-#Manual DinD
+#Manual DID
 #define subsets
 pre_treated<-filter(cai_data, treatment==1, policy2==0)
 pre_control<-filter(cai_data, treatment==0, policy2==0)
 post_treated<-filter(cai_data, treatment==1, policy2==1)
 post_control<-filter(cai_data, treatment==0, policy2==1)
-#DinD
+#DID
 (mean(post_treated$area_tob)-mean(pre_treated$area_tob))-(mean(post_control$area_tob)-mean(pre_control$area_tob))
 
 #TWFE
@@ -353,10 +354,204 @@ plot %>%
 ```
 
 # Recent discussion related to "Staggered" treatment
+* Different (staggered) treatment timings are nice! More variations!
+
+* Can we still use TWFE?: Several recent papers show when and how TWFE can fail
+  + @de2020two
+  + @goodman2018difference (or [Mixtape's version of this](https://mixtape.scunning.com/difference-in-differences.html?panelset=r-code&panelset1=r-code2#twoway-fixed-effects-with-differential-timing))
+  + [Guide by Callaway and Sant'Anna](https://bcallaway11.github.io/did/articles/multi-period-did.html)
+  + And several other papers (e.g. @borusyak2017revisiting, @sun2020estimating)
+  
+* Alternatives to TWFE
+  + @de2020two: uses a weighted-average of DID estimators.
+  + @callaway2020difference: focuses on "group-time average treatment effect" and discusses different aggregation schemes of the group-time average treatment effect.
+
+# @de2020two representation of TWFE estimator
+* **Set-up** of @de2020two ($N_{g,t}=1$ version): Consider $N$ cross-sectional units, $i=1,...,N$, and $T>3$ time periods, $t=1,...,T$. Denote $y_{it}(d_{it})$ as  potential outcomes and the treatment status, $d_{it}$, can be zero or one. The treatment effect for each $(i,t)$ is
+$$
+\Delta_{i,t}=y_{it}(1)-y_{it}(0).
+$$
+(The ATT is $\Delta=E(y_{it}(1)-y_{it}(0)|d_{it}=1)$.)
+
+* **TWFE regression**
+Consider TWFE regression
+$$
+y_{it}=\alpha_i+\gamma_t+\tau d_{it}+\varepsilon_{it}.
+$$
+Do we have $E(\hat{\tau})$ converging to $E(\Delta_{i,t})$?
+
+* **Theorem 1** of @de2020two (again, $N_{g,t}=1$ version)
+$$
+\tau=E\left(\frac{\sum_{(i,t):d_{it}=1}w_{it}\Delta_{it}}{\sum_i \sum_t d_{it}}\right)
+$$
+where
+$$
+w_{it}=\frac{\epsilon_{it}}{\frac{\sum_{(i,t):d_{it}=1}\epsilon_{it}}{\sum_i \sum_t d_{it}}},
+$$
+and 
+$$
+\epsilon_{it}=d_{it}-\bar{d}_i-\bar{d}_t+\bar{d}.
+$$
+
+# Why TWFE fails and when TWFE works?
+* **Why TWFE fails?** $w_{it}$ does not necessary represent sample weights. Some $w_{it}$ can be **negative**!
+
+* **If $\Delta_{it}=\Delta$ (i.e. homogeneous treatment effect),** we have 
+$$
+\tau=E\left(\frac{\sum_{(i,t):d_{it}=1}w_{it}\Delta_{it}}{\sum_i \sum_t d_{it}}\right)=\Delta
+$$
+TWFE works!
+
+* **If $T=2$, $d_{i1}=0$ for all $i$, and $d_{i2}=1$ for some $i$,** we have $\epsilon_{i2}=\epsilon_{2}$ for $i$ with $d_{i2}=1$, and then
+$$
+w_{i2}=\frac{\epsilon_{2}}{\frac{\sum_{i:d_{i2}=1}\epsilon_{2}}{\sum_i d_{i2}}}=1
+$$
+TWFE works!
+
+# @de2020two $DID_M$ estimator
+* **The intuition**: Use the weighted average of i) "treatment effects" in groups who switch-in from $d_{it-1}=0$ to $d_{it}=1$ and ii) "treatment effects" in groups who switch-out from $d_{it-1}=1$ to $d_{it}=0$. For i), the benchmark group is $d_{it-1}=d_{it}=0$ and for ii), the benchmark group is $d_{it-1}=d_{it}=1$. 
+
+* $DID_M$ estimator
+$$
+DID_M=\sum_{t=2} \left(\theta_{\text{switch-in},t}DID_{\text{switch-in},t}+\theta_{\text{switch-out},t}DID_{\text{switch-out},t}\right)
+$$
+
+# @callaway2020difference: Group-time average treatment effect
+
+# @callaway2020difference: Aggregation
 
 # Few treated and many controls
 
 # Synthetic control methods
+
+# An example [@abadie2003economic]
+
+```{r basque, results="hide"}
+library(Synth)
+data(basque)
+#Data preparation
+dataprep.out <- dataprep(
+foo = basque,
+predictors = c("school.illit", "school.prim", "school.med",
+"school.high", "school.post.high", "invest"),
+predictors.op = "mean",
+time.predictors.prior = 1964:1969,
+special.predictors = list(
+list("gdpcap", 1960:1969 , "mean"),
+list("sec.agriculture", seq(1961, 1969, 2), "mean"),
+list("sec.energy", seq(1961, 1969, 2), "mean"),
+list("sec.industry", seq(1961, 1969, 2), "mean"),
+list("sec.construction", seq(1961, 1969, 2), "mean"),
+list("sec.services.venta", seq(1961, 1969, 2), "mean"),
+list("sec.services.nonventa", seq(1961, 1969, 2), "mean"),
+list("popdens", 1969, "mean")),
+dependent = "gdpcap",
+unit.variable = "regionno",
+unit.names.variable = "regionname",
+time.variable = "year",
+treatment.identifier = 17,
+controls.identifier = c(2:16, 18),
+time.optimize.ssr = 1960:1969,
+time.plot = 1955:1997)
+#Further variable consolidation and manipulation following Abadie et al 2011 (Journal of Statistical Software)
+dataprep.out$X1["school.high",] <- dataprep.out$X1["school.high",] +
+dataprep.out$X1["school.post.high",]
+dataprep.out$X1 <- as.matrix(dataprep.out$X1[
+-which(rownames(dataprep.out$X1) == "school.post.high"),])
+dataprep.out$X0["school.high",] <- dataprep.out$X0["school.high",] +
+dataprep.out$X0["school.post.high",]
+dataprep.out$X0 <- dataprep.out$X0[
+-which(rownames(dataprep.out$X0) == "school.post.high"),]
+lowest <- which(rownames(dataprep.out$X0) == "school.illit")
+highest <- which(rownames(dataprep.out$X0) == "school.high")
+dataprep.out$X1[lowest:highest,] <-
+(100 * dataprep.out$X1[lowest:highest,]) /
+sum(dataprep.out$X1[lowest:highest,])
+dataprep.out$X0[lowest:highest,] <-
+100 * scale(dataprep.out$X0[lowest:highest,], center = FALSE,
+scale = colSums(dataprep.out$X0[lowest:highest,]))
+#Synth estimation
+synth.out <- synth(data.prep.obj = dataprep.out, method = "BFGS")
+synth.tables <- synth.tab(dataprep.res = dataprep.out,synth.res = synth.out)
+hat.w.scm1<-synth.tables$tab.w[,1]
+#Observed and Synthetic Basque
+obs.Y.1t<-dataprep.out$Y1
+hat.Y.1t.scm1<-(dataprep.out$Y0)%*%hat.w.scm1
+```
+```{r basque_results, collectcode=TRUE}
+#Weights
+synth.tables$tab.w
+#Plot
+Year<-1955:1997
+plot(Year,obs.Y.1t,ylim=c(3,12),ylab="real per-capita GDP(1986 USD, thousand)",type='l',lwd=2)
+abline(v=1970,lty=3,col=1)
+lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
+```
+
+# Placebo test
+* Test with other region (Cataluna)
+```{r placebo, collectcode=TRUE, results="hide"}
+dataprep.out <- dataprep(
+foo = basque,
+predictors = c("school.illit", "school.prim", "school.med",
+"school.high", "school.post.high", "invest"),
+predictors.op = "mean",
+time.predictors.prior = 1964:1969,
+special.predictors = list(
+list("gdpcap", 1960:1969 , "mean"),
+list("sec.agriculture", seq(1961, 1969, 2), "mean"),
+list("sec.energy", seq(1961, 1969, 2), "mean"),
+list("sec.industry", seq(1961, 1969, 2), "mean"),
+list("sec.construction", seq(1961, 1969, 2), "mean"),
+list("sec.services.venta", seq(1961, 1969, 2), "mean"),
+list("sec.services.nonventa", seq(1961, 1969, 2), "mean"),
+list("popdens", 1969, "mean")),
+dependent = "gdpcap",
+unit.variable = "regionno",
+unit.names.variable = "regionname",
+time.variable = "year",
+treatment.identifier = 10,
+controls.identifier = c(2:9, 11:16, 18),
+time.optimize.ssr = 1960:1969,
+time.plot = 1955:1997)
+#Further variable consolidation and manipulation following Abadie et al 2011 (Journal of Statistical Software)
+dataprep.out$X1["school.high",] <- dataprep.out$X1["school.high",] +
+dataprep.out$X1["school.post.high",]
+dataprep.out$X1 <- as.matrix(dataprep.out$X1[
+-which(rownames(dataprep.out$X1) == "school.post.high"),])
+dataprep.out$X0["school.high",] <- dataprep.out$X0["school.high",] +
+dataprep.out$X0["school.post.high",]
+dataprep.out$X0 <- dataprep.out$X0[
+-which(rownames(dataprep.out$X0) == "school.post.high"),]
+lowest <- which(rownames(dataprep.out$X0) == "school.illit")
+highest <- which(rownames(dataprep.out$X0) == "school.high")
+dataprep.out$X1[lowest:highest,] <-
+(100 * dataprep.out$X1[lowest:highest,]) /
+sum(dataprep.out$X1[lowest:highest,])
+dataprep.out$X0[lowest:highest,] <-
+100 * scale(dataprep.out$X0[lowest:highest,], center = FALSE,
+scale = colSums(dataprep.out$X0[lowest:highest,]))
+#Synth estimation
+synth.out <- synth(data.prep.obj = dataprep.out, method = "BFGS")
+synth.tables <- synth.tab(dataprep.res = dataprep.out,synth.res = synth.out)
+hat.w.scm1<-synth.tables$tab.w[,1]
+#Observed and Synthetic Cataluna
+obs.Y.1t<-dataprep.out$Y1
+hat.Y.1t.scm1<-(dataprep.out$Y0)%*%hat.w.scm1
+```
+```{r placebo_results, collectcode=TRUE}
+#Weights
+synth.tables$tab.w
+#Plot
+Year<-1955:1997
+plot(Year,obs.Y.1t,ylim=c(3,12),ylab="real per-capita GDP(1986 USD, thousand)",type='l',lwd=2)
+abline(v=1970,lty=3,col=1)
+lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
+```
+
+# Synthetic control: Things to consider
+
+# Next week
 
 # References
 
