@@ -266,7 +266,7 @@ $$
   + @de2020two
   + @callaway2020difference
 
-# An example [@cai2016impact]
+# Single treatment timing with $T>2$: An example [@cai2016impact]
 * Background
   1. The *experiment*: In 2003, the People's Insurance Company of China (PICC) started to offer a highly subsidized crop insurance program to tobacco producers in Guangchang county.
   2. @cai2016impact uses DID (and Triple difference) estimator to assess the impact of insurance provision on production and financail variables.
