@@ -741,7 +741,7 @@ E(2d_{i2}|i \in T)-E(2d_{i2}|i \in C)=2
 <ul>
 <li><strong>Single treatment timing</strong>: We can test for parellel-trend assumption if we have more than one “pre-treatment” periods. One way to do the pre-trend testing is to estimate <span class="math display">\[
 y_{it}=\alpha_i+\gamma_t+\sum_t \delta_t \mathbb{1}_i (i \in T) + \varepsilon_{it}
-\]</span>
+\]</span> and “test” whether <span class="math inline">\(\delta_t\)</span> are jointly zeros for <span class="math inline">\(t&lt;t^*\)</span> where <span class="math inline">\(t^*\)</span> is the treatment period.
 <ul>
 <li><em>Issues</em>: Can be under-powered and may lead to a biased estimate <span class="citation">(Roth 2019)</span></li>
 <li><em>Alternative approach</em>: “Honest” approach <span class="citation">(Rambachan and Roth 2019)</span></li>
