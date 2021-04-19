@@ -127,6 +127,8 @@ u_{i}\;\;\text{otherwise}
 $$
 
 ```{r simple, collectcode=TRUE}
+library(lmtest)
+library(sandwich)
 # set seed
 set.seed(11123)
 
@@ -160,9 +162,9 @@ dind_data <- data.frame("Y"=c(Y_1, Y_2),
                         "Time"=c(rep(1,N), rep(2,N)))
 
 # Two-way FE regression
-
 TWFE <- lm(Y ~ Treat + as.factor(Time) + as.factor(Unit), data = dind_data)
-coef(TWFE)[c("Treat")]
+Results<-coeftest(TWFE, vcov=vcovHC)
+Results[2,]
 ```
 
 **With $T=2$, DID and TWFE are numerically identical**
@@ -188,6 +190,8 @@ u_{i}\;\;\text{otherwise}
 $$
 
 ```{r simple_nonparellel}
+library(lmtest)
+library(sandwich)
 # set seed
 set.seed(11123)
 
@@ -221,7 +225,8 @@ dind_data <- data.frame("Y"=c(Y_1, Y_2),
 
 # Two-way FE regression
 TWFE <- lm(Y ~ Treat + as.factor(Time) + as.factor(Unit), data = dind_data)
-coef(TWFE)[c("Treat")]
+Results<-coeftest(TWFE, vcov=vcovHC)
+Results[2,]
 ```
 
 # What did we just estimate?
@@ -309,7 +314,7 @@ coeftest(TWFE, vcov=function(x) vcovHC(x, cluster=c("group")))
 * Simply ploting means by year
 ```{r cai2016_mean, collectcode=TRUE}
 ggplot(cai_data, aes(x=year, y=area_tob, color=treatment)) + 
-  stat_summary(aes(group = treatment), fun = mean, geom = 'line', size=2, alpha=0.9) 
+stat_summary(aes(group = treatment), fun = mean, geom = 'line', size=1) 
 ```
 
 * Regression-based: Estimate
