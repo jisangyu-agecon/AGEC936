@@ -510,6 +510,46 @@ $$
 
 # @callaway2020difference: An example
 
+```{r prf_example}
+library(did)
+library(tidyverse)
+library(foreign)
+library(plm)
+library(lmtest)
+
+#read data
+prf_data<-read.dta("/Users/jisangyu/Dropbox/AGEC936/data/prf_rent.dta")
+
+# estimate group-time average treatment effects using att_gt method
+prf_attgt <- att_gt(yname = "lnvalue",
+                        tname = "t",
+                        idname = "fips",
+                        gname = "g",
+                        xformla = NULL,
+                        panel = TRUE,
+                        control_group = c("notyettreated"),
+                        data = prf_data
+)
+
+# summarize the results
+summary(prf_attgt)
+# plot the results
+ggdid(prf_attgt)
+
+# group-specific effects
+agg.gs <- aggte(prf_attgt, type = "group")
+summary(agg.gs)
+# plot
+ggdid(agg.gs)
+
+# dynamic effects
+agg.es <- aggte(prf_attgt, type = "dynamic")
+summary(agg.es)
+# plot
+ggdid(agg.es)
+```
+
+
 # A couple of notes on @de2020two vs @callaway2020difference
 
 * @de2020two allows "switch-out" whereas @callaway2020difference works with strictly "staggered" cases (irreversable treatments).
