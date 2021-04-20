@@ -1011,14 +1011,46 @@ heterogeneous effects, and to dynamic effects if the robust_dynamic option is us
 <h1><span class="citation">Callaway and Sant’Anna (2020)</span>: Group-time average treatment effect</h1>
 <ul>
 <li><p><strong>The key idea</strong>: Think about “group-time” average treatment effect on treated.</p></li>
-<li><p><strong>Definition of “group”</strong>: A group of units who received treatment in same time period.</p></li>
+<li><p><strong>Definition of “group”</strong>: A group of units who received treatment in same time period, <span class="math inline">\(G_g=1\)</span> to indicate the group of units with the first-year of treatment is time <span class="math inline">\(g\)</span>.</p></li>
+<li><p><strong>(Dynamic) potential outcomes</strong>: A potential outcome of a unit who is in group <span class="math inline">\(G_g\)</span>, i.e. who got treated <em>since</em> time <span class="math inline">\(g\)</span>, is <span class="math inline">\(y_{it}(g)\)</span>. Researchers observe <span class="math display">\[
+y_{it}=y_{it}(0)+\sum_{t=2} \left(y_{it}(g)-y_{it}(0)\right)G_{ig}
+\]</span> where <span class="math inline">\(G_{ig}\)</span> is the group indicator for unit <span class="math inline">\(i\)</span>.</p></li>
+<li><p><strong>Group-time ATT</strong> <span class="math display">\[
+ATT(g,t)=E(y_t(g)-y_t(0)|G_g=1)
+\]</span></p></li>
+<li><p><strong>Key assumptions</strong> in estimating <em>group-time ATT</em></p>
+<ul>
+<li>Conditional parallel trends based on a “Never-treated” group</li>
+<li>Conditional parallel trends based on a “Not-yet-treated” group</li>
+</ul></li>
+<li><p><strong>Estimation</strong></p>
+<ul>
+<li><strong>Key idea</strong>: Compare the differences in the outcomes between time <span class="math inline">\(t\)</span> and <span class="math inline">\(g-\delta-1\)</span> where <span class="math inline">\(\delta\)</span> is the length of “anticipation” periods. You can compare <span class="math inline">\(G_g=1\)</span> with “never-treated” group or with “not-yet-treated” group. Can use outcome regression, inverse probability weighting, or doubly robust estimands. See section 2.4. of <span class="citation">Callaway and Sant’Anna (2020)</span>.</li>
+<li><strong>Doubly robust estimand (for the comparison to “not-yet-treated” group, assuming no anticipation)</strong> <span class="math display">\[
+E\left(\left(\frac{G_g}{E(G_g)}-\frac{\frac{p_{gt}(X)(1-d_{it})(1-G_g)}{1-p_{gt}(X)}}{E\left(\frac{p_{gt}(X)(1-d_{it})(1-G_g)}{1-p_{gt}(X)}\right)}\right) (y_{it}-y_{it-g}-m_{gt}(X)) \right)
+\]</span> where <span class="math inline">\(p_{gt}(X)\)</span> is a propensity score for <span class="math inline">\(G_g=1\)</span>, and <span class="math inline">\(m_{gt}(X)\)</span> is the difference explained by some covariates <span class="math inline">\(X\)</span>.</li>
+<li>Definition of <strong>Doubly Robust</strong>?</li>
+</ul></li>
+<li><p><strong>Aggregation</strong>: It depends on what you are interested in. For example, are you interested in the average of static effects <em>with-in</em> group? Or are you interested in the <em>dynamic</em> effects measured by the lengeth of <em>exposure</em>. See table 1 of <span class="citation">Callaway and Sant’Anna (2020)</span> for the discussion on “weights”.</p></li>
 </ul>
 </div>
-<div id="callaway2020difference-aggregation" class="slide section level1">
-<h1><span class="citation">Callaway and Sant’Anna (2020)</span>: Aggregation</h1>
+<div id="callaway2020difference-an-example" class="slide section level1">
+<h1><span class="citation">Callaway and Sant’Anna (2020)</span>: An example</h1>
+</div>
+<div id="a-couple-of-notes-on-de2020two-vs-callaway2020difference" class="slide section level1">
+<h1>A couple of notes on <span class="citation">de Chaisemartin and d’Haultfoeuille (2020)</span> vs <span class="citation">Callaway and Sant’Anna (2020)</span></h1>
+<ul>
+<li><p><span class="citation">de Chaisemartin and d’Haultfoeuille (2020)</span> allows “switch-out” whereas <span class="citation">Callaway and Sant’Anna (2020)</span> works with strictly “staggered” cases (irreversable treatments).</p></li>
+<li><p><span class="citation">Callaway and Sant’Anna (2020)</span> focuses more on treatment effects dynamics whereas <span class="citation">de Chaisemartin and d’Haultfoeuille (2020)</span> focuses on an instantaneous treatment effect.</p></li>
+<li><p>Unconditional <span class="citation">(de Chaisemartin and d’Haultfoeuille 2020)</span> versus conditional <span class="citation">(Callaway and Sant’Anna 2020)</span> designs.</p></li>
+</ul>
 </div>
 <div id="few-treated-and-many-controls" class="slide section level1">
 <h1>Few treated and many controls</h1>
+<ul>
+<li>(Extreme) case: <strong>One</strong> treated unit and <strong>many</strong> control units.</li>
+<li>What are the issues?</li>
+</ul>
 </div>
 <div id="synthetic-control-methods" class="slide section level1">
 <h1>Synthetic control methods</h1>
