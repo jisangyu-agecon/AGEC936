@@ -1,0 +1,26 @@
+---
+title: "AGEC 936 - Module 4"
+subtitle: "Panel IV/GMM<br>Shift-share Design"
+author: "Jisang Yu<br>Kansas State University"
+date: "4/19/2021"
+output:
+ slidy_presentation:
+   font_adjustment: -1
+   toc: false
+   footer: "AGEC 936 - Jisang Yu"
+bibliography: references.bib
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+library(Statamarkdown)
+```
+
+# This week
+* (Previous week: [DID, FE, and Synthetic Control](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html))
+* Panel IV example 1: Dynamic panel
+* Panel IV example 2: Pre-event trends
+* Panel IV example 3: Bartik/Shift-share IV
+* More on Shift-share design...
+
+# References
+

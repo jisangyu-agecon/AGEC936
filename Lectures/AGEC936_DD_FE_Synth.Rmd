@@ -12,6 +12,7 @@ bibliography: references.bib
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+library(Statamarkdown)
 ```
 
 # This week
@@ -58,7 +59,7 @@ If the **Bias** term is non-zero, what should we do?
 Let's consider 2 x 2 case (two-period, $t={1,2}$, N-unit, $i={1,...,N}$, and two-group, $g={T,C}$ case). Potential outcomes are
 $$
 y_{it}(0)=\alpha_i+\gamma_t+\varepsilon_{it} \\
-y_{it}(1)=\alpha_i+\gamma_t+\tau_i d_{it}+\varepsilon_{it}
+y_{it}(1)=\alpha_i+\gamma_t+\tau_i+\varepsilon_{it}
 $$
 For $i \in T$, $d_{i1}=0$ and $d_{i2}=1$ and for $i \in C$, $d_{i1}=0$ and $d_{i2}=0$.
 * **Average Treatment Effect on Treated (ATT)**
@@ -132,7 +133,7 @@ library(sandwich)
 # set seed
 set.seed(11123)
 
-# 100 units
+# 500 units
 N<-500
 unit<-1:500
 
@@ -172,7 +173,7 @@ Results[2,]
 # Violation of parellel-trend assumption
 * **DGP**
 $$
-y_{it}=5+2(t-1)(d_{it}+1)+4d_{it}+0.2x_{i}+\varepsilon_{it}\;\;\text{with}\;\;i=\{1,2,...,500\}\;\;\text{and}\;\;t=\{1,2\}
+y_{it}=5+2(t-1)x_{i}+4d_{it}+0.2x_{i}+\varepsilon_{it}\;\;\text{with}\;\;i=\{1,2,...,500\}\;\;\text{and}\;\;t=\{1,2\}
 $$
 $$
 d_{i1}=0,\;\;
@@ -211,7 +212,7 @@ X <- d*0.5+rnorm(N)
 # Pre
 Y_1 <- 5+0.2*X+0.3*rnorm(N)
 # Post
-Y_2 <- 5+2*(d+1)+0.2*X+tau*d+0.3*rnorm(N)
+Y_2 <- 5+2*(d+1)*X+0.2*X+tau*d+0.3*rnorm(N)
 
 # DinD
 (mean(Y_2[d == 1]) - mean(Y_1[d == 1])) - (mean(Y_2[d == 0]) - mean(Y_1[d == 0]))
@@ -255,7 +256,7 @@ $$
 since $E(d_{i2}|i \in T)=1$ and $E(d_{i2}|i \in C)=0$.
 
 # What if we have $T>2$?
-* **Single treatment timing**: We can test for parellel-trend assumption if we have more than one "pre-treatment" periods. One way to do the pre-trend testing is to estimate
+* **Single treatment timing**: We can test for parellel-trend/common-trend assumption if we have more than one "pre-treatment" periods. One way to do the pre-trend testing is to estimate
 $$
 y_{it}=\alpha_i+\gamma_t+\sum_t \delta_t \mathbb{1}_i (i \in T) + \varepsilon_{it}
 $$
@@ -400,6 +401,9 @@ $$
 
 # Why TWFE fails and when TWFE works?
 * **Why TWFE fails?** $w_{it}$ does not necessary represent sample weights. Some $w_{it}$ can be **negative**!
+  + In some unit-time observations, TWFE uses "treated" observations as controls... (see page 2971 of @de2020two)
+  + Negative weights are more likely to the periods when a large fraction of units are treated, and to the units who treated for many periods.
+
 
 * **If $\Delta_{it}=\Delta$ (i.e. homogeneous treatment effect),** we have 
 $$
@@ -416,12 +420,67 @@ TWFE works!
 # @de2020two $DID_M$ estimator
 * **The intuition**: Use the weighted average of i) "treatment effects" in groups who switch-in from $d_{it-1}=0$ to $d_{it}=1$ and ii) "treatment effects" in groups who switch-out from $d_{it-1}=1$ to $d_{it}=0$. For i), the benchmark group is $d_{it-1}=d_{it}=0$ and for ii), the benchmark group is $d_{it-1}=d_{it}=1$. 
 
+* Robust to heterogeneous treatment effects (of course, requires some assumptions such as common trend).
+
 * $DID_M$ estimator
 $$
 DID_M=\sum_{t=2} \left(\theta_{\text{switch-in},t}DID_{\text{switch-in},t}+\theta_{\text{switch-out},t}DID_{\text{switch-out},t}\right)
 $$
+where $\theta_{\text{switch-in},t}$ and $\theta_{\text{switch-out},t}$ are shares of observations that "switch-in" and "switch-out" over total treated observations in year $t$, and 
+$$
+DID_{\text{switch-in},t}=\frac{1}{N_{\text{switch-in},t}}\sum_{d_{it}=1,d_{it-1}=0} \left(y_{it}-y_{it-1}\right)-\frac{1}{N_{\text{not-treated},t}}\sum_{d_{it}=0,d_{it-1}=0} \left(y_{it}-y_{it-1}\right) 
+$$
+and
+$$
+DID_{\text{switch-out},t}=\frac{1}{N_{\text{treated},t}}\sum_{d_{it}=1,d_{it-1}=1} \left(y_{it}-y_{it-1}\right)-\frac{1}{N_{\text{switch-out},t}}\sum_{d_{it}=0,d_{it-1}=1} \left(y_{it}-y_{it-1}\right) 
+$$
+
+* The paper also offers an estimator that tests for common trend assumptions. The idea is to estimate $DID_M$ for $t-1$ and $t-2$ instead of $t$ and $t-1$ (but restrict the samples to $d_{it-1}=d_{it-2}$).
+
+# @de2020two $DID_M$ estimator: simulation example
+```{stata did_m, collectcode=TRUE, results="hide"}
+*Set up
+clear all
+set more off
+set obs 50
+*Generate panel data
+set seed 1234
+gen x=runiform(5,15)
+sort x
+gen id=_n
+expand 3
+bys id: gen t=_n
+*Heterogeneous TEs
+gen te=0
+replace te=4*t if id>25
+replace te=1*t if id<=25
+*DGP
+gen d=0
+*group 1: treated in t=2 and t=3
+replace d=1 if id>25 & t>=2
+*group 2: treated in t=3
+replace d=1 if id<=25 & t>=3
+*outcome 
+gen e=rnormal()
+gen y=0.5+0.5*t+te*d+0.2*x+e
+```
+```{stata did_m2, collectcode=TRUE}
+*ATT (observation number-weighted)
+summ te if d==1
+```
+```{stata did_m3, collectcode=TRUE}
+*TWFE
+xtset id t
+xtreg y d i.t, fe
+
+*de Chaisematin & DHaultfoeuille DID estimator
+did_multiplegt y id t d, breps(100)
+```
 
 # @callaway2020difference: Group-time average treatment effect
+* **The key idea**: Think about "group-time" average treatment effect on treated.
+
+* **Definition of "group"**: A group of units who received treatment in same time period. 
 
 # @callaway2020difference: Aggregation
 
@@ -557,6 +616,7 @@ lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
 # Synthetic control: Things to consider
 
 # Next week
+[Panel IV/GMM and Shift-share deisgn](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_Panel_IV_GMM.html)
 
 # References
 
