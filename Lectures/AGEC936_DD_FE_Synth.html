@@ -698,11 +698,11 @@ u_{i}\;\;\text{otherwise}
 <span id="cb5-19"><a href="#cb5-19"></a><span class="co"># Pre</span></span>
 <span id="cb5-20"><a href="#cb5-20"></a>Y_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="dv">5</span><span class="fl">+0.2</span><span class="op">*</span>X<span class="fl">+0.3</span><span class="op">*</span><span class="kw">rnorm</span>(N)</span>
 <span id="cb5-21"><a href="#cb5-21"></a><span class="co"># Post</span></span>
-<span id="cb5-22"><a href="#cb5-22"></a>Y_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="dv">5</span><span class="op">+</span><span class="dv">2</span><span class="op">*</span>(d<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>X<span class="fl">+0.2</span><span class="op">*</span>X<span class="op">+</span>tau<span class="op">*</span>d<span class="fl">+0.3</span><span class="op">*</span><span class="kw">rnorm</span>(N)</span>
+<span id="cb5-22"><a href="#cb5-22"></a>Y_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="dv">5</span><span class="op">+</span><span class="dv">2</span><span class="op">*</span>X<span class="fl">+0.2</span><span class="op">*</span>X<span class="op">+</span>tau<span class="op">*</span>d<span class="fl">+0.3</span><span class="op">*</span><span class="kw">rnorm</span>(N)</span>
 <span id="cb5-23"><a href="#cb5-23"></a></span>
 <span id="cb5-24"><a href="#cb5-24"></a><span class="co"># DinD</span></span>
 <span id="cb5-25"><a href="#cb5-25"></a>(<span class="kw">mean</span>(Y_<span class="dv">2</span>[d <span class="op">==</span><span class="st"> </span><span class="dv">1</span>]) <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(Y_<span class="dv">1</span>[d <span class="op">==</span><span class="st"> </span><span class="dv">1</span>])) <span class="op">-</span><span class="st"> </span>(<span class="kw">mean</span>(Y_<span class="dv">2</span>[d <span class="op">==</span><span class="st"> </span><span class="dv">0</span>]) <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(Y_<span class="dv">1</span>[d <span class="op">==</span><span class="st"> </span><span class="dv">0</span>]))</span></code></pre></div>
-<pre><code>[1] 5.95955</code></pre>
+<pre><code>[1] 4.940658</code></pre>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Two-way Fixed Effects</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a><span class="co"># Data prep</span></span>
 <span id="cb7-3"><a href="#cb7-3"></a>dind_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="st">&quot;Y&quot;</span>=<span class="kw">c</span>(Y_<span class="dv">1</span>, Y_<span class="dv">2</span>),</span>
@@ -715,7 +715,7 @@ u_{i}\;\;\text{otherwise}
 <span id="cb7-10"><a href="#cb7-10"></a>Results&lt;-<span class="kw">coeftest</span>(TWFE, <span class="dt">vcov=</span>vcovHC)</span>
 <span id="cb7-11"><a href="#cb7-11"></a>Results[<span class="dv">2</span>,]</span></code></pre></div>
 <pre><code>    Estimate   Std. Error      t value     Pr(&gt;|t|) 
-5.959550e+00 4.266778e-01 1.396733e+01 1.202969e-37 </code></pre>
+4.940658e+00 2.716853e-01 1.818522e+01 4.787903e-57 </code></pre>
 </div>
 <div id="what-did-we-just-estimate" class="slide section level1">
 <h1>What did we just estimate?</h1>
@@ -728,12 +728,12 @@ E(y_{i2}-y_{i1}|i \in T)-E(y_{i2}-y_{i1}|i \in C) \\
 =E(\tau_i|i \in T)+\underbrace{\{E(\gamma_{i2}-\gamma_{i1}|i \in T)-E(\gamma_{i2}-\gamma_{i1}|i \in C)\}}_{\text{Non-parallel trend bias}}.
 \]</span></li>
 <li>In the previous example, we had <span class="math display">\[
-\gamma_{it}=2(t-1)d_{it}
+\gamma_{it}=2(t-1)x_{i}
 \]</span> which means <span class="math display">\[
-\gamma_{i2}-\gamma_{i1}=2d_{i2}.
+\gamma_{i2}-\gamma_{i1}=2x_{i}.
 \]</span> Therefore, the “non-parallel trend bias” term becomes, <span class="math display">\[
-E(2d_{i2}|i \in T)-E(2d_{i2}|i \in C)=2
-\]</span> since <span class="math inline">\(E(d_{i2}|i \in T)=1\)</span> and <span class="math inline">\(E(d_{i2}|i \in C)=0\)</span>.</li>
+E(2x_{i}|i \in T)-E(2x_{i}|i \in C)=1
+\]</span> since <span class="math inline">\(E(x_{i}|i \in T)=0.5\)</span> and <span class="math inline">\(E(x_{i}|i \in C)=0\)</span>.</li>
 </ul>
 </div>
 <div id="what-if-we-have-t2" class="slide section level1">
@@ -999,9 +999,10 @@ corr(u_i, Xb)  = 0.1565                         Prob &gt; F          =     0.000
 F test that all u_i=0: F(49, 97) = 2.85                      Prob &gt; F = 0.0000
 
 
-DID estimators of the instantaneous treatment effect, of dynamic treatment effects if the dynamic option is used, and
-of placebo tests of the parallel trends assumption if the placebo option is used. The estimators are robust to
-heterogeneous effects, and to dynamic effects if the robust_dynamic option is used.
+DID estimators of the instantaneous treatment effect, of dynamic treatment effects if the
+dynamic option is used, and of placebo tests of the parallel trends assumption if the
+placebo option is used. The estimators are robust to heterogeneous effects, and to dynamic
+effects if the robust_dynamic option is used.
 
              |  Estimate         SE      LB CI      UB CI          N  Switchers 
 -------------+------------------------------------------------------------------
@@ -1029,13 +1030,25 @@ ATT(g,t)=E(y_t(g)-y_t(0)|G_g=1)
 <li><strong>Doubly robust estimand (for the comparison to “not-yet-treated” group, assuming no anticipation)</strong> <span class="math display">\[
 E\left(\left(\frac{G_g}{E(G_g)}-\frac{\frac{p_{gt}(X)(1-d_{it})(1-G_g)}{1-p_{gt}(X)}}{E\left(\frac{p_{gt}(X)(1-d_{it})(1-G_g)}{1-p_{gt}(X)}\right)}\right) (y_{it}-y_{it-g}-m_{gt}(X)) \right)
 \]</span> where <span class="math inline">\(p_{gt}(X)\)</span> is a propensity score for <span class="math inline">\(G_g=1\)</span>, and <span class="math inline">\(m_{gt}(X)\)</span> is the difference explained by some covariates <span class="math inline">\(X\)</span>.</li>
-<li>Definition of <strong>Doubly Robust</strong>?</li>
+<li>Definition of <strong>Doubly Robust</strong>?: See <span class="citation">Vermeulen and Vansteelandt (2015)</span>.</li>
 </ul></li>
 <li><p><strong>Aggregation</strong>: It depends on what you are interested in. For example, are you interested in the average of static effects <em>with-in</em> group? Or are you interested in the <em>dynamic</em> effects measured by the lengeth of <em>exposure</em>. See table 1 of <span class="citation">Callaway and Sant’Anna (2020)</span> for the discussion on “weights”.</p></li>
 </ul>
 </div>
 <div id="callaway2020difference-an-example" class="slide section level1">
 <h1><span class="citation">Callaway and Sant’Anna (2020)</span>: An example</h1>
+<ul>
+<li>Background
+<ol style="list-style-type: decimal">
+<li>Let’s look at the effect of staggered roll-out of the PRF Rainfall index insurance program.</li>
+<li>Here, let’s see whether having an insurance product available to ranchers affects rental rates for pastureland
+<ul>
+<li>A relevant paper is <span class="citation">Ifft, Wu, and Kuethe (2014)</span>: Finds a positive impact on farmland values using field-level data.</li>
+</ul></li>
+<li>The data span from 2009 to 2012 (<span class="math inline">\(T=4\)</span>) and the first year counties have the PRF product available differs.</li>
+<li>All counties are “treated” in 2013 and later.</li>
+</ol></li>
+</ul>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">library</span>(did)</span>
 <span id="cb21-2"><a href="#cb21-2"></a><span class="kw">library</span>(DIDmultiplegt)</span>
 <span id="cb21-3"><a href="#cb21-3"></a><span class="kw">library</span>(tidyverse)</span>
@@ -1175,7 +1188,7 @@ $N_switchers_effect
 <li><p>Packages</p>
 <ul>
 <li><span class="citation">de Chaisemartin and d’Haultfoeuille (2020)</span>: <strong>did_multiplegt</strong> (Stata) and <strong>DIDmultiplegt</strong> (R)</li>
-<li><span class="citation">Callaway and Sant’Anna (2020)</span>: <strong>did</strong> (R and Stata - see <a href="https://github.com/NickCH-K/did">here</a></li>
+<li><span class="citation">Callaway and Sant’Anna (2020)</span>: <strong>did</strong> (R and Stata - see <a href="https://github.com/NickCH-K/did">here</a>)</li>
 </ul></li>
 </ul>
 </div>
@@ -1392,6 +1405,9 @@ $N_switchers_effect
 <div id="ref-goodman2018difference">
 <p>Goodman-Bacon, Andrew. 2018. “Difference-in-Differences with Variation in Treatment Timing.” National Bureau of Economic Research.</p>
 </div>
+<div id="ref-ifft2014impact">
+<p>Ifft, Jennifer, Shang Wu, and Todd Kuethe. 2014. “The Impact of Pasture Insurance on Farmland Values.” <em>Agricultural and Resource Economics Review</em> 43 (3): 390–405.</p>
+</div>
 <div id="ref-rambachan2019honest">
 <p>Rambachan, Ashesh, and Jonathan Roth. 2019. “An Honest Approach to Parallel Trends.”</p>
 </div>
@@ -1403,6 +1419,9 @@ $N_switchers_effect
 </div>
 <div id="ref-sun2020estimating">
 <p>Sun, Liyang, and Sarah Abraham. 2020. “Estimating Dynamic Treatment Effects in Event Studies with Heterogeneous Treatment Effects.” <em>Journal of Econometrics</em>.</p>
+</div>
+<div id="ref-vermeulen2015bias">
+<p>Vermeulen, Karel, and Stijn Vansteelandt. 2015. “Bias-Reduced Doubly Robust Estimation.” <em>Journal of the American Statistical Association</em> 110 (511): 1024–36.</p>
 </div>
 </div>
 </div>
