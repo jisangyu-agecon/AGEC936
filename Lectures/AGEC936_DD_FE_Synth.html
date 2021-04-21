@@ -882,7 +882,7 @@ y_{it}=\alpha_i+\gamma_t+\sum_t \delta_t \mathbb{1}_i (i \in T) + \varepsilon_{i
 <div id="de2020two-representation-of-twfe-estimator" class="slide section level1">
 <h1><span class="citation">de Chaisemartin and d’Haultfoeuille (2020)</span> representation of TWFE estimator</h1>
 <ul>
-<li><p><strong>Set-up</strong> of <span class="citation">de Chaisemartin and d’Haultfoeuille (2020)</span> (<span class="math inline">\(N_{g,t}=1\)</span> version): Consider <span class="math inline">\(N\)</span> cross-sectional units, <span class="math inline">\(i=1,...,N\)</span>, and <span class="math inline">\(T&gt;3\)</span> time periods, <span class="math inline">\(t=1,...,T\)</span>. Denote <span class="math inline">\(y_{it}(d_{it})\)</span> as potential outcomes and the treatment status, <span class="math inline">\(d_{it}\)</span>, can be zero or one. The treatment effect for each <span class="math inline">\((i,t)\)</span> is <span class="math display">\[
+<li><p><strong>Set-up</strong> of <span class="citation">de Chaisemartin and d’Haultfoeuille (2020)</span> (<span class="math inline">\(N_{g,t}=1\)</span> version): Consider <span class="math inline">\(N\)</span> cross-sectional units, <span class="math inline">\(i=1,...,N\)</span>, and <span class="math inline">\(T&gt;2\)</span> time periods, <span class="math inline">\(t=1,...,T\)</span>. Denote <span class="math inline">\(y_{it}(d_{it})\)</span> as potential outcomes and the treatment status, <span class="math inline">\(d_{it}\)</span>, can be zero or one. The treatment effect for each <span class="math inline">\((i,t)\)</span> is <span class="math display">\[
 \Delta_{i,t}=y_{it}(1)-y_{it}(0).
 \]</span> (The ATT is <span class="math inline">\(\Delta=E(y_{it}(1)-y_{it}(0)|d_{it}=1)\)</span>.)</p></li>
 <li><p><strong>TWFE regression</strong> Consider TWFE regression <span class="math display">\[
@@ -1206,7 +1206,7 @@ $N_switchers_effect
 <li><span class="math inline">\(y_{1t}=y_{1t}(1)\)</span> if <span class="math inline">\(t&gt;t^*\)</span>,</li>
 <li><span class="math inline">\(y_{it}=y_{it}(0)\)</span> for <span class="math inline">\(i\neq1\)</span>.</li>
 </ul></li>
-<li>We need</li>
+<li>We need <span class="math inline">\(y_{1t}(0)\)</span> for <span class="math inline">\(t&gt;t^*\)</span>!</li>
 </ul>
 </div>
 <div id="an-example-abadie2003economic" class="slide section level1">

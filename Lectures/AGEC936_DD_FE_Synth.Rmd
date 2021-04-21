@@ -373,7 +373,7 @@ plot %>%
   + @callaway2020difference: focuses on "group-time average treatment effect" and discusses different aggregation schemes of the group-time average treatment effect.
 
 # @de2020two representation of TWFE estimator
-* **Set-up** of @de2020two ($N_{g,t}=1$ version): Consider $N$ cross-sectional units, $i=1,...,N$, and $T>3$ time periods, $t=1,...,T$. Denote $y_{it}(d_{it})$ as  potential outcomes and the treatment status, $d_{it}$, can be zero or one. The treatment effect for each $(i,t)$ is
+* **Set-up** of @de2020two ($N_{g,t}=1$ version): Consider $N$ cross-sectional units, $i=1,...,N$, and $T>2$ time periods, $t=1,...,T$. Denote $y_{it}(d_{it})$ as  potential outcomes and the treatment status, $d_{it}$, can be zero or one. The treatment effect for each $(i,t)$ is
 $$
 \Delta_{i,t}=y_{it}(1)-y_{it}(0).
 $$
@@ -585,7 +585,7 @@ $$
   + $y_{1t}=y_{1t}(0)$ if $t<t^*$, 
   + $y_{1t}=y_{1t}(1)$ if $t>t^*$,
   + $y_{it}=y_{it}(0)$ for $i\neq1$.
-* We need 
+* We need $y_{1t}(0)$ for $t>t^*$!
 
 
 # An example [@abadie2003economic]
