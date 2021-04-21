@@ -422,7 +422,7 @@ TWFE works!
 
 * Robust to heterogeneous treatment effects (of course, requires some assumptions such as common trend).
 
-* $DID_M$ estimator
+* **$DID_M$ estimator**
 $$
 DID_M=\sum_{t=2} \left(\theta_{\text{switch-in},t}DID_{\text{switch-in},t}+\theta_{\text{switch-out},t}DID_{\text{switch-out},t}\right)
 $$
@@ -437,7 +437,7 @@ $$
 
 * The paper also offers an estimator that tests for common trend assumptions. The idea is to estimate $DID_M$ for $t-1$ and $t-2$ instead of $t$ and $t-1$ (but restrict the samples to $d_{it-1}=d_{it-2}$).
 
-# @de2020two $DID_M$ estimator: simulation example
+# @de2020two $DID_M$ estimator: a simulation example
 ```{stata did_m, collectcode=TRUE, results="hide"}
 *Set up
 clear all
@@ -506,7 +506,7 @@ $$
   where $p_{gt}(X)$ is a propensity score for $G_g=1$, and $m_{gt}(X)$ is the difference explained by some covariates $X$.
   + Definition of **Doubly Robust**?: See @vermeulen2015bias.
 
-* **Aggregation**: It depends on what you are interested in. For example, are you interested in the average of static effects *with-in* group? Or are you interested in the *dynamic* effects measured by the lengeth of *exposure*. See table 1 of @callaway2020difference for the discussion on "weights".
+* **Aggregation**: It depends on what you are interested in. For example, are you interested in the average of static effects *with-in* group? Or are you interested in the *dynamic* effects measured by the length of *exposure*. See table 1 of @callaway2020difference for the discussion on "weights".
 
 # @callaway2020difference: An example
 * Background
@@ -581,7 +581,11 @@ did_multiplegt(prf_data, "lnvalue", "fips", "t", "index", brep=50)
 $$
 \tau_{t}=y_{1t}(1)-y_{1t}(0)
 $$
-* What do we observe?: $y_{1t}=y_{1t}(0)$ if $t<t^*$ and $y_{1t}=y_{1t}(1)$ if $t>t^*$. And $y_{it}=y_{it}(0)$ for $i\neq1$.
+* What do we observe? 
+  + $y_{1t}=y_{1t}(0)$ if $t<t^*$, 
+  + $y_{1t}=y_{1t}(1)$ if $t>t^*$,
+  + $y_{it}=y_{it}(0)$ for $i\neq1$.
+* We need 
 
 
 # An example [@abadie2003economic]

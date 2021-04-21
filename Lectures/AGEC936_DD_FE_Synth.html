@@ -918,7 +918,7 @@ w_{i2}=\frac{\epsilon_{2}}{\frac{\sum_{i:d_{i2}=1}\epsilon_{2}}{\sum_i d_{i2}}}=
 <ul>
 <li><p><strong>The intuition</strong>: Use the weighted average of i) “treatment effects” in groups who switch-in from <span class="math inline">\(d_{it-1}=0\)</span> to <span class="math inline">\(d_{it}=1\)</span> and ii) “treatment effects” in groups who switch-out from <span class="math inline">\(d_{it-1}=1\)</span> to <span class="math inline">\(d_{it}=0\)</span>. For i), the benchmark group is <span class="math inline">\(d_{it-1}=d_{it}=0\)</span> and for ii), the benchmark group is <span class="math inline">\(d_{it-1}=d_{it}=1\)</span>.</p></li>
 <li><p>Robust to heterogeneous treatment effects (of course, requires some assumptions such as common trend).</p></li>
-<li><p><span class="math inline">\(DID_M\)</span> estimator <span class="math display">\[
+<li><p><strong><span class="math inline">\(DID_M\)</span> estimator</strong> <span class="math display">\[
 DID_M=\sum_{t=2} \left(\theta_{\text{switch-in},t}DID_{\text{switch-in},t}+\theta_{\text{switch-out},t}DID_{\text{switch-out},t}\right)
 \]</span> where <span class="math inline">\(\theta_{\text{switch-in},t}\)</span> and <span class="math inline">\(\theta_{\text{switch-out},t}\)</span> are shares of observations that “switch-in” and “switch-out” over total treated observations in year <span class="math inline">\(t\)</span>, and <span class="math display">\[
 DID_{\text{switch-in},t}=\frac{1}{N_{\text{switch-in},t}}\sum_{d_{it}=1,d_{it-1}=0} \left(y_{it}-y_{it-1}\right)-\frac{1}{N_{\text{not-treated},t}}\sum_{d_{it}=0,d_{it-1}=0} \left(y_{it}-y_{it-1}\right) 
@@ -928,8 +928,8 @@ DID_{\text{switch-out},t}=\frac{1}{N_{\text{treated},t}}\sum_{d_{it}=1,d_{it-1}=
 <li><p>The paper also offers an estimator that tests for common trend assumptions. The idea is to estimate <span class="math inline">\(DID_M\)</span> for <span class="math inline">\(t-1\)</span> and <span class="math inline">\(t-2\)</span> instead of <span class="math inline">\(t\)</span> and <span class="math inline">\(t-1\)</span> (but restrict the samples to <span class="math inline">\(d_{it-1}=d_{it-2}\)</span>).</p></li>
 </ul>
 </div>
-<div id="de2020two-did_m-estimator-simulation-example" class="slide section level1">
-<h1><span class="citation">de Chaisemartin and d’Haultfoeuille (2020)</span> <span class="math inline">\(DID_M\)</span> estimator: simulation example</h1>
+<div id="de2020two-did_m-estimator-a-simulation-example" class="slide section level1">
+<h1><span class="citation">de Chaisemartin and d’Haultfoeuille (2020)</span> <span class="math inline">\(DID_M\)</span> estimator: a simulation example</h1>
 <div class="sourceCode" id="cb16"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb16-1"><a href="#cb16-1"></a>*Set up</span>
 <span id="cb16-2"><a href="#cb16-2"></a><span class="kw">clear</span> <span class="ot">all</span></span>
 <span id="cb16-3"><a href="#cb16-3"></a><span class="kw">set</span> <span class="kw">more</span> <span class="kw">off</span></span>
@@ -1032,7 +1032,7 @@ E\left(\left(\frac{G_g}{E(G_g)}-\frac{\frac{p_{gt}(X)(1-d_{it})(1-G_g)}{1-p_{gt}
 \]</span> where <span class="math inline">\(p_{gt}(X)\)</span> is a propensity score for <span class="math inline">\(G_g=1\)</span>, and <span class="math inline">\(m_{gt}(X)\)</span> is the difference explained by some covariates <span class="math inline">\(X\)</span>.</li>
 <li>Definition of <strong>Doubly Robust</strong>?: See <span class="citation">Vermeulen and Vansteelandt (2015)</span>.</li>
 </ul></li>
-<li><p><strong>Aggregation</strong>: It depends on what you are interested in. For example, are you interested in the average of static effects <em>with-in</em> group? Or are you interested in the <em>dynamic</em> effects measured by the lengeth of <em>exposure</em>. See table 1 of <span class="citation">Callaway and Sant’Anna (2020)</span> for the discussion on “weights”.</p></li>
+<li><p><strong>Aggregation</strong>: It depends on what you are interested in. For example, are you interested in the average of static effects <em>with-in</em> group? Or are you interested in the <em>dynamic</em> effects measured by the length of <em>exposure</em>. See table 1 of <span class="citation">Callaway and Sant’Anna (2020)</span> for the discussion on “weights”.</p></li>
 </ul>
 </div>
 <div id="callaway2020difference-an-example" class="slide section level1">
@@ -1200,7 +1200,13 @@ $N_switchers_effect
 <li>Back to <strong>potential outcome representation</strong>: we want <span class="math display">\[
 \tau_{t}=y_{1t}(1)-y_{1t}(0)
 \]</span></li>
-<li>What do we observe?: <span class="math inline">\(y_{1t}=y_{1t}(0)\)</span> if <span class="math inline">\(t&lt;t^*\)</span> and <span class="math inline">\(y_{1t}=y_{1t}(1)\)</span> if <span class="math inline">\(t&gt;t^*\)</span>. And <span class="math inline">\(y_{it}=y_{it}(0)\)</span> for <span class="math inline">\(i\neq1\)</span>.</li>
+<li>What do we observe?
+<ul>
+<li><span class="math inline">\(y_{1t}=y_{1t}(0)\)</span> if <span class="math inline">\(t&lt;t^*\)</span>,</li>
+<li><span class="math inline">\(y_{1t}=y_{1t}(1)\)</span> if <span class="math inline">\(t&gt;t^*\)</span>,</li>
+<li><span class="math inline">\(y_{it}=y_{it}(0)\)</span> for <span class="math inline">\(i\neq1\)</span>.</li>
+</ul></li>
+<li>We need</li>
 </ul>
 </div>
 <div id="an-example-abadie2003economic" class="slide section level1">
