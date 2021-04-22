@@ -527,6 +527,13 @@ library(lmtest)
 #read data
 prf_data<-read.dta("/Users/jisangyu/Dropbox/AGEC936/data/prf_rent.dta")
 
+#TWFE
+TWFE<-plm(lnvalue ~ index + as.factor(year),
+          data=prf_data,
+          index=c("fips"),
+          model="within")
+coeftest(TWFE, vcov=function(x) vcovHC(x, cluster=c("group")))
+
 # estimate group-time average treatment effects using att_gt method
 prf_attgt <- att_gt(yname = "lnvalue",
                     tname = "t",
@@ -563,7 +570,6 @@ did_multiplegt(prf_data, "lnvalue", "fips", "t", "index", brep=50)
 ```
 
 # A couple of notes on @de2020two vs @callaway2020difference
-
 * @de2020two allows "switch-out" whereas @callaway2020difference works with strictly "staggered" cases (irreversable treatments).
 
 * @callaway2020difference focuses more on treatment effects dynamics whereas @de2020two focuses on an instantaneous treatment effect.
@@ -576,7 +582,7 @@ did_multiplegt(prf_data, "lnvalue", "fips", "t", "index", brep=50)
 
 # Synthetic control methods
 * Foundational pieces: @abadie2010synthetic and @abadie2019using
-* When?: (Normally), **one** treated unit ($i=1$), **many** control units, and (somewhat) long time period.
+* When?: (Normally but not necessarily), **one** treated unit ($i=1$), **many** control units, and (somewhat) long time period.
 * Back to **potential outcome representation**: we want
 $$
 \tau_{t}=y_{1t}(1)-y_{1t}(0)
@@ -586,7 +592,7 @@ $$
   + $y_{1t}=y_{1t}(1)$ if $t>t^*$,
   + $y_{it}=y_{it}(0)$ for $i\neq1$.
 * We need $y_{1t}(0)$ for $t>t^*$!
-
+* The **key idea**: Let's combine $y_{it}$ for $i\neq1$ to estimate $y_{1t}(0)$ for $t>t^*$.
 
 # An example [@abadie2003economic]
 * **Background**
@@ -720,7 +726,7 @@ lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
 ```
 
 # Synthetic control: Things to consider
-* Great summary and discussion by @abadie2019using
+* Great summary and discussion by @abadie2019using.
 
 
 # Next week

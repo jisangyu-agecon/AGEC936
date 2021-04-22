@@ -2,7 +2,7 @@
 title: "AGEC 936 - Module 4"
 subtitle: "Panel IV/GMM<br>Shift-share Design"
 author: "Jisang Yu<br>Kansas State University"
-date: "4/19/2021"
+date: "4/26/2021"
 output:
  slidy_presentation:
    font_adjustment: -1
@@ -17,10 +17,21 @@ library(Statamarkdown)
 
 # This week
 * (Previous week: [DID, FE, and Synthetic Control](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html))
+* Panel GMM
 * Panel IV example 1: Dynamic panel
 * Panel IV example 2: Pre-event trends
 * Panel IV example 3: Bartik/Shift-share IV
 * More on Shift-share design...
+
+# Panel GMM
+
+# Panel IV example 1: Dynamic panel
+
+# Panel IV example 2: Pre-event trends
+
+# Panel IV example 3: Bartik/Shift-share IV
+
+# What else...?
 
 # References
 
