@@ -999,9 +999,10 @@ corr(u_i, Xb)  = 0.1565                         Prob &gt; F          =     0.000
 F test that all u_i=0: F(49, 97) = 2.85                      Prob &gt; F = 0.0000
 
 
-DID estimators of the instantaneous treatment effect, of dynamic treatment effects if the dynamic option is used, and
-of placebo tests of the parallel trends assumption if the placebo option is used. The estimators are robust to
-heterogeneous effects, and to dynamic effects if the robust_dynamic option is used.
+DID estimators of the instantaneous treatment effect, of dynamic treatment effects if the
+dynamic option is used, and of placebo tests of the parallel trends assumption if the
+placebo option is used. The estimators are robust to heterogeneous effects, and to dynamic
+effects if the robust_dynamic option is used.
 
              |  Estimate         SE      LB CI      UB CI          N  Switchers 
 -------------+------------------------------------------------------------------
@@ -1223,6 +1224,18 @@ $N_switchers_effect
 </ul></li>
 <li>We need <span class="math inline">\(y_{1t}(0)\)</span> for <span class="math inline">\(t&gt;t^*\)</span>!</li>
 <li>The <strong>key idea</strong>: Let’s combine <span class="math inline">\(y_{it}\)</span> for <span class="math inline">\(i\neq1\)</span> to estimate <span class="math inline">\(y_{1t}(0)\)</span> for <span class="math inline">\(t&gt;t^*\)</span>.</li>
+<li>Underlying model for the potential outcome, <span class="math inline">\(y_{it}(0)\)</span>, is (equation (1) of <span class="citation">Abadie, Diamond, and Hainmueller (2010)</span>) <span class="math display">\[
+y_{it}(0)=\delta_{t}+\theta_t Z_i + \lambda_t\mu_i+\varepsilon_{it}.
+\]</span></li>
+<li>Suppose if there are <span class="math inline">\(w^*\)</span> that satisfy <span class="math display">\[
+\sum_{j=2} w^{*}_j y_{js}=y_{1s}\;\;\forall\;\;s&lt;t^*,
+\]</span> <span class="math display">\[
+\sum_{j=2} w^{*}_j Z_{j}=Z_{1}\;\;\forall\;\;s&lt;t^*.
+\]</span></li>
+<li>Under certain conditions, we have <span class="math inline">\(\sum_{j=2} w^{*}_j y_{jt}\)</span> approximately equal to <span class="math inline">\(y_{1t}(0)\)</span>. Thus, we can use <span class="math display">\[
+\hat{\tau}_t=y_{1t}-\sum_{j=2} w^{*}_j y_{jt}\;\;\forall\;\;t&gt;t^*
+\]</span></li>
+<li>Seems cool but will this always work?</li>
 </ul>
 </div>
 <div id="an-example-abadie2003economic" class="slide section level1">
@@ -1393,7 +1406,7 @@ $N_switchers_effect
 <div id="synthetic-control-things-to-consider" class="slide section level1">
 <h1>Synthetic control: Things to consider</h1>
 <ul>
-<li>Great summary and discussion by <span class="citation">Abadie (2019)</span></li>
+<li>Great summary and discussion by <span class="citation">Abadie (2019)</span>.</li>
 </ul>
 </div>
 <div id="next-week" class="slide section level1">

@@ -593,6 +593,22 @@ $$
   + $y_{it}=y_{it}(0)$ for $i\neq1$.
 * We need $y_{1t}(0)$ for $t>t^*$!
 * The **key idea**: Let's combine $y_{it}$ for $i\neq1$ to estimate $y_{1t}(0)$ for $t>t^*$.
+* Underlying model for the potential outcome, $y_{it}(0)$, is (equation (1) of @abadie2010synthetic)
+  $$
+  y_{it}(0)=\delta_{t}+\theta_t Z_i + \lambda_t\mu_i+\varepsilon_{it}.
+  $$
+* Suppose if there are $w^*$ that satisfy
+  $$
+  \sum_{j=2} w^{*}_j y_{js}=y_{1s}\;\;\forall\;\;s<t^*,
+  $$
+  $$
+  \sum_{j=2} w^{*}_j Z_{j}=Z_{1}\;\;\forall\;\;s<t^*.
+  $$
+* Under certain conditions, we have $\sum_{j=2} w^{*}_j y_{jt}$ approximately equal to $y_{1t}(0)$. Thus, we can use
+  $$
+  \hat{\tau}_t=y_{1t}-\sum_{j=2} w^{*}_j y_{jt}\;\;\forall\;\;t>t^*
+  $$
+* Seems cool but will this always work?
 
 # An example [@abadie2003economic]
 * **Background**
