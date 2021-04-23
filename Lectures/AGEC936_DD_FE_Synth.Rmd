@@ -608,7 +608,17 @@ $$
   $$
   \hat{\tau}_t=y_{1t}-\sum_{j=2} w^{*}_j y_{jt}\;\;\forall\;\;t>t^*
   $$
-* Seems cool but will this always work?
+* Estimation (see equation (7) of @abadie2019using):
+  $$
+  Min_{w_j,j\neq1}\;\left(\sum_h v_h \left(X_{1h}-\sum_{j=2} w_j X_{2j}\right)\right)
+  $$
+  subject to
+  $$
+  w_j\geq 0\;\;\text{and}\;\;\sum_{j=2}w_j = 1
+  $$
+  and $X_h$ are "predictors", which include $y_{js}$ for $j\neq=1$ and $s<t^*$, and $Z_j$ for $j\neq1$.
+* How do we choose $v_h$?: @abadie2010synthetic uses $v_h$ such that produce $w_j$ such that they minimize the out-of-sample mean squared prediction error for some set times in the pre-intervention period.
+* Seems cool... any issues?
 
 # An example [@abadie2003economic]
 * **Background**
@@ -741,9 +751,18 @@ abline(v=1970,lty=3,col=1)
 lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
 ```
 
-# Synthetic control: Things to consider
+# Synthetic control: Strengths and things to consider [@abadie2019using]
 * Great summary and discussion by @abadie2019using.
-
+* Strengths
+  + No extrapolation
+  + Sparsity across "donors": Intepretability
+* Things to consider
+  + Effect sizes and the volatility in the outcome of the treated unit.
+  + Choosing "predictors" and $v_h$
+  + Time dimension: the lengths of pre- and post- intervention periods
+  + Donor pool
+  + **Inference**
+* Further readings
 
 # Next week
 [Panel IV/GMM and Shift-share deisgn](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_Panel_IV_GMM.html)
