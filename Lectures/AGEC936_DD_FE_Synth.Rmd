@@ -754,8 +754,8 @@ lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
 # Synthetic control: Strengths and things to consider [@abadie2019using]
 * Great summary and discussion by @abadie2019using.
 * Strengths
-  + No extrapolation
-  + Sparsity across "donors": Intepretability
+  + No extrapolation: Why matter? See @king2006dangers.
+  + Sparsity across "donors": Interpretability
 * Things to consider
   + Effect sizes and the volatility in the outcome of the treated unit.
   + Choosing "predictors" and $v_h$
@@ -763,6 +763,15 @@ lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
   + Donor pool
   + **Inference**
 * Further readings
+  + Flexibility versus extrapolation risks
+    - Possible negative weights: @doudchenko2016balancing
+    - Non-negative but weights do not necessarily sum to one: @li2020statistical
+    - Non-negative, weights sum to one, but allow parallel shifts (a constant can be added or subtracted): @goh2020synthetic
+  + Innovations in inference techniques
+    - Frequentist approaches: e.g. @li2020statistical, @chernozhukov2017exact
+    - Bayesian approaches: e.g. @amjad2018robust, @goh2020synthetic
+  + Extension to disaggregated data: @arkhangelsky2019synthetic, @lhour2020apenalized
+  + De-bias approach: @ben2018augmented
 
 # Next week
 [Panel IV/GMM and Shift-share deisgn](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_Panel_IV_GMM.html)

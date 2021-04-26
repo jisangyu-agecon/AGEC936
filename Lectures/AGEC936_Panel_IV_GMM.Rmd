@@ -17,19 +17,184 @@ library(Statamarkdown)
 
 # This week
 * (Previous week: [DID, FE, and Synthetic Control](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html))
-* Panel GMM
-* Panel IV example 1: Dynamic panel
-* Panel IV example 2: Pre-event trends
-* Panel IV example 3: Bartik/Shift-share IV
-* More on Shift-share design...
+* Revisiting IV in the context of Panel FE set-up
+* Panel IV example 1: Pre-event trends
+* Panel IV example 2: Bartik/Shift-share IV
 
-# Panel GMM
+# Revisiting IV in the context of Panel FE set-up
+* Revisiting the identifying assumptions for Panel FE estimator
+$$
+\begin{align}
+y_{it}=\alpha+\rho d_{it}+v_i + u_{it}
+\end{align}
+$$
 
-# Panel IV example 1: Dynamic panel
+  1. Strict exogeneity: $E(u_{it}|d_{i1}, d_{i2},...,d_{iT})=0$
+  2. The regressor, $d_{it}$, needs to vary within each cross-sectional unit over time.
+  
+* Revisiting the identifying assumptions for IV estimator (Let's ignore the panel structure for a moment)
+$$
+\begin{align}
+y_{i}=\alpha+\rho d_{i}+\varepsilon_{i}
+\end{align}
+$$
+$$
+\begin{align}
+d_{i}=\beta+\gamma z_{i}+\eta_{i}
+\end{align}
+$$
+  1. Exclusion restriction: $E(u_{it}|z_{it})=0$
+  2. Relevancy: $Cov(d_i,z_i) \neq 0$
+  
+* Now, let's think about the identifying assumptions for IV estimator in the context of **Panel FE** model
+$$
+\begin{align}
+y_{it}=\alpha+\rho d_{it}+v_i + u_{it}
+\end{align}
+$$
+$$
+\begin{align}
+d_{it}=\beta+\gamma z_{it}+\eta_{it}
+\end{align}
+$$
+  1. Exclusion restriction: $E(\varepsilon_{i}|z_{it}, d_{i1}, d_{i2},...,d_{iT})=0$
+  2. Relevancy: $Cov(d_{it},z_{it}) \neq 0$
+  3. Need some **within** variations in $z_{it}$
+  
+# Pre-event trends: Going back to the parallel/common trend assumption
+* Motivation: What if the parallel/common trend assumption falls apart?
+* One way is to control for observables -- conditional parallel/common trend [e.g.][@callaway2020difference].
+* Denote $y$ as the outcome, $d$ as the treatment, $x$ as the observable control, and $w$ as the unobservable confounder (assume the within transformation). Here is my attempt on drawing DAG for this problem:
 
-# Panel IV example 2: Pre-event trends
+```{r dag, fig.align='center', out.width="50%"}
+library(dagitty)
+library(ggdag)
 
-# Panel IV example 3: Bartik/Shift-share IV
+dag <- dagitty("dag{y1 <- w1 -> d1
+                d1 -> y1
+                w1 -> x1
+               }")
+ggdag(dag, layout = "circle") +
+  theme_dag()
+```
+
+# Panel IV example 1: Pre-event trends [@freyaldenhoven2019pre]
+```{r dag2, fig.align='center', out.width="50%"}
+library(dagitty)
+library(ggdag)
+
+dag <- dagitty("dag{y1 <- w1 -> d1
+                d1 -> y1
+                w1 -> x1
+                w1 -> w2
+                w2 -> d2
+               }")
+ggdag(dag, layout = "circle") +
+  theme_dag()
+```
+
+* Obviously, using the observable control is fine if the observable $x$ **perfectly** explains the unobservable confounder, $w$. If not, we have so-called *regression diultion/measurement error* bias.
+* The **key** idea of @freyaldenhoven2019pre: Use the **lead(s)** of the treatment variable as **instruments**.
+* Practically, one can do the following (again, all variables are within transformed): regress $y$ on $d$ and $x$ but **instrument** $x$ using the **leads** of $d$.
+
+# A mini-version simulation of @freyaldenhoven2019pre: Pre-trend
+```{stata first, collectcode=TRUE, results="hide"}
+clear
+set seed 11123
+set obs 500
+
+egen id = seq()
+bys id: gen alpha = rnormal(0,1) 
+expand 20
+sort id
+by id: gen year=_n
+xtset id year
+
+*create eta
+bys id: gen eta=0 if _n==1
+bys id: replace eta=eta[_n-1]+rnormal(0,1) if _n>1
+*create x
+bys id: gen x = eta + rnormal(0,2)
+*create z
+bys id: gen ztemp = eta 
+bys id: gen z = (ztemp >4)
+bys id: replace z=1 if z[_n-1]==1
+drop ztemp
+
+*create y
+bys id: gen y = z + .25*eta + .2*year + alpha + rnormal(0,1)
+
+*create dummmies for time period of event and pre/post
+bys id: gen event = z-z[_n-1]
+recode event (.=0)
+foreach n of num 1(1)5{
+  bys id: gen t_`n'=event[_n+`n']
+  bys id: gen t`n'=event[_n-`n']
+}
+recode t* (.=0)
+
+*create instruments
+foreach n of num 1(1)5 {
+  bys id: gen z_lead`n'=F`n'.z
+  bys id: replace z_lead`n'=1 if z_lead`n'[_n-1]==1
+}
+recode z* (.=0)
+
+*Add dummies for both sides of eventplot
+bys id: gen t_6=-z_lead5
+bys id: replace t5=1 if t5[_n-1]==1
+recode t5 (.=0)
+
+*labeling for figures
+label var t_6 "-6+"
+label var t_5 "-5"
+label var t_4 "-4"
+label var t_3 "-3"
+label var t_2 "-2"
+label var t_1 "-1"
+label var t1 "1"
+label var t2 "2"
+label var t3 "3"
+label var t4 "4"
+label var t5 "5+"
+
+*keep sample with enough lead and lag
+keep if year>6 & year<16
+*pre-trends comparison
+areg y t_6 t_5 t_4 t_3 t_2 event t1 t2 t3 t4 t5 i.year, absorb(id) vce(cluster id)
+coefplot, keep(t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5) vertical graphregion(color(white)) title("Naive") saving(nocontrol.gph, replace)
+
+areg y t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5 eta i.year, absorb(id) vce(cluster id)
+coefplot, keep(t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5) vertical graphregion(color(white)) title("Ideal") saving(eta.gph, replace)
+
+areg y t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5 x i.year, absorb(id) vce(cluster id)
+coefplot, keep(t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5) vertical graphregion(color(white)) title("Proxy") saving(proxy.gph, replace)
+
+xi: xtivreg2 y t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5 (x=z_lead1) i.year, fe cluster(id)
+coefplot, keep(t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5) vertical graphregion(color(white)) title("2SLS") saving(panel2sls.gph, replace)
+
+graph combine nocontrol.gph eta.gph proxy.gph panel2sls.gph, col(2) graphregion(color(white))
+graph export preevent_trend.png, replace
+
+rm nocontrol.gph
+rm eta.gph
+rm proxy.gph
+rm panel2sls.gph
+```
+
+```{r, echo=FALSE, fig.align='center', out.width="70%"}
+   knitr::include_graphics('./preevent_trend.png')
+```
+
+# A mini-version simulation of @freyaldenhoven2019pre: ATE
+```{stata second, collectcode=TRUE}
+*Not mitigating non-parallel trend
+areg y z i.year, absorb(id) vce(cluster id)
+*FE2SLS
+xi: xtivreg2 y z (x=z_lead1) i.year, fe cluster(id)
+```
+
+# Panel IV example 2: Bartik/Shift-share IV
 
 # What else...?
 

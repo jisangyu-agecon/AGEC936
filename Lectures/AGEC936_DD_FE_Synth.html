@@ -1420,8 +1420,8 @@ w_j\geq 0\;\;\text{and}\;\;\sum_{j=2}w_j = 1
 <li>Great summary and discussion by <span class="citation">Abadie (2019)</span>.</li>
 <li>Strengths
 <ul>
-<li>No extrapolation</li>
-<li>Sparsity across “donors”: Intepretability</li>
+<li>No extrapolation: Why matter? See <span class="citation">King and Zeng (2006)</span>.</li>
+<li>Sparsity across “donors”: Interpretability</li>
 </ul></li>
 <li>Things to consider
 <ul>
@@ -1431,7 +1431,22 @@ w_j\geq 0\;\;\text{and}\;\;\sum_{j=2}w_j = 1
 <li>Donor pool</li>
 <li><strong>Inference</strong></li>
 </ul></li>
-<li>Further readings</li>
+<li>Further readings
+<ul>
+<li>Flexibility versus extrapolation risks
+<ul>
+<li>Possible negative weights: <span class="citation">Doudchenko and Imbens (2016)</span></li>
+<li>Non-negative but weights do not necessarily sum to one: <span class="citation">Li (2020)</span></li>
+<li>Non-negative, weights sum to one, but allow parallel shifts (a constant can be added or subtracted): <span class="citation">Goh and Yu (2020)</span></li>
+</ul></li>
+<li>Innovations in inference techniques
+<ul>
+<li>Frequentist approaches: e.g. <span class="citation">Li (2020)</span>, <span class="citation">Chernozhukov, Wuthrich, and Zhu (2017)</span></li>
+<li>Bayesian approaches: e.g. <span class="citation">Amjad, Shah, and Shen (2018)</span>, <span class="citation">Goh and Yu (2020)</span></li>
+</ul></li>
+<li>Extension to disaggregated data: <span class="citation">Arkhangelsky et al. (2019)</span>, <span class="citation">L’Hour and Abadie (2020)</span></li>
+<li>De-bias approach: <span class="citation">Ben-Michael, Feller, and Rothstein (2018)</span></li>
+</ul></li>
 </ul>
 </div>
 <div id="next-week" class="slide section level1">
@@ -1450,6 +1465,15 @@ w_j\geq 0\;\;\text{and}\;\;\sum_{j=2}w_j = 1
 <div id="ref-abadie2003economic">
 <p>Abadie, Alberto, and Javier Gardeazabal. 2003. “The Economic Costs of Conflict: A Case Study of the Basque Country.” <em>American Economic Review</em> 93 (1): 113–32.</p>
 </div>
+<div id="ref-amjad2018robust">
+<p>Amjad, Muhammad, Devavrat Shah, and Dennis Shen. 2018. “Robust Synthetic Control.” <em>The Journal of Machine Learning Research</em> 19 (1): 802–52.</p>
+</div>
+<div id="ref-arkhangelsky2019synthetic">
+<p>Arkhangelsky, Dmitry, Susan Athey, David A Hirshberg, Guido W Imbens, and Stefan Wager. 2019. “Synthetic Difference in Differences.” National Bureau of Economic Research.</p>
+</div>
+<div id="ref-ben2018augmented">
+<p>Ben-Michael, Eli, Avi Feller, and Jesse Rothstein. 2018. “The Augmented Synthetic Control Method.” <em>arXiv Preprint arXiv:1811.04170</em>.</p>
+</div>
 <div id="ref-borusyak2017revisiting">
 <p>Borusyak, Kirill, and Xavier Jaravel. 2017. “Revisiting Event Study Designs.” <em>Available at SSRN 2826228</em>.</p>
 </div>
@@ -1459,14 +1483,32 @@ w_j\geq 0\;\;\text{and}\;\;\sum_{j=2}w_j = 1
 <div id="ref-callaway2020difference">
 <p>Callaway, Brantly, and Pedro HC Sant’Anna. 2020. “Difference-in-Differences with Multiple Time Periods.” <em>Journal of Econometrics</em>.</p>
 </div>
+<div id="ref-chernozhukov2017exact">
+<p>Chernozhukov, Victor, Kaspar Wuthrich, and Yinchu Zhu. 2017. “An Exact and Robust Conformal Inference Method for Counterfactual and Synthetic Controls.” <em>arXiv Preprint arXiv:1712.09089</em>.</p>
+</div>
 <div id="ref-de2020two">
 <p>de Chaisemartin, Clément, and Xavier d’Haultfoeuille. 2020. “Two-Way Fixed Effects Estimators with Heterogeneous Treatment Effects.” <em>American Economic Review</em> 110 (9): 2964–96.</p>
+</div>
+<div id="ref-doudchenko2016balancing">
+<p>Doudchenko, Nikolay, and Guido W Imbens. 2016. “Balancing, Regression, Difference-in-Differences and Synthetic Control Methods: A Synthesis.” National Bureau of Economic Research.</p>
+</div>
+<div id="ref-goh2020synthetic">
+<p>Goh, Gyuhyeong, and Jisang Yu. 2020. “Synthetic Control Method with Convex Hull Restrictions: A Bayesian Maximum a Posteriori Approach.” <em>arXiv Preprint arXiv:2005.13719</em>.</p>
 </div>
 <div id="ref-goodman2018difference">
 <p>Goodman-Bacon, Andrew. 2018. “Difference-in-Differences with Variation in Treatment Timing.” National Bureau of Economic Research.</p>
 </div>
 <div id="ref-ifft2014impact">
 <p>Ifft, Jennifer, Shang Wu, and Todd Kuethe. 2014. “The Impact of Pasture Insurance on Farmland Values.” <em>Agricultural and Resource Economics Review</em> 43 (3): 390–405.</p>
+</div>
+<div id="ref-king2006dangers">
+<p>King, Gary, and Langche Zeng. 2006. “The Dangers of Extreme Counterfactuals.” <em>Political Analysis</em> 14 (2): 131–59.</p>
+</div>
+<div id="ref-lhour2020apenalized">
+<p>L’Hour, Jeremy, and Alberto Abadie. 2020. “A Penalized Synthetic Control Estimator for Disaggregated Data.”</p>
+</div>
+<div id="ref-li2020statistical">
+<p>Li, Kathleen T. 2020. “Statistical Inference for Average Treatment Effects Estimated by Synthetic Control Methods.” <em>Journal of the American Statistical Association</em> 115 (532): 2068–83.</p>
 </div>
 <div id="ref-rambachan2019honest">
 <p>Rambachan, Ashesh, and Jonathan Roth. 2019. “An Honest Approach to Parallel Trends.”</p>
