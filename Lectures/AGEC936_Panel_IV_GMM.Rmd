@@ -72,12 +72,12 @@ $$
 y_{it}=\alpha+\rho d_{it}+\varepsilon_{it}
 \end{align}
 $$
-* And you worry that, $Cov(d_{it},\varepsilon_{it}) \neq 0$. What are your options?
+* And you worry that, $Cov(d_{it},\varepsilon_{it}) \neq 0$. 
 
 # Pre-event trends: Going back to the parallel/common trend assumption
 * Motivation: What if the parallel/common trend assumption falls apart?
 * One way is to control for observables -- conditional parallel/common trend [e.g.][@callaway2020difference].
-* Denote $y$ as the outcome, $d$ as the treatment, $x$ as the observable control, and $w$ as the unobservable confounder (assume the within transformation). Here is my attempt on drawing DAG for this problem (Full disclosure -- I am not a DAG expert and this needs some verifications):
+* Denote $y$ as the outcome, $d$ as the treatment, $x$ as the observable control, and $w$ as the unobservable confounder (assume the within transformation). Here is my attempt on drawing DAG for this problem (Full disclosure -- I am as new to DAG as you are so this needs some verification):
 
 ```{r dag, fig.align='center', out.width="50%"}
 library(dagitty)
@@ -92,7 +92,7 @@ ggdag(dag, layout = "circle") +
 ```
 
 # Panel IV example 1: Pre-event trends [@freyaldenhoven2019pre]
-* Again, an attempt to draw a DAG to show the IV approach can work (Full disclosure -- I am not a DAG expert and this needs some verifications):
+* Again, an attempt to draw a DAG to show the IV approach can work:
 ```{r dag2, fig.align='center', out.width="50%"}
 library(dagitty)
 library(ggdag)
@@ -107,12 +107,12 @@ ggdag(dag, layout = "circle") +
   theme_dag()
 ```
 
-* Obviously, using the observable control is fine if the observable $x$ **perfectly** explains the unobservable confounder, $w$. If not, we have so-called *regression diultion/measurement error* bias.
+* Obviously, using the observable control is fine if the observable $x$ **perfectly** explains the unobservable confounder, $w$. If not, we have so-called **regression diultion/measurement error** bias.
 * The **key** idea of @freyaldenhoven2019pre: Use the **lead(s)** of the treatment variable as **instruments**.
 * Practically, one can do the following (again, all variables are within transformed): regress $y$ on $d$ and $x$ but **instrument** $x$ using the **leads** of $d$.
 
 # A mini-version simulation of @freyaldenhoven2019pre: Pre-trend
-```{stata first, collectcode=TRUE, results="hide"}
+```{stata first, collectcode=TRUE, results="hide", eval=FALSE}
 clear
 set seed 11123
 set obs 500
@@ -201,7 +201,7 @@ rm panel2sls.gph
 ```
 
 # A mini-version simulation of @freyaldenhoven2019pre: ATE
-```{stata second, collectcode=TRUE}
+```{stata second, collectcode=TRUE, eval=FALSE}
 *Not mitigating non-parallel trend
 areg y z i.year, absorb(id) vce(cluster id)
 *FE2SLS
@@ -209,6 +209,8 @@ xi: xtivreg2 y z (x=z_lead1) i.year, fe cluster(id)
 ```
 
 # Panel IV example 2: Bartik/Shift-share IV
+
+
 
 # What else...?
 
