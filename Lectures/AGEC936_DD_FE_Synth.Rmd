@@ -752,7 +752,7 @@ lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
 ```
 
 # Synthetic control: Strengths and things to consider [@abadie2019using]
-* Great summary and discussion by @abadie2019using.
+* See the latest review of @abadie2019using.
 * Strengths
   + No extrapolation: Why matter? See @king2006dangers.
   + Sparsity across "donors": Interpretability
