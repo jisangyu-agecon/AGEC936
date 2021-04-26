@@ -28,8 +28,13 @@ $$
 y_{it}=\alpha+\rho d_{it}+v_i + u_{it}
 \end{align}
 $$
-
-  1. Strict exogeneity: $E(u_{it}|d_{i1}, d_{i2},...,d_{iT})=0$
+Within-transformation ($\tilde{k}$ to denote the within transformation) leads to
+$$
+\begin{align}
+\tilde{y}_{it}=\rho \tilde{d}_{it}+\tilde{u}_{it}
+\end{align}
+$$
+  1. Strict exogeneity: We need $E(\tilde{u}_{it}|\tilde{d}_{it})$. The sufficient condition is $E(u_{it}|d_{i1}, d_{i2},...,d_{iT})=0$.
   2. The regressor, $d_{it}$, needs to vary within each cross-sectional unit over time.
   
 * Revisiting the identifying assumptions for IV estimator (Let's ignore the panel structure for a moment)
@@ -43,28 +48,36 @@ $$
 d_{i}=\beta+\gamma z_{i}+\eta_{i}
 \end{align}
 $$
-  1. Exclusion restriction: $E(u_{it}|z_{it})=0$
+  1. Exclusion restriction: $E(u_{i}|z_{i})=0$
   2. Relevancy: $Cov(d_i,z_i) \neq 0$
   
 * Now, let's think about the identifying assumptions for IV estimator in the context of **Panel FE** model
 $$
 \begin{align}
-y_{it}=\alpha+\rho d_{it}+v_i + u_{it}
+\tilde{y}_{it}=\rho \tilde{d}_{it}+\tilde{u}_{it}
 \end{align}
 $$
 $$
 \begin{align}
-d_{it}=\beta+\gamma z_{it}+\eta_{it}
+\tilde{d}_{it}=\gamma \tilde{z}_{it}+\eta_{it}
 \end{align}
 $$
-  1. Exclusion restriction: $E(\varepsilon_{i}|z_{it}, d_{i1}, d_{i2},...,d_{iT})=0$
-  2. Relevancy: $Cov(d_{it},z_{it}) \neq 0$
-  3. Need some **within** variations in $z_{it}$
+  1. Exclusion restriction: We need $E(\tilde{u}_{it}|\tilde{z}_{it})$. $E(u_{it}|z_{i1}, z_{i2},...,z_{iT})=0$
+  2. Relevancy: $Cov(\tilde{d}_{it},\tilde{z}_{it}) \neq 0$ (Necessary to have some **within** variations in $z_{it}$)
   
+# Some considerations
+* Consider the following regression equation:
+$$
+\begin{align}
+y_{it}=\alpha+\rho d_{it}+\varepsilon_{it}
+\end{align}
+$$
+* And you worry that, $Cov(d_{it},\varepsilon_{it}) \neq 0$. What are your options?
+
 # Pre-event trends: Going back to the parallel/common trend assumption
 * Motivation: What if the parallel/common trend assumption falls apart?
 * One way is to control for observables -- conditional parallel/common trend [e.g.][@callaway2020difference].
-* Denote $y$ as the outcome, $d$ as the treatment, $x$ as the observable control, and $w$ as the unobservable confounder (assume the within transformation). Here is my attempt on drawing DAG for this problem:
+* Denote $y$ as the outcome, $d$ as the treatment, $x$ as the observable control, and $w$ as the unobservable confounder (assume the within transformation). Here is my attempt on drawing DAG for this problem (Full disclosure -- I am not a DAG expert and this needs some verifications):
 
 ```{r dag, fig.align='center', out.width="50%"}
 library(dagitty)
@@ -79,6 +92,7 @@ ggdag(dag, layout = "circle") +
 ```
 
 # Panel IV example 1: Pre-event trends [@freyaldenhoven2019pre]
+* Again, an attempt to draw a DAG to show the IV approach can work (Full disclosure -- I am not a DAG expert and this needs some verifications):
 ```{r dag2, fig.align='center', out.width="50%"}
 library(dagitty)
 library(ggdag)

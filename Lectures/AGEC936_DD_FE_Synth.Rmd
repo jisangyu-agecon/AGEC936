@@ -508,13 +508,15 @@ $$
 
 * **Aggregation**: It depends on what you are interested in. For example, are you interested in the average of static effects *with-in* group? Or are you interested in the *dynamic* effects measured by the length of *exposure*. See table 1 of @callaway2020difference for the discussion on "weights".
 
-# @callaway2020difference: An example
+# A potential application topic: PRF and rental rates
 * Background
   1. Let's look at the effect of staggered roll-out of the PRF Rainfall index insurance program.
   2. Here, let's see whether having an insurance product available to ranchers affects rental rates for pastureland 
       - A relevant paper is @ifft2014impact: Finds a positive impact on farmland values using field-level data.
   3. The data span from 2009 to 2012 ($T=4$) and the first year counties have the PRF product available differs.
   4. All counties are "treated" in 2013 and later.
+  
+* Let's apply @callaway2020difference and @de2020two
   
 ```{r prf_example}
 library(did)
@@ -591,7 +593,7 @@ $$
   + $y_{1t}=y_{1t}(0)$ if $t<t^*$, 
   + $y_{1t}=y_{1t}(1)$ if $t>t^*$,
   + $y_{it}=y_{it}(0)$ for $i\neq1$.
-* We need $y_{1t}(0)$ for $t>t^*$!
+  + But, **we need $y_{1t}(0)$ for $t>t^*$!**
 * The **key idea**: Let's combine $y_{it}$ for $i\neq1$ to estimate $y_{1t}(0)$ for $t>t^*$.
 * Underlying model for the potential outcome, $y_{it}(0)$, is (equation (1) of @abadie2010synthetic)
   $$
@@ -616,7 +618,7 @@ $$
   $$
   w_j\geq 0\;\;\text{and}\;\;\sum_{j=2}w_j = 1
   $$
-  and $X_h$ are "predictors", which include $y_{js}$ for $j\neq=1$ and $s<t^*$, and $Z_j$ for $j\neq1$.
+  and $X_h$ are "predictors", which include $y_{js}$ for $j\neq 1$ and $s<t^*$, and $Z_j$ for $j\neq1$.
 * How do we choose $v_h$?: @abadie2010synthetic uses $v_h$ such that produce $w_j$ such that they minimize the out-of-sample mean squared prediction error for some set times in the pre-intervention period.
 * Seems cool... any issues?
 

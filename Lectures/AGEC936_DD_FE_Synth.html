@@ -999,19 +999,14 @@ corr(u_i, Xb)  = 0.1565                         Prob &gt; F          =     0.000
 F test that all u_i=0: F(49, 97) = 2.85                      Prob &gt; F = 0.0000
 
 
-DID estimators of the instantaneous treatment effect, of dynamic treatment
-effects if the dynamic option is used, and of placebo tests of the parallel
-trends assumption if the placebo option is used. The estimators are robust
-to heterogeneous effects, and to dynamic effects if the robust_dynamic
-option is used.
+DID estimators of the instantaneous treatment effect, of dynamic treatment effects if the
+dynamic option is used, and of placebo tests of the parallel trends assumption if the
+placebo option is used. The estimators are robust to heterogeneous effects, and to dynamic
+effects if the robust_dynamic option is used.
 
-             |  Estimate         SE      LB CI      UB CI          N 
--------------+-------------------------------------------------------
-    Effect_0 |  7.814228   .4890417   6.855706    8.77275         50 
-
-             | Switchers 
--------------+-----------
-    Effect_0 |        25 </code></pre>
+             |  Estimate         SE      LB CI      UB CI          N  Switchers 
+-------------+------------------------------------------------------------------
+    Effect_0 |  7.814228   .4890417   6.855706    8.77275         50         25 </code></pre>
 </div>
 <div id="callaway2020difference-group-time-average-treatment-effect" class="slide section level1">
 <h1><span class="citation">Callaway and Sant’Anna (2020)</span>: Group-time average treatment effect</h1>
@@ -1040,8 +1035,8 @@ E\left(\left(\frac{G_g}{E(G_g)}-\frac{\frac{p_{gt}(X)(1-d_{it})(1-G_g)}{1-p_{gt}
 <li><p><strong>Aggregation</strong>: It depends on what you are interested in. For example, are you interested in the average of static effects <em>with-in</em> group? Or are you interested in the <em>dynamic</em> effects measured by the length of <em>exposure</em>. See table 1 of <span class="citation">Callaway and Sant’Anna (2020)</span> for the discussion on “weights”.</p></li>
 </ul>
 </div>
-<div id="callaway2020difference-an-example" class="slide section level1">
-<h1><span class="citation">Callaway and Sant’Anna (2020)</span>: An example</h1>
+<div id="a-potential-application-topic-prf-and-rental-rates" class="slide section level1">
+<h1>A potential application topic: PRF and rental rates</h1>
 <ul>
 <li>Background
 <ol style="list-style-type: decimal">
@@ -1053,6 +1048,7 @@ E\left(\left(\frac{G_g}{E(G_g)}-\frac{\frac{p_{gt}(X)(1-d_{it})(1-G_g)}{1-p_{gt}
 <li>The data span from 2009 to 2012 (<span class="math inline">\(T=4\)</span>) and the first year counties have the PRF product available differs.</li>
 <li>All counties are “treated” in 2013 and later.</li>
 </ol></li>
+<li>Let’s apply <span class="citation">Callaway and Sant’Anna (2020)</span> and <span class="citation">de Chaisemartin and d’Haultfoeuille (2020)</span></li>
 </ul>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">library</span>(did)</span>
 <span id="cb21-2"><a href="#cb21-2"></a><span class="kw">library</span>(DIDmultiplegt)</span>
@@ -1226,8 +1222,8 @@ $N_switchers_effect
 <li><span class="math inline">\(y_{1t}=y_{1t}(0)\)</span> if <span class="math inline">\(t&lt;t^*\)</span>,</li>
 <li><span class="math inline">\(y_{1t}=y_{1t}(1)\)</span> if <span class="math inline">\(t&gt;t^*\)</span>,</li>
 <li><span class="math inline">\(y_{it}=y_{it}(0)\)</span> for <span class="math inline">\(i\neq1\)</span>.</li>
+<li>But, <strong>we need <span class="math inline">\(y_{1t}(0)\)</span> for <span class="math inline">\(t&gt;t^*\)</span>!</strong></li>
 </ul></li>
-<li>We need <span class="math inline">\(y_{1t}(0)\)</span> for <span class="math inline">\(t&gt;t^*\)</span>!</li>
 <li>The <strong>key idea</strong>: Let’s combine <span class="math inline">\(y_{it}\)</span> for <span class="math inline">\(i\neq1\)</span> to estimate <span class="math inline">\(y_{1t}(0)\)</span> for <span class="math inline">\(t&gt;t^*\)</span>.</li>
 <li>Underlying model for the potential outcome, <span class="math inline">\(y_{it}(0)\)</span>, is (equation (1) of <span class="citation">Abadie, Diamond, and Hainmueller (2010)</span>) <span class="math display">\[
 y_{it}(0)=\delta_{t}+\theta_t Z_i + \lambda_t\mu_i+\varepsilon_{it}.
@@ -1244,7 +1240,7 @@ y_{it}(0)=\delta_{t}+\theta_t Z_i + \lambda_t\mu_i+\varepsilon_{it}.
 Min_{w_j,j\neq1}\;\left(\sum_h v_h \left(X_{1h}-\sum_{j=2} w_j X_{2j}\right)\right)
 \]</span> subject to <span class="math display">\[
 w_j\geq 0\;\;\text{and}\;\;\sum_{j=2}w_j = 1
-\]</span> and <span class="math inline">\(X_h\)</span> are “predictors”, which include <span class="math inline">\(y_{js}\)</span> for <span class="math inline">\(j\neq=1\)</span> and <span class="math inline">\(s&lt;t^*\)</span>, and <span class="math inline">\(Z_j\)</span> for <span class="math inline">\(j\neq1\)</span>.</li>
+\]</span> and <span class="math inline">\(X_h\)</span> are “predictors”, which include <span class="math inline">\(y_{js}\)</span> for <span class="math inline">\(j\neq 1\)</span> and <span class="math inline">\(s&lt;t^*\)</span>, and <span class="math inline">\(Z_j\)</span> for <span class="math inline">\(j\neq1\)</span>.</li>
 <li>How do we choose <span class="math inline">\(v_h\)</span>?: <span class="citation">Abadie, Diamond, and Hainmueller (2010)</span> uses <span class="math inline">\(v_h\)</span> such that produce <span class="math inline">\(w_j\)</span> such that they minimize the out-of-sample mean squared prediction error for some set times in the pre-intervention period.</li>
 <li>Seems cool… any issues?</li>
 </ul>

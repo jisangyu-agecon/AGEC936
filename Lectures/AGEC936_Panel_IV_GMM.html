@@ -529,16 +529,20 @@ Jisang Yu<br>Kansas State University
 <div id="revisiting-iv-in-the-context-of-panel-fe-set-up" class="slide section level1">
 <h1>Revisiting IV in the context of Panel FE set-up</h1>
 <ul>
-<li><p>Revisiting the identifying assumptions for Panel FE estimator <span class="math display">\[
+<li>Revisiting the identifying assumptions for Panel FE estimator <span class="math display">\[
 \begin{align}
 y_{it}=\alpha+\rho d_{it}+v_i + u_{it}
 \end{align}
-\]</span></p>
+\]</span> Within-transformation (<span class="math inline">\(\tilde{k}\)</span> to denote the within transformation) leads to <span class="math display">\[
+\begin{align}
+\tilde{y}_{it}=\rho \tilde{d}_{it}+\tilde{u}_{it}
+\end{align}
+\]</span>
 <ol style="list-style-type: decimal">
-<li>Strict exogeneity: <span class="math inline">\(E(u_{it}|d_{i1}, d_{i2},...,d_{iT})=0\)</span></li>
+<li>Strict exogeneity: We need <span class="math inline">\(E(\tilde{u}_{it}|\tilde{d}_{it})\)</span>. The sufficient condition is <span class="math inline">\(E(u_{it}|d_{i1}, d_{i2},...,d_{iT})=0\)</span>.</li>
 <li>The regressor, <span class="math inline">\(d_{it}\)</span>, needs to vary within each cross-sectional unit over time.</li>
 </ol></li>
-<li><p>Revisiting the identifying assumptions for IV estimator (Let’s ignore the panel structure for a moment) <span class="math display">\[
+<li>Revisiting the identifying assumptions for IV estimator (Let’s ignore the panel structure for a moment) <span class="math display">\[
 \begin{align}
 y_{i}=\alpha+\rho d_{i}+\varepsilon_{i}
 \end{align}
@@ -546,25 +550,35 @@ y_{i}=\alpha+\rho d_{i}+\varepsilon_{i}
 \begin{align}
 d_{i}=\beta+\gamma z_{i}+\eta_{i}
 \end{align}
-\]</span></p>
+\]</span>
 <ol style="list-style-type: decimal">
-<li>Exclusion restriction: <span class="math inline">\(E(u_{it}|z_{it})=0\)</span></li>
+<li>Exclusion restriction: <span class="math inline">\(E(u_{i}|z_{i})=0\)</span></li>
 <li>Relevancy: <span class="math inline">\(Cov(d_i,z_i) \neq 0\)</span></li>
 </ol></li>
-<li><p>Now, let’s think about the identifying assumptions for IV estimator in the context of <strong>Panel FE</strong> model <span class="math display">\[
+<li>Now, let’s think about the identifying assumptions for IV estimator in the context of <strong>Panel FE</strong> model <span class="math display">\[
 \begin{align}
-y_{it}=\alpha+\rho d_{it}+v_i + u_{it}
+\tilde{y}_{it}=\rho \tilde{d}_{it}+\tilde{u}_{it}
 \end{align}
 \]</span> <span class="math display">\[
 \begin{align}
-d_{it}=\beta+\gamma z_{it}+\eta_{it}
+\tilde{d}_{it}=\gamma \tilde{z}_{it}+\eta_{it}
 \end{align}
-\]</span></p>
+\]</span>
 <ol style="list-style-type: decimal">
-<li>Exclusion restriction: <span class="math inline">\(E(\varepsilon_{i}|z_{it}, d_{i1}, d_{i2},...,d_{iT})=0\)</span></li>
-<li>Relevancy: <span class="math inline">\(Cov(d_{it},z_{it}) \neq 0\)</span></li>
-<li>Need some <strong>within</strong> variations in <span class="math inline">\(z_{it}\)</span></li>
+<li>Exclusion restriction: We need <span class="math inline">\(E(\tilde{u}_{it}|\tilde{z}_{it})\)</span>. <span class="math inline">\(E(u_{it}|z_{i1}, z_{i2},...,z_{iT})=0\)</span></li>
+<li>Relevancy: <span class="math inline">\(Cov(\tilde{d}_{it},\tilde{z}_{it}) \neq 0\)</span> (Necessary to have some <strong>within</strong> variations in <span class="math inline">\(z_{it}\)</span>)</li>
 </ol></li>
+</ul>
+</div>
+<div id="some-considerations" class="slide section level1">
+<h1>Some considerations</h1>
+<ul>
+<li>Consider the following regression equation: <span class="math display">\[
+\begin{align}
+y_{it}=\alpha+\rho d_{it}+\varepsilon_{it}
+\end{align}
+\]</span></li>
+<li>And you worry that, <span class="math inline">\(Cov(d_{it},\varepsilon_{it}) \neq 0\)</span>. What are your options?</li>
 </ul>
 </div>
 <div id="pre-event-trends-going-back-to-the-parallelcommon-trend-assumption" class="slide section level1">
@@ -572,7 +586,7 @@ d_{it}=\beta+\gamma z_{it}+\eta_{it}
 <ul>
 <li>Motivation: What if the parallel/common trend assumption falls apart?</li>
 <li>One way is to control for observables – conditional parallel/common trend [e.g.]<span class="citation">(Callaway and Sant’Anna 2020)</span>.</li>
-<li>Denote <span class="math inline">\(y\)</span> as the outcome, <span class="math inline">\(d\)</span> as the treatment, <span class="math inline">\(x\)</span> as the observable control, and <span class="math inline">\(w\)</span> as the unobservable confounder (assume the within transformation). Here is my attempt on drawing DAG for this problem:</li>
+<li>Denote <span class="math inline">\(y\)</span> as the outcome, <span class="math inline">\(d\)</span> as the treatment, <span class="math inline">\(x\)</span> as the observable control, and <span class="math inline">\(w\)</span> as the unobservable confounder (assume the within transformation). Here is my attempt on drawing DAG for this problem (Full disclosure – I am not a DAG expert and this needs some verifications):</li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(dagitty)</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(ggdag)</span>
@@ -587,6 +601,9 @@ d_{it}=\beta+\gamma z_{it}+\eta_{it}
 </div>
 <div id="panel-iv-example-1-pre-event-trends-freyaldenhoven2019pre" class="slide section level1">
 <h1>Panel IV example 1: Pre-event trends <span class="citation">(Freyaldenhoven, Hansen, and Shapiro 2019)</span></h1>
+<ul>
+<li>Again, an attempt to draw a DAG to show the IV approach can work (Full disclosure – I am not a DAG expert and this needs some verifications):</li>
+</ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">library</span>(dagitty)</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="kw">library</span>(ggdag)</span>
 <span id="cb2-3"><a href="#cb2-3"></a></span>
@@ -696,7 +713,12 @@ d_{it}=\beta+\gamma z_{it}+\eta_{it}
 <span id="cb4-2"><a href="#cb4-2"></a><span class="kw">areg</span> <span class="fu">y</span> z i.<span class="fu">year</span>, absorb(id) <span class="kw">vce</span>(<span class="kw">cluster</span> id)</span>
 <span id="cb4-3"><a href="#cb4-3"></a>*FE2SLS</span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="kw">xi</span>: xtivreg2 <span class="fu">y</span> z (x=z_lead1) i.<span class="fu">year</span>, <span class="kw">fe</span> <span class="kw">cluster</span>(id)</span></code></pre></div>
-<pre><code>Linear regression, absorbing indicators         Number of obs     =      4,500
+<pre><code> command coefplot is unrecognized
+r(199);
+
+
+
+Linear regression, absorbing indicators         Number of obs     =      4,500
 Absorbed variable: id                           No. of categories =        500
                                                 F(   9,    499)   =     136.26
                                                 Prob &gt; F          =     0.0000
