@@ -72,11 +72,36 @@ $$
 y_{it}=\alpha+\rho d_{it}+\varepsilon_{it}
 \end{align}
 $$
-* And you worry that, $Cov(d_{it},\varepsilon_{it}) \neq 0$. 
+And you worry that, $Cov(d_{it},\varepsilon_{it}) \neq 0$. 
+
+* Using an IV to mitigate this requires $z_{it}$ such that
+$$
+E(\varepsilon_{it}|z_{it})=0\;\;\text{and}\;\;Cov(z_{it},d_{it}) \neq 0
+$$
+
+* Recall that with Panel FE approach, we have
+$$
+\begin{align}
+\tilde{y}_{it}=\rho \tilde{d}_{it}+\tilde{u}_{it}
+\end{align}
+$$
+meaning that we need $z_{it}$ such that
+$$
+E(\tilde{u}_{it}|\tilde{z}_{it})=0\;\;\text{and}\;\;Cov(\tilde{z}_{it},\tilde{d}_{it}) \neq 0
+$$
+
+* Questions to think about
+  1. If we have an instrument that satisfies $E(\varepsilon_{it}|z_{it})=0$, and $Cov(z_{it},d_{it}) \neq 0$, do we need to use Panel FE estimator?
+  2. Do we get consistency if we use Panel FE-2SLS with an instrument that satisfies $E(\varepsilon_{it}|z_{it})=0$, and $Cov(z_{it},d_{it}) \neq 0$?
+
+# Some IV/GMM related topics in the context of Panel data applications
+* Dynamic panel (Arellano-Bond type estimators)
+* Mitigating potential violation of parallel/common pre-event trends
+* Bartik/Shift-share IVs
 
 # Pre-event trends: Going back to the parallel/common trend assumption
 * Motivation: What if the parallel/common trend assumption falls apart?
-* One way is to control for observables -- conditional parallel/common trend [e.g.][@callaway2020difference].
+* One way is to control for observables -- conditional parallel/common trend [e.g. @callaway2020difference].
 * Denote $y$ as the outcome, $d$ as the treatment, $x$ as the observable control, and $w$ as the unobservable confounder (assume the within transformation). Here is my attempt on drawing DAG for this problem (Full disclosure -- I am as new to DAG as you are so this needs some verification):
 
 ```{r dag, fig.align='center', out.width="50%"}
@@ -209,8 +234,15 @@ xi: xtivreg2 y z (x=z_lead1) i.year, fe cluster(id)
 ```
 
 # Panel IV example 2: Bartik/Shift-share IV
-
-
+* Named after @bartik1991benefits, also known as "Shift-share" IV.
+* The idea is to combine "aggregated/macro-level shocks" and a measure for "heterogeneous (local) exposures" and use this combination as an "instrument".
+* I like the framework of @goldsmith2020bartik, so I will form our discussion around it (two other related papers are @adao2019shift and @borusyak2020quasi -- please do check out if you are interested in this literature)
+* **Set up** (ignore the panel structure for now)
+Consider the following regression equation:
+$$
+y_i=\alpha+\beta x_i+\varepsilon_i
+$$
+where the regressor 
 
 # What else...?
 

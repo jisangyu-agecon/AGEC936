@@ -573,19 +573,41 @@ d_{i}=\beta+\gamma z_{i}+\eta_{i}
 <div id="some-considerations" class="slide section level1">
 <h1>Some considerations</h1>
 <ul>
-<li>Consider the following regression equation: <span class="math display">\[
+<li><p>Consider the following regression equation: <span class="math display">\[
 \begin{align}
 y_{it}=\alpha+\rho d_{it}+\varepsilon_{it}
 \end{align}
-\]</span></li>
-<li>And you worry that, <span class="math inline">\(Cov(d_{it},\varepsilon_{it}) \neq 0\)</span>.</li>
+\]</span> And you worry that, <span class="math inline">\(Cov(d_{it},\varepsilon_{it}) \neq 0\)</span>.</p></li>
+<li><p>Using an IV to mitigate this requires <span class="math inline">\(z_{it}\)</span> such that <span class="math display">\[
+E(\varepsilon_{it}|z_{it})=0\;\;\text{and}\;\;Cov(z_{it},d_{it}) \neq 0
+\]</span></p></li>
+<li><p>Recall that with Panel FE approach, we have <span class="math display">\[
+\begin{align}
+\tilde{y}_{it}=\rho \tilde{d}_{it}+\tilde{u}_{it}
+\end{align}
+\]</span> meaning that we need <span class="math inline">\(z_{it}\)</span> such that <span class="math display">\[
+E(\tilde{u}_{it}|\tilde{z}_{it})=0\;\;\text{and}\;\;Cov(\tilde{z}_{it},\tilde{d}_{it}) \neq 0
+\]</span></p></li>
+<li><p>Questions to think about</p>
+<ol style="list-style-type: decimal">
+<li>If we have an instrument that satisfies <span class="math inline">\(E(\varepsilon_{it}|z_{it})=0\)</span>, and <span class="math inline">\(Cov(z_{it},d_{it}) \neq 0\)</span>, do we need to use Panel FE estimator?</li>
+<li>Do we get consistency if we use Panel FE-2SLS with an instrument that satisfies <span class="math inline">\(E(\varepsilon_{it}|z_{it})=0\)</span>, and <span class="math inline">\(Cov(z_{it},d_{it}) \neq 0\)</span>?</li>
+</ol></li>
+</ul>
+</div>
+<div id="some-ivgmm-related-topics-in-the-context-of-panel-data-applications" class="slide section level1">
+<h1>Some IV/GMM related topics in the context of Panel data applications</h1>
+<ul>
+<li>Dynamic panel (Arellano-Bond type estimators)</li>
+<li>Mitigating potential violation of parallel/common pre-event trends</li>
+<li>Bartik/Shift-share IVs</li>
 </ul>
 </div>
 <div id="pre-event-trends-going-back-to-the-parallelcommon-trend-assumption" class="slide section level1">
 <h1>Pre-event trends: Going back to the parallel/common trend assumption</h1>
 <ul>
 <li>Motivation: What if the parallel/common trend assumption falls apart?</li>
-<li>One way is to control for observables – conditional parallel/common trend [e.g.]<span class="citation">(Callaway and Sant’Anna 2020)</span>.</li>
+<li>One way is to control for observables – conditional parallel/common trend <span class="citation">(e.g. Callaway and Sant’Anna 2020)</span>.</li>
 <li>Denote <span class="math inline">\(y\)</span> as the outcome, <span class="math inline">\(d\)</span> as the treatment, <span class="math inline">\(x\)</span> as the observable control, and <span class="math inline">\(w\)</span> as the unobservable confounder (assume the within transformation). Here is my attempt on drawing DAG for this problem (Full disclosure – I am as new to DAG as you are so this needs some verification):</li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(dagitty)</span>
@@ -716,6 +738,14 @@ y_{it}=\alpha+\rho d_{it}+\varepsilon_{it}
 </div>
 <div id="panel-iv-example-2-bartikshift-share-iv" class="slide section level1">
 <h1>Panel IV example 2: Bartik/Shift-share IV</h1>
+<ul>
+<li>Named after <span class="citation">Bartik (1991)</span>, also known as “Shift-share” IV.</li>
+<li>The idea is to combine “aggregated/macro-level shocks” and a measure for “heterogeneous (local) exposures” and use this combination as an “instrument”.</li>
+<li>I like the framework of <span class="citation">Goldsmith-Pinkham, Sorkin, and Swift (2020)</span>, so I will form our discussion around it (two other related papers are <span class="citation">Adao, Kolesár, and Morales (2019)</span> and <span class="citation">Borusyak, Hull, and Jaravel (2020)</span> – please do check out if you are interested in this literature)</li>
+<li><strong>Set up</strong> (ignore the panel structure for now) Consider the following regression equation: <span class="math display">\[
+y_i=\alpha+\beta x_i+\varepsilon_i
+\]</span> where the regressor</li>
+</ul>
 </div>
 <div id="what-else" class="slide section level1">
 <h1>What else…?</h1>
@@ -723,11 +753,23 @@ y_{it}=\alpha+\rho d_{it}+\varepsilon_{it}
 <div id="references" class="slide section level1 unnumbered">
 <h1>References</h1>
 <div id="refs" class="references">
+<div id="ref-adao2019shift">
+<p>Adao, Rodrigo, Michal Kolesár, and Eduardo Morales. 2019. “Shift-Share Designs: Theory and Inference.” <em>The Quarterly Journal of Economics</em> 134 (4): 1949–2010.</p>
+</div>
+<div id="ref-bartik1991benefits">
+<p>Bartik, Timothy J. 1991. “Who Benefits from State and Local Economic Development Policies?”</p>
+</div>
+<div id="ref-borusyak2020quasi">
+<p>Borusyak, Kirill, Peter Hull, and Xavier Jaravel. 2020. “Quasi-Experimental Shift-Share Research Designs.”</p>
+</div>
 <div id="ref-callaway2020difference">
 <p>Callaway, Brantly, and Pedro HC Sant’Anna. 2020. “Difference-in-Differences with Multiple Time Periods.” <em>Journal of Econometrics</em>.</p>
 </div>
 <div id="ref-freyaldenhoven2019pre">
 <p>Freyaldenhoven, Simon, Christian Hansen, and Jesse M Shapiro. 2019. “Pre-Event Trends in the Panel Event-Study Design.” <em>American Economic Review</em> 109 (9): 3307–38.</p>
+</div>
+<div id="ref-goldsmith2020bartik">
+<p>Goldsmith-Pinkham, Paul, Isaac Sorkin, and Henry Swift. 2020. “Bartik Instruments: What, When, Why, and How.” <em>American Economic Review</em> 110 (8): 2586–2624.</p>
 </div>
 </div>
 </div>

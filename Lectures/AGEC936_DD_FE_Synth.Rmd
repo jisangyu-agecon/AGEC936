@@ -627,7 +627,7 @@ $$
   1. Looks at the relationship between terrorism and regional GDP in Spain.
   2. Specifically, the paper estimates the impact of terrorist conflicts in the Basque Country.
   3. Control units (or potential "donors") are 16 other Spanish regions.
-  4. Sample period: 1955 - 1997 (pre-treatment period: 1955 - 1969)
+  4. Sample period: 1955 - 1997 (pre-treatment period: 1955 - 1969, optimization period: 1960 - 1969)
   5. Uses 12 predictors
   
 ```{r basque, results="hide"}
@@ -683,6 +683,70 @@ obs.Y.1t<-dataprep.out$Y1
 hat.Y.1t.scm1<-(dataprep.out$Y0)%*%hat.w.scm1
 ```
 ```{r basque_results, collectcode=TRUE}
+#Weights
+synth.tables$tab.w
+#Plot
+Year<-1955:1997
+plot(Year,obs.Y.1t,ylim=c(3,12),ylab="real per-capita GDP(1986 USD, thousand)",type='l',lwd=2)
+abline(v=1970,lty=3,col=1)
+lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
+```
+
+# Different optimiztion period
+* What if we use 1955 - 1964 instead of 1960 - 1969?
+```{r basque2, results="hide"}
+library(Synth)
+data(basque)
+#Data preparation
+dataprep.out <- dataprep(
+foo = basque,
+predictors = c("school.illit", "school.prim", "school.med",
+"school.high", "school.post.high", "invest"),
+predictors.op = "mean",
+time.predictors.prior = 1964:1969,
+special.predictors = list(
+list("gdpcap", 1960:1969 , "mean"),
+list("sec.agriculture", seq(1961, 1969, 2), "mean"),
+list("sec.energy", seq(1961, 1969, 2), "mean"),
+list("sec.industry", seq(1961, 1969, 2), "mean"),
+list("sec.construction", seq(1961, 1969, 2), "mean"),
+list("sec.services.venta", seq(1961, 1969, 2), "mean"),
+list("sec.services.nonventa", seq(1961, 1969, 2), "mean"),
+list("popdens", 1969, "mean")),
+dependent = "gdpcap",
+unit.variable = "regionno",
+unit.names.variable = "regionname",
+time.variable = "year",
+treatment.identifier = 17,
+controls.identifier = c(2:16, 18),
+time.optimize.ssr = 1955:1964,
+time.plot = 1955:1997)
+#Further variable consolidation and manipulation following Abadie et al 2011 (Journal of Statistical Software)
+dataprep.out$X1["school.high",] <- dataprep.out$X1["school.high",] +
+dataprep.out$X1["school.post.high",]
+dataprep.out$X1 <- as.matrix(dataprep.out$X1[
+-which(rownames(dataprep.out$X1) == "school.post.high"),])
+dataprep.out$X0["school.high",] <- dataprep.out$X0["school.high",] +
+dataprep.out$X0["school.post.high",]
+dataprep.out$X0 <- dataprep.out$X0[
+-which(rownames(dataprep.out$X0) == "school.post.high"),]
+lowest <- which(rownames(dataprep.out$X0) == "school.illit")
+highest <- which(rownames(dataprep.out$X0) == "school.high")
+dataprep.out$X1[lowest:highest,] <-
+(100 * dataprep.out$X1[lowest:highest,]) /
+sum(dataprep.out$X1[lowest:highest,])
+dataprep.out$X0[lowest:highest,] <-
+100 * scale(dataprep.out$X0[lowest:highest,], center = FALSE,
+scale = colSums(dataprep.out$X0[lowest:highest,]))
+#Synth estimation
+synth.out <- synth(data.prep.obj = dataprep.out, method = "BFGS")
+synth.tables <- synth.tab(dataprep.res = dataprep.out,synth.res = synth.out)
+hat.w.scm1<-synth.tables$tab.w[,1]
+#Observed and Synthetic Basque
+obs.Y.1t<-dataprep.out$Y1
+hat.Y.1t.scm1<-(dataprep.out$Y0)%*%hat.w.scm1
+```
+```{r basque_results2, collectcode=TRUE}
 #Weights
 synth.tables$tab.w
 #Plot
