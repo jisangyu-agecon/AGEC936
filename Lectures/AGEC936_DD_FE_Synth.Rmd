@@ -612,7 +612,7 @@ $$
   $$
 * Estimation (see equation (7) of @abadie2019using):
   $$
-  Min_{w_j,j\neq1}\;\left(\sum_h v_h \left(X_{1h}-\sum_{j=2} w_j X_{2j}\right)\right)
+  Min_{w_j,j\neq1}\;\left(\sum_h v_h \left(X_{1h}-\sum_{j=2} w_j X_{2j}\right)^2\right)
   $$
   subject to
   $$
