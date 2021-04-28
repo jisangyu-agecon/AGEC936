@@ -622,6 +622,55 @@ $$
 * How do we choose $v_h$?: @abadie2010synthetic uses $v_h$ such that produce $w_j$ such that they minimize the out-of-sample mean squared prediction error for some set times in the pre-intervention period.
 * Seems cool... any issues?
 
+  
+# A simple simulation
+```{stata synthstata, results="hide"}  
+clear all
+set obs 5
+set seed 1234
+
+*id
+gen id=_n
+
+*time invariant var
+gen x=3*rnormal()
+
+*expand
+expand 20
+
+*time var
+bys id: gen t=_n
+
+*error
+gen e=rnormal()
+
+*treatment to id=1 after t=10
+gen d=0
+replace d=1 if id==1 & t>=10
+
+*outcome
+gen y=2+0.5*x+0.5*t*x+2*t*d+e
+
+*synth
+xtset id t
+*compare with actual counterfactual
+tempfile temp
+synth y y(1) y(2) y(3) y(4) y(5) x(1(1)5), trunit(1) trperiod(10) mspeperiod(1(1)7) keep(`temp')
+
+use `temp', clear
+gen real_counterfactual=_Y_treated
+replace real_counterfactual=_Y_treated-2*_time if _time>=10
+label var real_counterfactual "Counterfactual"
+
+*plot
+tw (line _Y_treated _time) (line _Y_synthetic _time) (line real_counterfactual _time), graphregion(color(white))
+graph export "synth.png", replace
+```
+
+```{r, echo=FALSE, fig.align='center', out.width="70%"}
+   knitr::include_graphics('./synth.png')
+```
+
 # An example [@abadie2003economic]
 * **Background**
   1. Looks at the relationship between terrorism and regional GDP in Spain.

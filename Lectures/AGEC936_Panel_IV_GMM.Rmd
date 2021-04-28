@@ -62,8 +62,8 @@ $$
 \tilde{d}_{it}=\gamma \tilde{z}_{it}+\eta_{it}
 \end{align}
 $$
-  1. Exclusion restriction: We need $E(\tilde{u}_{it}|\tilde{z}_{it})$. $E(u_{it}|z_{i1}, z_{i2},...,z_{iT})=0$
-  2. Relevancy: $Cov(\tilde{d}_{it},\tilde{z}_{it}) \neq 0$ (Necessary to have some **within** variations in $z_{it}$)
+  1. Exclusion restriction: We need $E(\tilde{u}_{it}|\tilde{z}_{it})$ or we can represent this condition as $E(z_{it}u_{it}|v_i)=0$. Note that the sufficient condition for this is $E(u_{it}|z_{i1}, z_{i2},...,z_{iT})=0$.
+  2. Relevancy: $Cov(\tilde{d}_{it},\tilde{z}_{it}) \neq 0$ or we can write this as $Cov(d_{it},z_{it}|v_i)$ (Necessary to have some **within** variations in $z_{it}$).
   
 # Some considerations
 * Consider the following regression equation:
@@ -92,7 +92,7 @@ $$
 
 * Questions to think about
   1. If we have an instrument that satisfies $E(\varepsilon_{it}|z_{it})=0$, and $Cov(z_{it},d_{it}) \neq 0$, do we need to use Panel FE estimator?
-  2. Do we get consistency if we use Panel FE-2SLS with an instrument that satisfies $E(\varepsilon_{it}|z_{it})=0$, and $Cov(z_{it},d_{it}) \neq 0$?
+  2. Do we obtain the consistency if we use Panel FE-2SLS with an instrument that satisfies $E(\varepsilon_{it}|z_{it})=0$, and $Cov(z_{it},d_{it}) \neq 0$?
 
 # Some IV/GMM related topics in the context of Panel data applications
 * Dynamic panel (Arellano-Bond type estimators)
@@ -155,16 +155,16 @@ bys id: replace eta=eta[_n-1]+rnormal(0,1) if _n>1
 *create x
 bys id: gen x = eta + rnormal(0,2)
 *create z
-bys id: gen ztemp = eta 
-bys id: gen z = (ztemp >4)
-bys id: replace z=1 if z[_n-1]==1
-drop ztemp
+bys id: gen dtemp = eta 
+bys id: gen d = (dtemp >4)
+bys id: replace d=1 if d[_n-1]==1
+drop dtemp
 
 *create y
-bys id: gen y = z + .25*eta + .2*year + alpha + rnormal(0,1)
+bys id: gen y = d + .25*eta + .2*year + alpha + rnormal(0,1)
 
 *create dummmies for time period of event and pre/post
-bys id: gen event = z-z[_n-1]
+bys id: gen event = d-d[_n-1]
 recode event (.=0)
 foreach n of num 1(1)5{
   bys id: gen t_`n'=event[_n+`n']
@@ -174,13 +174,13 @@ recode t* (.=0)
 
 *create instruments
 foreach n of num 1(1)5 {
-  bys id: gen z_lead`n'=F`n'.z
-  bys id: replace z_lead`n'=1 if z_lead`n'[_n-1]==1
+  bys id: gen d_lead`n'=F`n'.d
+  bys id: replace d_lead`n'=1 if d_lead`n'[_n-1]==1
 }
-recode z* (.=0)
+recode d* (.=0)
 
 *Add dummies for both sides of eventplot
-bys id: gen t_6=-z_lead5
+bys id: gen t_6=-d_lead5
 bys id: replace t5=1 if t5[_n-1]==1
 recode t5 (.=0)
 
@@ -209,7 +209,7 @@ coefplot, keep(t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5) vertical graphregion(color(
 areg y t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5 x i.year, absorb(id) vce(cluster id)
 coefplot, keep(t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5) vertical graphregion(color(white)) title("Proxy") saving(proxy.gph, replace)
 
-xi: xtivreg2 y t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5 (x=z_lead1) i.year, fe cluster(id)
+xi: xtivreg2 y t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5 (x=d_lead1) i.year, fe cluster(id)
 coefplot, keep(t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5) vertical graphregion(color(white)) title("2SLS") saving(panel2sls.gph, replace)
 
 graph combine nocontrol.gph eta.gph proxy.gph panel2sls.gph, col(2) graphregion(color(white))
@@ -228,21 +228,70 @@ rm panel2sls.gph
 # A mini-version simulation of @freyaldenhoven2019pre: ATE
 ```{stata second, collectcode=TRUE, eval=FALSE}
 *Not mitigating non-parallel trend
-areg y z i.year, absorb(id) vce(cluster id)
+areg y d i.year, absorb(id) vce(cluster id)
 *FE2SLS
-xi: xtivreg2 y z (x=z_lead1) i.year, fe cluster(id)
+xi: xtivreg2 y d (x=d_lead1) i.year, fe cluster(id)
 ```
 
 # Panel IV example 2: Bartik/Shift-share IV
 * Named after @bartik1991benefits, also known as "Shift-share" IV.
 * The idea is to combine "aggregated/macro-level shocks" and a measure for "heterogeneous (local) exposures" and use this combination as an "instrument".
 * I like the framework of @goldsmith2020bartik, so I will form our discussion around it (two other related papers are @adao2019shift and @borusyak2020quasi -- please do check out if you are interested in this literature)
-* **Set up** (ignore the panel structure for now)
-Consider the following regression equation:
+* **Set up**: Consider the following regression equation (now we use subscript $l$ instead of $i$ to emphasize that the unit of observations is at "locality" level):
 $$
-y_i=\alpha+\beta x_i+\varepsilon_i
+y_{lt}=\alpha+\beta x_{lt}+v_l+u_{lt}
 $$
-where the regressor 
+where the regressor, $x_l$, can be represented as (not necessarily) 
+$$
+x_{lt}=\sum_k z_{lkt} g_{lkt}.
+$$
+and suppose we have $E(x_{lt}u_{lt}|v_l) \neq 0$. That is, **Panel FE** estimator will not provide a consistent estimate $\hat{\beta}$.
+* **Bartik Instrument**: It usually takes the following form
+$$
+B_{lt}=\sum_k z_{lk0} g_{kt},
+$$
+  + $z_{lk0}$: The share of industry/sector $k$ in location $l$ in the base/initial period $0$.
+  + $g_{kt}$: The (aggregated) shock to industry/sector $k$ in time $t$. This comes from
+  $$
+  g_{lkt}=g_{kt}+\tilde{g}_{lkt}
+  $$
+where $\tilde{g}_{lkt}$ is the idiosyncratic shock/variation.
+
+# Identifying assumptions
+* Recall that the (second-stage) regression equation is
+$$
+y_{lt}=\alpha+\beta x_{lt}+v_l+u_{lt}
+$$
+and the Bartik Instrument is
+$$
+B_{lt}=\sum_k z_{lk0} g_{kt},
+$$
+
+* Identifying assumptions for FE2SLS
+  + Exclusion restriction
+  $$
+  E(B_{lt}u_{lt}|v_l)=0
+  $$
+  + Relevance
+  $$
+  Cov(x_{lt},B_{lt}|v_l) \neq 0
+  $$
+  
+* Let's be more specific. The FE2SLS estimator with the Bartik instrument is [@goldsmith2020bartik;@borusyak2020quasi]
+$$
+\hat{\beta}_{Bartik}=\frac{\sum_l \sum_t \sum_k z_{lk0}g_{kt}\tilde{y}_{lt}}{\sum_l \sum_t \sum_k z_{lk0}g_{kt}\tilde{x}_{lt}}
+$$
+where $\tilde{k}$ is the residual of regress $k$ on $v_l$ (or any possible other covariates).
+
+* This leads to
+$$
+\hat{\beta}_{Bartik}-\beta=\frac{\sum_l \sum_t \sum_k z_{lk0}g_{kt}\tilde{u}_{lt}}{\sum_l \sum_t \sum_k z_{lk0}g_{kt}\tilde{x}_{lt}} \\
+=\frac{\sum_t \sum_k g_{kt} \sum_l z_{lk0} \tilde{u}_{lt}}{\sum_t \sum_k g_{kt} \sum_l z_{lk0} \tilde{x}_{lt}}
+$$
+  + $L$ consistency: $E(z_{lk0} \tilde{u}_{lt})=0$ (Focus of @goldsmith2020bartik)
+  + $K$ consistency: $E( g_{kt} \eta_{kt})=0$ where $\eta_{kt}=\sum_l z_{lk0} \tilde{u}_{lt}$.
+
+# Analgous to DinD
 
 # What else...?
 
