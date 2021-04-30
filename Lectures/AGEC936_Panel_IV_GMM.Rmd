@@ -137,7 +137,7 @@ ggdag(dag, layout = "circle") +
 * Practically, one can do the following (again, all variables are within transformed): regress $y$ on $d$ and $x$ but **instrument** $x$ using the **leads** of $d$.
 
 # A mini-version simulation of @freyaldenhoven2019pre: Pre-trend
-```{stata first, collectcode=TRUE, results="hide", eval=FALSE}
+```{stata first, collectcode=TRUE, results="hide"}
 clear
 set seed 11123
 set obs 500
@@ -226,7 +226,7 @@ rm panel2sls.gph
 ```
 
 # A mini-version simulation of @freyaldenhoven2019pre: ATE
-```{stata second, collectcode=TRUE, eval=FALSE}
+```{stata second, collectcode=TRUE}
 *Not mitigating non-parallel trend
 areg y d i.year, absorb(id) vce(cluster id)
 *FE2SLS
@@ -246,6 +246,11 @@ $$
 x_{lt}=\sum_k z_{lkt} g_{lkt}.
 $$
 and suppose we have $E(x_{lt}u_{lt}|v_l) \neq 0$. That is, **Panel FE** estimator will not provide a consistent estimate $\hat{\beta}$.
+* An example for the variables:
+  + $y_{lt}$: Wage in area $l$ in time $t$,
+  + $x_{lt}$: Employment growth rate in area $l$ in time $t$,
+  + $z_{lkt}$: Employment share of sector $k$ in area $l$ in time $t$,
+  + $g_{lkt}$: Growth rate of sector $k$ in area $l$ in time $t$.
 * **Bartik Instrument**: It usually takes the following form
 $$
 B_{lt}=\sum_k z_{lk0} g_{kt},
@@ -266,7 +271,6 @@ and the Bartik Instrument is
 $$
 B_{lt}=\sum_k z_{lk0} g_{kt},
 $$
-
 * Identifying assumptions for FE2SLS
   + Exclusion restriction
   $$
@@ -276,13 +280,11 @@ $$
   $$
   Cov(x_{lt},B_{lt}|v_l) \neq 0
   $$
-  
 * Let's be more specific. The FE2SLS estimator with the Bartik instrument is [@goldsmith2020bartik;@borusyak2020quasi]
 $$
 \hat{\beta}_{Bartik}=\frac{\sum_l \sum_t \sum_k z_{lk0}g_{kt}\tilde{y}_{lt}}{\sum_l \sum_t \sum_k z_{lk0}g_{kt}\tilde{x}_{lt}}
 $$
 where $\tilde{k}$ is the residual of regress $k$ on $v_l$ (or any possible other covariates).
-
 * This leads to
 $$
 \hat{\beta}_{Bartik}-\beta=\frac{\sum_l \sum_t \sum_k z_{lk0}g_{kt}\tilde{u}_{lt}}{\sum_l \sum_t \sum_k z_{lk0}g_{kt}\tilde{x}_{lt}} \\
@@ -291,9 +293,31 @@ $$
   + $L$ consistency: $E(z_{lk0} \tilde{u}_{lt})=0$ (Focus of @goldsmith2020bartik)
   + $K$ consistency: $E( g_{kt} \eta_{kt})=0$ where $\eta_{kt}=\sum_l z_{lk0} \tilde{u}_{lt}$.
 
-# Analgous to DinD
+# Decomposition and Rotemberg weights
+* @goldsmith2020bartik shows the following (I am presenting the version of their representation in Panel data set-up):
+$$
+\hat{\beta}_{Bartik}=\sum_k \sum_s \hat{\alpha}_{ks} \hat{\beta}_{ks}
+$$
+where 
+$$
+\hat{\beta}_{ks}=\frac{\sum_l \sum_t z_{lk0} \times \mathbb{1}_{t}(t=s)\tilde{y}_{lt}}{\sum_l \sum_t z_{lk0} \times \mathbb{1}_{t}(t=s)\tilde{x}_{lt}}
+$$
+and
+$$
+\hat{\alpha}_{ks}=\frac{\sum_l \sum_t g_{kt} z_{lk0} \times \mathbb{1}_{t}(t=s)\tilde{x}_{lt}}{\sum_k \sum_l \sum_t g_{kt} z_{lk0} \times \mathbb{1}_{t}(t=s)\tilde{x}_{lt}}.
+$$
+(This is the @goldsmith2020bartik decomposition based on Rotemberg weights)
+* Interpretation of the decomposition: $\hat{\beta}_{ks}$ is an IV estimate that uses $z_{lk0} \times \mathbb{1}_{t}(t=s)$ as an instrument.
+* Implications of the weight $\hat{\alpha}_{ks}$: If $\hat{\beta}_{ks}$ is biased (potentially, due to the misspecified moment condition), $\hat{\alpha}_{ks}$ represents how much of this bias translates to the overall bias.
+
+# Approaches to test for identifying assumptions
+* Check the correlations between initial characteristics and initial shares, $z_{lk0}$: Visualize the source of variation, and potentially can control for the characteristics that is correlated with the shares (the correlated initial characteristic times time dummies).
+* Testing for pre-trends.
+* Use many instruments (e.g. $z_{lk0} \times \mathbb{1}_{t}(t=s)$) and compare or do over-identification test.
 
 # What else...?
+* Survey: [Click here](https://kstate.qualtrics.com/jfe/form/SV_0cXZVbMH9TBeOTI)
+* Questions?
 
 # References
 

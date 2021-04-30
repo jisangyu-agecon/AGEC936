@@ -735,6 +735,154 @@ E(\tilde{u}_{it}|\tilde{z}_{it})=0\;\;\text{and}\;\;Cov(\tilde{z}_{it},\tilde{d}
 <span id="cb4-2"><a href="#cb4-2"></a><span class="kw">areg</span> <span class="fu">y</span> <span class="kw">d</span> i.<span class="fu">year</span>, absorb(id) <span class="kw">vce</span>(<span class="kw">cluster</span> id)</span>
 <span id="cb4-3"><a href="#cb4-3"></a>*FE2SLS</span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="kw">xi</span>: xtivreg2 <span class="fu">y</span> <span class="kw">d</span> (x=d_lead1) i.<span class="fu">year</span>, <span class="kw">fe</span> <span class="kw">cluster</span>(id)</span></code></pre></div>
+<pre><code>&gt;. *Not mitigating non-parallel trend
+
+Linear regression, absorbing indicators         Number of obs     =   
+&gt;    4,500
+Absorbed variable: id                           No. of categories =   
+&gt;      500
+                                                F(   9,    499)   =   
+&gt;   136.26
+                                                Prob &gt; F          =   
+&gt;   0.0000
+                                                R-squared         =   
+&gt;   0.6979
+                                                Adj R-squared     =   
+&gt;   0.6594
+                                                Root MSE          =   
+&gt;   1.0479
+
+                                   (Std. Err. adjusted for 500 cluster
+&gt; s in id)
+----------------------------------------------------------------------
+&gt; --------
+             |               Robust
+           y |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. I
+&gt; nterval]
+-------------+--------------------------------------------------------
+&gt; --------
+           d |   1.678971    .098881    16.98   0.000     1.484697    
+&gt; 1.873246
+             |
+        year |
+          8  |   .1992058   .0686899     2.90   0.004     .0642489    
+&gt; .3341628
+          9  |   .3380996   .0692132     4.88   0.000     .2021143    
+&gt; .4740849
+         10  |   .5980075   .0696946     8.58   0.000     .4610764    
+&gt; .7349385
+         11  |   .8058226   .0721737    11.17   0.000     .6640208    
+&gt; .9476244
+         12  |   .8943974   .0715926    12.49   0.000     .7537373    
+&gt; 1.035057
+         13  |   1.039585   .0776219    13.39   0.000     .8870789    
+&gt; 1.192091
+         14  |   1.300039   .0747294    17.40   0.000     1.153216    
+&gt; 1.446862
+         15  |   1.508567   .0732636    20.59   0.000     1.364624    
+&gt;  1.65251
+             |
+       _cons |   1.399976   .0494024    28.34   0.000     1.302913    
+&gt; 1.497038
+----------------------------------------------------------------------
+&gt; --------
+
+i.year            _Iyear_7-15         (naturally coded; _Iyear_7 omitt
+&gt; ed)
+
+FIXED EFFECTS ESTIMATION
+------------------------
+Number of groups =       500                    Obs per group: min =  
+&gt;        9
+                                                               avg =  
+&gt;      9.0
+                                                               max =  
+&gt;        9
+
+IV (2SLS) estimation
+--------------------
+
+Estimates efficient for homoskedasticity only
+Statistics robust to heteroskedasticity and clustering on id
+
+Number of clusters (id) =          500                Number of obs = 
+&gt;     4500
+                                                      F( 10,   499) = 
+&gt;   170.83
+                                                      Prob &gt; F      = 
+&gt;   0.0000
+Total (centered) SS     =  6192.675884                Centered R2   = 
+&gt;   0.1973
+Total (uncentered) SS   =  6192.675884                Uncentered R2 = 
+&gt;   0.1973
+Residual SS             =  4970.570363                Root MSE      = 
+&gt;    1.115
+
+----------------------------------------------------------------------
+&gt; --------
+             |               Robust
+           y |      Coef.   Std. Err.      z    P&gt;|z|     [95% Conf. I
+&gt; nterval]
+-------------+--------------------------------------------------------
+&gt; --------
+           x |   .2424444   .0761975     3.18   0.001        .0931    
+&gt; .3917888
+           d |   1.061716   .2263555     4.69   0.000     .6180675    
+&gt; 1.505365
+    _Iyear_8 |   .2525054     .07268     3.47   0.001     .1100553    
+&gt; .3949556
+    _Iyear_9 |   .4072937   .0731136     5.57   0.000     .2639937    
+&gt; .5505938
+   _Iyear_10 |   .6183905   .0685338     9.02   0.000     .4840667    
+&gt; .7527142
+   _Iyear_11 |   .8764334   .0735029    11.92   0.000     .7323704    
+&gt; 1.020496
+   _Iyear_12 |   .9786804   .0756918    12.93   0.000     .8303271    
+&gt; 1.127034
+   _Iyear_13 |   1.134741   .0771122    14.72   0.000      .983604    
+&gt; 1.285878
+   _Iyear_14 |   1.374412   .0769039    17.87   0.000     1.223683    
+&gt;  1.52514
+   _Iyear_15 |   1.600505   .0750227    21.33   0.000     1.453464    
+&gt; 1.747547
+----------------------------------------------------------------------
+&gt; --------
+Underidentification test (Kleibergen-Paap rk LM statistic):           
+&gt;   27.991
+                                                   Chi-sq(1) P-val =  
+&gt;   0.0000
+----------------------------------------------------------------------
+&gt; --------
+Weak identification test (Cragg-Donald Wald F statistic):             
+&gt;   36.439
+                         (Kleibergen-Paap rk Wald F statistic):       
+&gt;   40.158
+Stock-Yogo weak ID test critical values: 10% maximal IV size          
+&gt;    16.38
+                                         15% maximal IV size          
+&gt;     8.96
+                                         20% maximal IV size          
+&gt;     6.66
+                                         25% maximal IV size          
+&gt;     5.53
+Source: Stock-Yogo (2005).  Reproduced by permission.
+NB: Critical values are for Cragg-Donald F statistic and i.i.d. errors
+&gt; .
+----------------------------------------------------------------------
+&gt; --------
+Hansen J statistic (overidentification test of all instruments):      
+&gt;    0.000
+                                                 (equation exactly ide
+&gt; ntified)
+----------------------------------------------------------------------
+&gt; --------
+Instrumented:         x
+Included instruments: d _Iyear_8 _Iyear_9 _Iyear_10 _Iyear_11 _Iyear_1
+&gt; 2
+                      _Iyear_13 _Iyear_14 _Iyear_15
+Excluded instruments: d_lead1
+----------------------------------------------------------------------
+&gt; --------</code></pre>
 </div>
 <div id="panel-iv-example-2-bartikshift-share-iv" class="slide section level1">
 <h1>Panel IV example 2: Bartik/Shift-share IV</h1>
@@ -747,6 +895,13 @@ y_{lt}=\alpha+\beta x_{lt}+v_l+u_{lt}
 \]</span> where the regressor, <span class="math inline">\(x_l\)</span>, can be represented as (not necessarily) <span class="math display">\[
 x_{lt}=\sum_k z_{lkt} g_{lkt}.
 \]</span> and suppose we have <span class="math inline">\(E(x_{lt}u_{lt}|v_l) \neq 0\)</span>. That is, <strong>Panel FE</strong> estimator will not provide a consistent estimate <span class="math inline">\(\hat{\beta}\)</span>.</li>
+<li>An example for the variables:
+<ul>
+<li><span class="math inline">\(y_{lt}\)</span>: Wage in area <span class="math inline">\(l\)</span> in time <span class="math inline">\(t\)</span>,</li>
+<li><span class="math inline">\(x_{lt}\)</span>: Employment growth rate in area <span class="math inline">\(l\)</span> in time <span class="math inline">\(t\)</span>,</li>
+<li><span class="math inline">\(z_{lkt}\)</span>: Employment share of sector <span class="math inline">\(k\)</span> in area <span class="math inline">\(l\)</span> in time <span class="math inline">\(t\)</span>,</li>
+<li><span class="math inline">\(g_{lkt}\)</span>: Growth rate of sector <span class="math inline">\(k\)</span> in area <span class="math inline">\(l\)</span> in time <span class="math inline">\(t\)</span>.</li>
+</ul></li>
 <li><strong>Bartik Instrument</strong>: It usually takes the following form <span class="math display">\[
 B_{lt}=\sum_k z_{lk0} g_{kt},
 \]</span>
@@ -761,12 +916,12 @@ g_{lkt}=g_{kt}+\tilde{g}_{lkt}
 <div id="identifying-assumptions" class="slide section level1">
 <h1>Identifying assumptions</h1>
 <ul>
-<li><p>Recall that the (second-stage) regression equation is <span class="math display">\[
+<li>Recall that the (second-stage) regression equation is <span class="math display">\[
 y_{lt}=\alpha+\beta x_{lt}+v_l+u_{lt}
 \]</span> and the Bartik Instrument is <span class="math display">\[
 B_{lt}=\sum_k z_{lk0} g_{kt},
-\]</span></p></li>
-<li><p>Identifying assumptions for FE2SLS</p>
+\]</span></li>
+<li>Identifying assumptions for FE2SLS
 <ul>
 <li>Exclusion restriction <span class="math display">\[
 E(B_{lt}u_{lt}|v_l)=0
@@ -775,24 +930,47 @@ E(B_{lt}u_{lt}|v_l)=0
 Cov(x_{lt},B_{lt}|v_l) \neq 0
 \]</span></li>
 </ul></li>
-<li><p>Let’s be more specific. The FE2SLS estimator with the Bartik instrument is <span class="citation">(Goldsmith-Pinkham, Sorkin, and Swift 2020; Borusyak, Hull, and Jaravel 2020)</span> <span class="math display">\[
+<li>Let’s be more specific. The FE2SLS estimator with the Bartik instrument is <span class="citation">(Goldsmith-Pinkham, Sorkin, and Swift 2020; Borusyak, Hull, and Jaravel 2020)</span> <span class="math display">\[
 \hat{\beta}_{Bartik}=\frac{\sum_l \sum_t \sum_k z_{lk0}g_{kt}\tilde{y}_{lt}}{\sum_l \sum_t \sum_k z_{lk0}g_{kt}\tilde{x}_{lt}}
-\]</span> where <span class="math inline">\(\tilde{k}\)</span> is the residual of regress <span class="math inline">\(k\)</span> on <span class="math inline">\(v_l\)</span> (or any possible other covariates).</p></li>
-<li><p>This leads to <span class="math display">\[
+\]</span> where <span class="math inline">\(\tilde{k}\)</span> is the residual of regress <span class="math inline">\(k\)</span> on <span class="math inline">\(v_l\)</span> (or any possible other covariates).</li>
+<li>This leads to <span class="math display">\[
 \hat{\beta}_{Bartik}-\beta=\frac{\sum_l \sum_t \sum_k z_{lk0}g_{kt}\tilde{u}_{lt}}{\sum_l \sum_t \sum_k z_{lk0}g_{kt}\tilde{x}_{lt}} \\
 =\frac{\sum_t \sum_k g_{kt} \sum_l z_{lk0} \tilde{u}_{lt}}{\sum_t \sum_k g_{kt} \sum_l z_{lk0} \tilde{x}_{lt}}
-\]</span></p>
+\]</span>
 <ul>
 <li><span class="math inline">\(L\)</span> consistency: <span class="math inline">\(E(z_{lk0} \tilde{u}_{lt})=0\)</span> (Focus of <span class="citation">Goldsmith-Pinkham, Sorkin, and Swift (2020)</span>)</li>
 <li><span class="math inline">\(K\)</span> consistency: <span class="math inline">\(E( g_{kt} \eta_{kt})=0\)</span> where <span class="math inline">\(\eta_{kt}=\sum_l z_{lk0} \tilde{u}_{lt}\)</span>.</li>
 </ul></li>
 </ul>
 </div>
-<div id="analgous-to-dind" class="slide section level1">
-<h1>Analgous to DinD</h1>
+<div id="decomposition-and-rotemberg-weights" class="slide section level1">
+<h1>Decomposition and Rotemberg weights</h1>
+<ul>
+<li><span class="citation">Goldsmith-Pinkham, Sorkin, and Swift (2020)</span> shows the following (I am presenting the version of their representation in Panel data set-up): <span class="math display">\[
+\hat{\beta}_{Bartik}=\sum_k \sum_s \hat{\alpha}_{ks} \hat{\beta}_{ks}
+\]</span> where <span class="math display">\[
+\hat{\beta}_{ks}=\frac{\sum_l \sum_t z_{lk0} \times \mathbb{1}_{t}(t=s)\tilde{y}_{lt}}{\sum_l \sum_t z_{lk0} \times \mathbb{1}_{t}(t=s)\tilde{x}_{lt}}
+\]</span> and <span class="math display">\[
+\hat{\alpha}_{ks}=\frac{\sum_l \sum_t g_{kt} z_{lk0} \times \mathbb{1}_{t}(t=s)\tilde{x}_{lt}}{\sum_k \sum_l \sum_t g_{kt} z_{lk0} \times \mathbb{1}_{t}(t=s)\tilde{x}_{lt}}.
+\]</span> (This is the <span class="citation">Goldsmith-Pinkham, Sorkin, and Swift (2020)</span> decomposition based on Rotemberg weights)</li>
+<li>Interpretation of the decomposition: <span class="math inline">\(\hat{\beta}_{ks}\)</span> is an IV estimate that uses <span class="math inline">\(z_{lk0} \times \mathbb{1}_{t}(t=s)\)</span> as an instrument.</li>
+<li>Implications of the weight <span class="math inline">\(\hat{\alpha}_{ks}\)</span>: If <span class="math inline">\(\hat{\beta}_{ks}\)</span> is biased (potentially, due to the misspecified moment condition), <span class="math inline">\(\hat{\alpha}_{ks}\)</span> represents how much of this bias translates to the overall bias.</li>
+</ul>
+</div>
+<div id="approaches-to-test-for-identifying-assumptions" class="slide section level1">
+<h1>Approaches to test for identifying assumptions</h1>
+<ul>
+<li>Check the correlations between initial characteristics and initial shares, <span class="math inline">\(z_{lk0}\)</span>: Visualize the source of variation, and potentially can control for the characteristics that is correlated with the shares (the correlated initial characteristic times time dummies).</li>
+<li>Testing for pre-trends.</li>
+<li>Use many instruments (e.g. <span class="math inline">\(z_{lk0} \times \mathbb{1}_{t}(t=s)\)</span>) and compare or do over-identification test.</li>
+</ul>
 </div>
 <div id="what-else" class="slide section level1">
 <h1>What else…?</h1>
+<ul>
+<li>Survey: <a href="https://kstate.qualtrics.com/jfe/form/SV_0cXZVbMH9TBeOTI">Click here</a></li>
+<li>Questions?</li>
+</ul>
 </div>
 <div id="references" class="slide section level1 unnumbered">
 <h1>References</h1>
