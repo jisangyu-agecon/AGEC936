@@ -262,6 +262,79 @@ $$
   $$
 where $\tilde{g}_{lkt}$ is the idiosyncratic shock/variation.
 
+# A simulation example of a simple Bartik IV
+```{stata bartik}
+clear all
+set seed 11123
+
+* l=1000
+set obs 1000
+gen l=_n
+
+* v_l
+gen v=runiform(-0.1,0.1)
+
+* k=7 & create initial shares
+forval k=1/6{
+	gen z`k'=runiform(0,0.13)
+}
+gen z7=1-z1-z2-z3-z4-z5-z6
+
+* t=10
+expand 10
+bys l: gen t=_n
+
+* change shares as time evolves
+forval k=1/6{
+	replace z`k'=z`k'*(1+t*0.1*runiform(0,0.2)) if t>1
+}
+replace z7=1-z1-z2-z3-z4-z5-z6 if t>1
+
+* growth rates at kt
+forval k=1/7{
+gen g`k'=1+runiform(-0.2,0.2)
+}
+
+* growth rate at lkt
+forval k=1/7{
+gen latent_l`k'=runiform(0,0.25)
+gen gl`k'=g`k'*(1+latent_l`k')+1.5*v
+}
+
+* x at lkt
+forval k=1/7{
+gen x`k'=gl`k'*z`k'
+}
+gen x=x1+x2+x3+x4+x5+x6+x7
+
+* DGP: y at lkt
+gen y=2+3*x+(latent_l1+latent_l2+latent_l3+latent_l4+latent_l5+latent_l6+latent_l7)+0.5*v+rnormal()
+
+* OLS
+reg y x, robust
+
+* FE
+xtset l t
+xtreg y x, fe robust
+
+* FE2SLS Bartik
+* Bartik instrument
+* create initial share variable
+gen initial=0
+replace initial=1 if t==1
+forval k=1/7{
+gen tempz`k'=initial*z`k'
+bys l: gen z0`k'=sum(tempz`k')
+}
+* Bartik instrument
+forval k=1/7{
+gen bartik`k'=z0`k'*g`k'
+}	
+gen bartik=bartik1+bartik2+bartik3+bartik4+bartik5+bartik6+bartik7
+* FE 2SLS
+xtivreg2 y (x=bartik), fe robust first
+```
+
 # Identifying assumptions
 * Recall that the (second-stage) regression equation is
 $$
