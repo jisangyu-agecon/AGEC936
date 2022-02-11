@@ -2,7 +2,7 @@
 title: "AGEC 936 - Module 4"
 subtitle: "Introduction of Panel Data Analysis"
 author: "Jisang Yu <br> Kansas State University"
-date: "4/12/2021"
+date: "2/21/2022"
 output:
  slidy_presentation:
    font_adjustment: -1
@@ -31,7 +31,7 @@ library(Statamarkdown)
 
 * Problem set (most likely one)
 
-* Referee report (5 page max): Choose an empirical paper that utilizes panel data and does a causal analysis based on panel data approaches. Choose from major economics or agricultural economics journals (limit the time period to post-2010). Please submit the citation of the paper of your choice by **21$^{st}$ of April**. Your referee report is due **2$^{nd}$ of May**. Your referee report should contain
+* Referee report (5 page max): Choose an empirical paper that utilizes panel data and does a causal analysis based on panel data approaches. Choose from major economics or agricultural economics journals (limit the time period to post-2010). Please submit the citation of the paper of your choice by **11$^{th}$ of March**. Your referee report is due **25$^{th}$ of March**. Your referee report should contain
 
   + A brief summary of the paper (0.5 page)
   + Describe the main empirical specification and the identification strategy of the paper (1 -- 1.5 page)
