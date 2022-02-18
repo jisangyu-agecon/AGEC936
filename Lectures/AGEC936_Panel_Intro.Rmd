@@ -22,10 +22,11 @@ library(Statamarkdown)
 
 * Readings
 
-* Two useful textbooks
+* Useful textbooks (no need to purchase, The Mixtape and The Effect are freely available online)
 
   + Cameron, A.C. and Trivedi, P.K., 2005. Microeconometrics: Methods and Applications.
-  + Cunningham, S., 2021, Causal Inference: The Mixtape
+  + Cunningham, S., 2021, Causal Inference: The Mixtape, [link](https://mixtape.scunning.com/)
+  + Hungington-Klein, N., 2022, The Effect: An Introduction to Research Design and Causality, [link](https://theeffectbook.net/)
 
 # Introduction: Assignments
 
@@ -61,7 +62,7 @@ library(Statamarkdown)
 
 * Not necessarily "teach" you new methods -- I will provide various frameworks for carefully thinking about these empirical issues and point you to the relevant literature.
 
-*These being said, you may will walk away with more questions than answers after this module...*
+*These being said, you may will leave this module with more questions than answers after this module...*
 
 # Panel data: an introduction
 
