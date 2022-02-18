@@ -372,7 +372,7 @@ xtreg y d if t>2, fe
 xtabond y d, lag(1)
 ```
 
-# Other empirical issues in Panel analyses (which we will not cover)
+# Other empirical issues in Panel analyses (which we will not cover unless requested)
 * Unbalanced panel/attrition
 
 * Nonlinear models: Incidental problem with MLE
