@@ -54,6 +54,8 @@ library(Statamarkdown)
 
 6. *Any other panel-related topics you are interested in? (Let me know by coming Friday)*
 
+* Guest Lecture on publishing (Dr. Jesse Tack, March 23rd)
+
 # Introduction: My goals here are...
 
 * To bring various (and mostly recent) empirical issues related to panel data analyses to your attention
