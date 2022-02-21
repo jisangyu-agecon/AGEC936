@@ -52,7 +52,7 @@ library(Statamarkdown)
 
 5. Shift-share design
 
-6. *Any other panel-related topics you are interested in?*
+6. *Any other panel-related topics you are interested in? (Let me know by coming Friday)*
 
 # Introduction: My goals here are...
 
