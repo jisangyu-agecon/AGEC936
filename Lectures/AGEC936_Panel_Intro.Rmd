@@ -112,7 +112,7 @@ $$
 $$
 \begin{align}
 d_{it}= \begin{cases}
-1\;\;\text{if}\;\;x_{i}>5.5 \\
+1\;\;\text{if}\;\;x_{i}>5.5\;\;\text{and}\;\;t=2 \\
 0\;\;\text{otherwise}
 \end{cases}
 \end{align}
@@ -227,7 +227,7 @@ y_{it}=\alpha+\rho d_{it}+v_i + u_{it}
 $$
 
 - Identifying assumptions
-  1. Strict exogeneity: $E(u_{it}|d_{i1}, d_{i2},...,d_{iT})=0$
+  1. Strict exogeneity, $E(u_{it}|d_{i1}, d_{i2},...,d_{iT})=0$: This precludes the inclusion of the lagged dependent variable as an additional regressor.
   2. The regressor, $d_{it}$, needs to vary within each cross-sectional unit over time.
 
 - Unbiasedness and asymptotics
@@ -244,7 +244,8 @@ $$
 
 * With $T=2$, LSDV, FE, and FD are identical.
 * With $T>2$, LSDV and FE are in general more efficient.
-* Weaker identifying assumption than FE/LSDV: $E(u_{it}|d_{it}, d_{it-1})=0$
+* Somewhat weaker identifying assumption than FE/LSDV, sequential exogeneity: $E(u_{it}|d_{it}, d_{it-1})=0$
+* In practice, very little difference between the two identifying assumptions (i.e. there are not many cases one assumption holds and the other does not). The only exception is when you need to work with the lagged dependent variable. The sequential exogeneity still precludes the inclusion of the lagged dependent variable but allows the use of instrumental vairables.   
   
 
 # FE, LSDV, and FD: An example
@@ -260,7 +261,7 @@ xtreg y d, fe
 areg y d, absorb(id)
 
 *FD
-reg d.y d.d, nocon
+reg d.y d.d, nocon robust
 ```
 
 *We see the numerical equivalence between* **FE**, **LSDV**, *and*, **FD**.
