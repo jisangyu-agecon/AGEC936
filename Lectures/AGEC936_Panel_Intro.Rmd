@@ -1,8 +1,7 @@
 ---
-title: "AGEC 936 - Module 4"
+title: "AGEC 936 - Module 3"
 subtitle: "Introduction of Panel Data Analysis"
 author: "Jisang Yu <br> Kansas State University"
-date: "2/21/2022"
 output:
  slidy_presentation:
    font_adjustment: -1
@@ -385,6 +384,6 @@ xtabond y d, lag(1)
 * Standard errors
 
 # Next week
-[DID, TWFE, and Synthetic Control](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html)
+[DID, and TWFE](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html)
 
 # References
