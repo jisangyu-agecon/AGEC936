@@ -326,7 +326,7 @@ reg d.y d.d, nocon robust
 - Possible solution: Panel GMM with previous outcomes as instruments [@arellano1991some]. The moment conditions are 
   $$
   \begin{align}
-  E(y_{is}\Delta \varepsilon_{it})=0\;\;\text{for}\;\;s\leq t-2
+  E(y_{is}\Delta u_{it})=0\;\;\text{for}\;\;s\leq t-2
   \end{align}
   $$
 
@@ -427,15 +427,16 @@ $$
 y_{it}=\alpha+\rho d_{it}+v_i + u_{it}
 \end{align}
 $$
-- Random Effects versus Fixed Effects
+
+* Random Effects versus Fixed Effects
 
    + Random Effects estimator assumes $E[v_i|d_{it}]=0$. 
    + Normally estimated by Generalized Least Squares by assuming $v_i \sim N(0,\sigma_v^2)$ and $u_{it} \sim N(0,\sigma^2)$ 
    + Rarely used in the context of the observational/causal inference studies.
   
-- Unbalanced panel/attrition
+* Unbalanced panel/attrition
 
-- Nonlinear models: Incidental problem with MLE
+* Nonlinear models: Incidental problem with MLE
 
 
 # Next week

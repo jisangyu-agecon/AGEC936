@@ -535,7 +535,7 @@ y_{it}=g(d_{it},v_i,u_{it})
 <li><p>FE/FD is biased (Nickell Bias) and inconsistent with <span class="math inline">\(N \rightarrow \infty\)</span> with fixed <span class="math inline">\(T\)</span></p></li>
 <li><p>Possible solution: Panel GMM with previous outcomes as instruments <span class="citation">(Arellano and Bond 1991)</span>. The moment conditions are <span class="math display">\[
 \begin{align}
-E(y_{is}\Delta \varepsilon_{it})=0\;\;\text{for}\;\;s\leq t-2
+E(y_{is}\Delta u_{it})=0\;\;\text{for}\;\;s\leq t-2
 \end{align}
 \]</span></p></li>
 <li><p>Two conditions on the instruments: i) relevancy and ii) exclusion restriction</p></li>
@@ -758,11 +758,14 @@ Instruments:    lag_d lag2_d lag2_y
 \begin{align}
 y_{it}=\alpha+\rho d_{it}+v_i + u_{it}
 \end{align}
-\]</span> - Random Effects versus Fixed Effects</p>
+\]</span></p>
 <ul>
-<li><p>Random Effects estimator assumes <span class="math inline">\(E[v_i|d_{it}]=0\)</span>.</p></li>
-<li><p>Normally estimated by Generalized Least Squares by assuming <span class="math inline">\(v_i \sim N(0,\sigma_v^2)\)</span> and <span class="math inline">\(u_{it} \sim N(0,\sigma^2)\)</span></p></li>
-<li><p>Rarely used in the context of the observational/causal inference studies.</p></li>
+<li><p>Random Effects versus Fixed Effects</p>
+<ul>
+<li>Random Effects estimator assumes <span class="math inline">\(E[v_i|d_{it}]=0\)</span>.</li>
+<li>Normally estimated by Generalized Least Squares by assuming <span class="math inline">\(v_i \sim N(0,\sigma_v^2)\)</span> and <span class="math inline">\(u_{it} \sim N(0,\sigma^2)\)</span></li>
+<li>Rarely used in the context of the observational/causal inference studies.</li>
+</ul></li>
 <li><p>Unbalanced panel/attrition</p></li>
 <li><p>Nonlinear models: Incidental problem with MLE</p></li>
 </ul>
