@@ -321,7 +321,7 @@ reg d.y d.d, nocon robust
   \end{align}
   $$
 
-- FE/FD is inconsistent with $N \rightarrow \infty$ with fixed $T$
+- FE/FD is biased (Nickell Bias) and inconsistent with $N \rightarrow \infty$ with fixed $T$
 
 - Possible solution: Panel GMM with previous outcomes as instruments [@arellano1991some]. The moment conditions are 
   $$
@@ -329,6 +329,47 @@ reg d.y d.d, nocon robust
   E(y_{is}\Delta \varepsilon_{it})=0\;\;\text{for}\;\;s\leq t-2
   \end{align}
   $$
+
+- Two conditions on the instruments: i) relevancy and ii) exclusion restriction
+
+- Arellano-Bond example
+
+```{stata simple_dynamic1, collectcode=TRUE, results="hide"}
+clear all
+set more off
+set obs 250
+
+*Generate panel data
+set seed 11313
+gen id=_n
+gen x=runiform(1,10)
+expand 6
+bys id: gen t=_n
+
+gen v=0.5*rnormal()
+gen d=7.5*x+v
+gen e=5*rnormal()
+
+*DGP (t=1)
+gen y=5+10*d+0.5*x+e if t==1
+
+*Panel set up
+xtset id t
+
+*Past outcomes affect the current outcome (DGP for t>1)
+forval i=2/6{
+	replace y=5+.75*l.y+10*d+0.5*x+e if t==`i'
+}
+```
+
+
+```{stata simple_dynamic2, collectcode=TRUE}
+*Panel FE
+xtreg y l.y d, fe
+
+*Arellano-Bond regression
+xtabond y d, lag(1)
+```
 
 # Extending the simple simulation
 
@@ -338,25 +379,25 @@ set more off
 set obs 250
 
 *Generate panel data
-set seed 1234
+set seed 11313
 gen id=_n
 gen x=runiform(1,10)
-expand 4
+expand 6
 bys id: gen t=_n
 
 *DGP (t<3)
 gen v=0.5*rnormal()
 gen d=0.75*x+v if t<3
-gen e=rnormal()
+gen e=5*rnormal()
 gen y=0.5+0.2*d+0.5*x+e if t<3
 
 *Panel set up
 xtset id t
 
 *Past treatment and outcomes affect the current treatment (DGP for t>2)
-forval i=3/4{
-replace d=0.25*l.y+0.15*l2.y+0.5*l.d+0.75*x+v if t==`i'
-replace y=0.5+0.2*d+0.5*x+e if t==`i'
+forval i=3/6{
+replace d=0.25*l.y+0.15*l2.y+0.5*l.d+7.5*x+v if t==`i'
+replace y=0.5+0.85*l.y+10*d+0.5*x+e if t==`i'
 }
 ```
 
@@ -367,23 +408,37 @@ replace y=0.5+0.2*d+0.5*x+e if t==`i'
 xtreg y d, fe
 
 xtreg y d if t>2, fe
-```
 
-```{stata dynamic3, collectcode=TRUE}
-*Arellano-Bond regression
-xtabond y d, lag(1)
+*create lagged ds
+gen lag_d=l.d
+gen lag2_d=l2.d
+*create lagged y
+gen lag_y=l.y
+gen lag2_y=l2.y
+
+*Solving via IV regression
+xtivreg y (lag_y d = lag_d lag2_d lag2_y), fe
 ```
 
 # Other empirical issues in Panel analyses
-* Unbalanced panel/attrition
 
-* Nonlinear models: Incidental problem with MLE
+$$
+\begin{align}
+y_{it}=\alpha+\rho d_{it}+v_i + u_{it}
+\end{align}
+$$
+- Random Effects versus Fixed Effects
 
-* "Long" panel: panel unit-root/cointegration
+   + Random Effects estimator assumes $E[v_i|d_{it}]=0$. 
+   + Normally estimated by Generalized Least Squares by assuming $v_i \sim N(0,\sigma_v^2)$ and $u_{it} \sim N(0,\sigma^2)$ 
+   + Rarely used in the context of the observational/causal inference studies.
+  
+- Unbalanced panel/attrition
 
-* Standard errors
+- Nonlinear models: Incidental problem with MLE
+
 
 # Next week
-[DID, and TWFE](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html)
+[DID and TWFE](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html)
 
 # References
