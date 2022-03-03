@@ -1,6 +1,6 @@
 ---
 title: "AGEC 936 - Module 3"
-subtitle: "Panel Time Series<br>Synthetic Control Methods"
+subtitle: "Synthetic Control Methods<br>Panel Time Series"
 author: "Jisang Yu<br>Kansas State University"
 output:
  slidy_presentation:
@@ -16,10 +16,8 @@ library(Statamarkdown)
 
 # This week
 * Previous week([DID, and TWFE](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html))
-* Some time-series considerations
 * Synthetic control methods
-
-# Time-series considerations in Panel data setting
+* Some time-series considerations
 
 # Synthetic control methods
 * Foundational pieces: @abadie2010synthetic and @abadie2019using
@@ -326,6 +324,9 @@ lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
     - Bayesian approaches: e.g. @amjad2018robust, @goh2020synthetic
   + Extension to disaggregated data: @arkhangelsky2019synthetic, @lhour2020apenalized
   + De-bias approach: @ben2018augmented
+
+# Some time-series considerations in Panel data setting
+
 
 # Next week
 [Panel IV/GMM and Shift-share deisgn](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_Panel_IV_GMM.html)
