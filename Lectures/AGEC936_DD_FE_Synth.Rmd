@@ -364,7 +364,9 @@ plot %>%
   + @de2020two
   + @goodman2018difference (or [Mixtape's version of this](https://mixtape.scunning.com/difference-in-differences.html?panelset=r-code&panelset1=r-code2#twoway-fixed-effects-with-differential-timing))
   + [Guide by Callaway and Sant'Anna](https://bcallaway11.github.io/did/articles/multi-period-did.html)
-  + And several other papers (e.g. @borusyak2017revisiting, @sun2020estimating)
+  + @borusyak2017revisiting
+  + @sun2020estimating
+  + And recent review papers (@de2022two and @roth2022s)
   
 * Alternatives to TWFE
   + @de2020two: uses a weighted-average of DID estimators.
@@ -579,6 +581,14 @@ did_multiplegt(prf_data, "lnvalue", "fips", "t", "index", brep=50)
 * Packages
   + @de2020two: **did_multiplegt** (Stata) and **DIDmultiplegt** (R)
   + @callaway2020difference: **did** (R and Stata - see [here](https://github.com/NickCH-K/did))
+  
+# Another agricultural economics example
+* [The effect of PRF availability on the Conservation Reserve Program enrollment](https://ambrook.com/research/the-conservation-reserve-program-is-competing-with-pasture-insurance-for-farmer-participation)
+
+```{r, echo=FALSE, fig.align='center', out.width="70%"}
+   knitr::include_graphics('./raw_att.png')
+```
+
 
 # Next week
 [Panel Time Series/Synthetic Control](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_Synth_Panel_time_series.html)
