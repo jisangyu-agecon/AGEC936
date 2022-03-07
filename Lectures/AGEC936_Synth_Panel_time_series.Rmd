@@ -15,12 +15,22 @@ library(Statamarkdown)
 ```
 
 # This week
-* Previous week([DID, and TWFE](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html))
+* Previous week([DID and TWFE](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html))
 * Synthetic control methods
 * Some time-series considerations
 
+# When do DinD research designs work
+* Parallel trend assumption
+  + This is the key!
+  + Staggered DinD designs also need the parallel trend assumption.
+* For statistical power and inference, we need enough obervations in each *group*.
+
+* What if
+  + we cannot assume the parallel trend?
+  + we only have **one** observation for treated unit?
+
 # Synthetic control methods
-* Foundational pieces: @abadie2010synthetic and @abadie2019using
+* Foundational piece: @abadie2010synthetic
 * When?: (Normally but not necessarily), **one** treated unit ($i=1$), **many** control units, and (somewhat) long time period.
 * Back to **potential outcome representation**: we want
 $$
@@ -47,7 +57,7 @@ $$
   $$
   \hat{\tau}_t=y_{1t}-\sum_{j=2} w^{*}_j y_{jt}\;\;\forall\;\;t>t^*
   $$
-* Estimation (see equation (7) of @abadie2019using):
+* Estimation (see equation (7) of @abadie2021using):
   $$
   Min_{w_j,j\neq1}\;\left(\sum_h v_h \left(X_{1h}-\sum_{j=2} w_j X_{2j}\right)^2\right)
   $$
@@ -303,9 +313,9 @@ abline(v=1970,lty=3,col=1)
 lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
 ```
 
-# Synthetic control: Strengths and things to consider [@abadie2019using]
-* See the latest review of @abadie2019using.
-* Strengths
+# Things to consider [@abadie2021using]
+* See the latest review of @abadie2021using
+* Highlighted features of Synthetic control method
   + No extrapolation: Why matter? See @king2006dangers.
   + Sparsity across "donors": Interpretability
 * Things to consider
@@ -314,19 +324,26 @@ lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
   + Time dimension: the lengths of pre- and post- intervention periods
   + Donor pool
   + **Inference**
-* Further readings
-  + Flexibility versus extrapolation risks
-    - Possible negative weights: @doudchenko2016balancing
-    - Non-negative but weights do not necessarily sum to one: @li2020statistical
-    - Non-negative, weights sum to one, but allow parallel shifts (a constant can be added or subtracted): @goh2020synthetic
-  + Innovations in inference techniques
-    - Frequentist approaches: e.g. @li2020statistical, @chernozhukov2017exact
-    - Bayesian approaches: e.g. @amjad2018robust, @goh2020synthetic
-  + Extension to disaggregated data: @arkhangelsky2019synthetic, @lhour2020apenalized
-  + De-bias approach: @ben2018augmented
+  
+# Recent development
+* Flexibility versus extrapolation risks
+  + Possible negative weights: @doudchenko2016balancing
+  + Non-negative but weights do not necessarily sum to one: @li2020statistical
+  + Non-negative, weights sum to one, but allow parallel shifts (a constant can be added or subtracted): @goh2022synthetic
+* Innovations in inference techniques
+  + Frequentist approaches: e.g. @li2020statistical, @chernozhukov2021exact
+  + Bayesian approaches: e.g. @amjad2018robust, @goh2022synthetic
+* Extension to disaggregated data: @arkhangelsky2021, @ben2021synthetic, @abadie2021penalized
+* De-bias approach: @ben2021augmented
 
 # Some time-series considerations in Panel data setting
-
+* Panel unit root test
+  + Tests for stationarity of the panel time series
+  + Each test has either different null or different asymptotics (see page 8 of xtunitroot Stata help file)
+  + Some references: @levin2002unit, @im2003testing, or Stata's xtunitroot help file.
+  
+* Panel Vector Autoregression: Be aware of Nickell bias (Dissappears with large T, for short T, see Arellano-Bond-type first-differenced GMM estimators)
+  + Some references: @holtz1988estimating, @abrigo2016estimation
 
 # Next week
 [Panel IV/GMM and Shift-share deisgn](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_Panel_IV_GMM.html)

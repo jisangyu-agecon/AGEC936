@@ -259,7 +259,7 @@ $$
 y_{it}=\alpha_i+\gamma_t+\sum_t \delta_t \mathbb{1}_i (i \in T) + \varepsilon_{it}
 $$
 and "test" whether $\delta_t$ are jointly zeros for $t<t^*$ where $t^*$ is the treatment period. 
-  + *Issues*: Can be under-powered and may lead to a biased estimate [@roth2019pre]
+  + *Issues*: Can be under-powered and may lead to a biased estimate [@rothpre]
   + *Alternative approach*: "Honest" approach [@rambachan2019honest]
   + Functional forms? Theory?
 * **Staggered treatment timing** and (dynamic) **heterogeneous treatment effects**: TWFE fails if the treatment is staggered AND the treatment effects are heterogeneous. Many recent papers discuss this issue. Two papers/approaches we will focus on
@@ -362,7 +362,7 @@ plot %>%
 
 * Can we still use TWFE?: Several recent papers show when and how TWFE can fail
   + @de2020two
-  + @goodman2018difference (or [Mixtape's version of this](https://mixtape.scunning.com/difference-in-differences.html?panelset=r-code&panelset1=r-code2#twoway-fixed-effects-with-differential-timing))
+  + @goodman2021difference (or [Mixtape's version of this](https://mixtape.scunning.com/difference-in-differences.html?panelset=r-code&panelset1=r-code2#twoway-fixed-effects-with-differential-timing))
   + [Guide by Callaway and Sant'Anna](https://bcallaway11.github.io/did/articles/multi-period-did.html)
   + @borusyak2017revisiting
   + @sun2020estimating
