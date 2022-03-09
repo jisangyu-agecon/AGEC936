@@ -30,7 +30,7 @@ library(Statamarkdown)
   + we only have **one** observation for treated unit?
 
 # Synthetic control methods
-* Foundational piece: @abadie2010synthetic
+* Foundational piece: @abadie2010synthetic (originally developed by @abadie2003economic)
 * When?: (Normally but not necessarily), **one** treated unit ($i=1$), **many** control units, and (somewhat) long time period.
 * Back to **potential outcome representation**: we want
 $$
@@ -313,6 +313,11 @@ abline(v=1970,lty=3,col=1)
 lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
 ```
 
+# Some recent applications in agricultural/applied economics
+* Immigration enforcement on agriculture (labor, crop production, and profitability): @luo2021stringent (replication data/code available at [the AJAE article website](https://onlinelibrary.wiley.com/doi/full/10.1111/ajae.12271))
+* Economic/health effects of the environmental or natural disaster: @guilfoos2018economic, @mohan2017economic, and @coffman2012hurricane
+* Impacts of trade or economic liberalization: @olper2018trade and @billmeier2013assessing
+
 # Things to consider [@abadie2021using]
 * See the latest review of @abadie2021using
 * Highlighted features of Synthetic control method
@@ -330,11 +335,13 @@ lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
   + Possible negative weights: @doudchenko2016balancing
   + Non-negative but weights do not necessarily sum to one: @li2020statistical
   + Non-negative, weights sum to one, but allow parallel shifts (a constant can be added or subtracted): @goh2022synthetic
+* Predictors for the weights estimation: @kaul2021standard and @botosaru2019role
+* Imperfect pretreatment fit: @ben2021augmented and @ferman2021synthetic
 * Innovations in inference techniques
-  + Frequentist approaches: e.g. @li2020statistical, @chernozhukov2021exact
-  + Bayesian approaches: e.g. @amjad2018robust, @goh2022synthetic
-* Extension to disaggregated data: @arkhangelsky2021, @ben2021synthetic, @abadie2021penalized
-* De-bias approach: @ben2021augmented
+  + Frequentist approaches: e.g.  @chernozhukov2021exact and @li2020statistical
+  + Bayesian approaches: e.g. @goh2022synthetic and @amjad2018robust
+* Extension to disaggregated data: @ben2021synthetic, @abadie2021penalized, and @arkhangelsky2021
+
 
 # Some time-series considerations in Panel data setting
 * Panel unit root test
@@ -343,7 +350,7 @@ lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
   + Some references: @levin2002unit, @im2003testing, or Stata's xtunitroot help file.
   
 * Panel Vector Autoregression: Be aware of Nickell bias (Dissappears with large T, for short T, see Arellano-Bond-type first-differenced GMM estimators)
-  + Some references: @holtz1988estimating, @abrigo2016estimation
+  + Some references: @abrigo2016estimation and @holtz1988estimating
 
 # Next week
 [Panel IV/GMM and Shift-share deisgn](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_Panel_IV_GMM.html)
