@@ -38,7 +38,7 @@ $$
 $$
 * What do we observe? 
   + $y_{1t}=y_{1t}(0)$ if $t<t^*$, 
-  + $y_{1t}=y_{1t}(1)$ if $t>t^*$,
+  + $y_{1t}=y_{1t}(1)$ if $t \geq t^*$,
   + $y_{it}=y_{it}(0)$ for $i\neq1$.
   + But, **we need $y_{1t}(0)$ for $t>t^*$!**
 * The **key idea**: Let's combine $y_{it}$ for $i\neq1$ to estimate $y_{1t}(0)$ for $t>t^*$.
@@ -59,7 +59,7 @@ $$
   $$
 * Estimation (see equation (7) of @abadie2021using):
   $$
-  Min_{w_j,j\neq1}\;\left(\sum_h v_h \left(X_{1h}-\sum_{j=2} w_j X_{2j}\right)^2\right)
+  Min_{w_j,j\neq1}\;\left(\sum_h v_h \left(X_{1h}-\sum_{j=2} w_j X_{jh}\right)^2\right)
   $$
   subject to
   $$

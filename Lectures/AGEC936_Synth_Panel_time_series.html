@@ -193,7 +193,7 @@ Jisang Yu<br>Kansas State University
 <li>What do we observe?
 <ul>
 <li><span class="math inline">\(y_{1t}=y_{1t}(0)\)</span> if <span class="math inline">\(t&lt;t^*\)</span>,</li>
-<li><span class="math inline">\(y_{1t}=y_{1t}(1)\)</span> if <span class="math inline">\(t&gt;t^*\)</span>,</li>
+<li><span class="math inline">\(y_{1t}=y_{1t}(1)\)</span> if <span class="math inline">\(t \geq t^*\)</span>,</li>
 <li><span class="math inline">\(y_{it}=y_{it}(0)\)</span> for <span class="math inline">\(i\neq1\)</span>.</li>
 <li>But, <strong>we need <span class="math inline">\(y_{1t}(0)\)</span> for <span class="math inline">\(t&gt;t^*\)</span>!</strong></li>
 </ul></li>
@@ -210,7 +210,7 @@ y_{it}(0)=\delta_{t}+\theta_t Z_i + \lambda_t\mu_i+\varepsilon_{it}.
 \hat{\tau}_t=y_{1t}-\sum_{j=2} w^{*}_j y_{jt}\;\;\forall\;\;t&gt;t^*
 \]</span></li>
 <li>Estimation (see equation (7) of <span class="citation">Abadie (2021)</span>): <span class="math display">\[
-Min_{w_j,j\neq1}\;\left(\sum_h v_h \left(X_{1h}-\sum_{j=2} w_j X_{2j}\right)^2\right)
+Min_{w_j,j\neq1}\;\left(\sum_h v_h \left(X_{1h}-\sum_{j=2} w_j X_{jh}\right)^2\right)
 \]</span> subject to <span class="math display">\[
 w_j\geq 0\;\;\text{and}\;\;\sum_{j=2}w_j = 1
 \]</span> and <span class="math inline">\(X_h\)</span> are “predictors,” which include <span class="math inline">\(y_{js}\)</span> for <span class="math inline">\(j\neq 1\)</span> and <span class="math inline">\(s&lt;t^*\)</span>, and <span class="math inline">\(Z_j\)</span> for <span class="math inline">\(j\neq1\)</span>.</li>
