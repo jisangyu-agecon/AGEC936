@@ -15,7 +15,7 @@ library(Statamarkdown)
 ```
 
 # This week
-* Previous week([DID and TWFE](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html))
+* Previous week ([DID and TWFE](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html))
 * Synthetic control methods
 * Some time-series considerations
 
@@ -102,7 +102,7 @@ gen y=2+0.5*x+0.5*t*x+2*t*d+e
 xtset id t
 *compare with actual counterfactual
 tempfile temp
-synth y y(1) y(2) y(3) y(4) y(5) x(1(1)5), trunit(1) trperiod(10) mspeperiod(1(1)7) keep(`temp')
+synth y y(1) y(2) y(3) y(4) y(5) x(1(1)5), trunit(1) trperiod(10) mspeperiod(5(1)8) keep(`temp')
 
 use `temp', clear
 gen real_counterfactual=_Y_treated
@@ -123,8 +123,8 @@ graph export "synth.png", replace
   1. Looks at the relationship between terrorism and regional GDP in Spain.
   2. Specifically, the paper estimates the impact of terrorist conflicts in the Basque Country.
   3. Control units (or potential "donors") are 16 other Spanish regions.
-  4. Sample period: 1955 - 1997 (pre-treatment period: 1955 - 1969, optimization period: 1960 - 1969)
-  5. Uses 12 predictors
+  4. Sample period: 1955 - 1997 (pre-treatment period: 1955 - 1969, valdiation period: 1960 - 1969)
+  5. Uses 14 predictors
   
 ```{r basque, results="hide"}
 library(Synth)
@@ -188,8 +188,8 @@ abline(v=1970,lty=3,col=1)
 lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
 ```
 
-# Different optimiztion period
-* What if we use 1955 - 1964 instead of 1960 - 1969?
+# Different cross-validation splits
+* What if we use 1955 - 1969 instead of 1960 - 1969?
 ```{r basque2, results="hide"}
 library(Synth)
 data(basque)
@@ -215,7 +215,7 @@ unit.names.variable = "regionname",
 time.variable = "year",
 treatment.identifier = 17,
 controls.identifier = c(2:16, 18),
-time.optimize.ssr = 1955:1964,
+time.optimize.ssr = 1955:1969,
 time.plot = 1955:1997)
 #Further variable consolidation and manipulation following Abadie et al 2011 (Journal of Statistical Software)
 dataprep.out$X1["school.high",] <- dataprep.out$X1["school.high",] +
