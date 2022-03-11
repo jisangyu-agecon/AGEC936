@@ -338,7 +338,7 @@ lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
 * Predictors for the weights estimation: @kaul2021standard and @botosaru2019role
 * Imperfect pretreatment fit: @ben2021augmented and @ferman2021synthetic
 * Innovations in inference techniques
-  + Frequentist approaches: e.g.  @chernozhukov2021exact and @li2020statistical
+  + Frequentist approaches: e.g.  @chernozhukov2021exact, @li2020statistical, and @firpo2018synthetic
   + Bayesian approaches: e.g. @goh2022synthetic and @amjad2018robust
 * Extension to disaggregated data: @ben2021synthetic, @abadie2021penalized, and @arkhangelsky2021
 
