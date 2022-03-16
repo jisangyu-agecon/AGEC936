@@ -17,8 +17,9 @@ library(Statamarkdown)
 # This week
 * ([Panel Time Series/Synthetic Control](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_Synth_Panel_time_series.html))
 * Revisiting IV in the context of Panel FE set-up
-* Panel IV example 1: Pre-event trends
-* Panel IV example 2: Bartik/Shift-share IV
+* Panel IV example 1: Bartik/Shift-share IV
+* Guest lecture
+* Panel IV example 2: Pre-event trends
 
 # Revisiting IV in the context of Panel FE set-up
 * Revisiting the identifying assumptions for Panel FE estimator
@@ -95,144 +96,10 @@ $$
 
 # Some IV/GMM related topics in the context of Panel data applications
 * Dynamic panel (Arellano-Bond type estimators)
-* Mitigating potential violation of parallel/common pre-event trends
 * Bartik/Shift-share IVs
+* Mitigating potential violation of parallel/common pre-event trends
 
-# Pre-event trends: Going back to the parallel/common trend assumption
-* Motivation: What if the parallel/common trend assumption falls apart?
-* One way is to control for observables -- conditional parallel/common trend [e.g. @callaway2020difference].
-* Denote $y$ as the outcome, $d$ as the treatment, $x$ as the observable control, and $w$ as the unobservable confounder (assume the within transformation). Here is my attempt on drawing DAG for this problem (Full disclosure -- I am as new to DAG as you are so this needs some verification):
-
-```{r dag, fig.align='center', out.width="50%"}
-library(dagitty)
-library(ggdag)
-
-dag <- dagitty("dag{y1 <- w1 -> d1
-                d1 -> y1
-                w1 -> x1
-               }")
-ggdag(dag, layout = "circle") +
-  theme_dag()
-```
-
-# Panel IV example 1: Pre-event trends [@freyaldenhoven2019pre]
-* Again, an attempt to draw a DAG to show the IV approach can work:
-```{r dag2, fig.align='center', out.width="50%"}
-library(dagitty)
-library(ggdag)
-
-dag <- dagitty("dag{y1 <- w1 -> d1
-                d1 -> y1
-                w1 -> x1
-                w1 -> w2
-                w2 -> d2
-               }")
-ggdag(dag, layout = "circle") +
-  theme_dag()
-```
-
-* Obviously, using the observable control is fine if the observable $x$ **perfectly** explains the unobservable confounder, $w$. If not, we have so-called **regression diultion/measurement error** bias.
-* The **key** idea of @freyaldenhoven2019pre: Use the **lead(s)** of the treatment variable as **instruments**.
-* Practically, one can do the following (again, all variables are within transformed): regress $y$ on $d$ and $x$ but **instrument** $x$ using the **leads** of $d$.
-
-# A mini-version simulation of @freyaldenhoven2019pre: Pre-trend
-```{stata first, collectcode=TRUE, results="hide"}
-clear
-set seed 11123
-set obs 500
-
-egen id = seq()
-bys id: gen alpha = rnormal(0,1) 
-expand 20
-sort id
-by id: gen year=_n
-xtset id year
-
-*create eta
-bys id: gen eta=0 if _n==1
-bys id: replace eta=eta[_n-1]+rnormal(0,1) if _n>1
-*create x
-bys id: gen x = eta + rnormal(0,2)
-*create z
-bys id: gen dtemp = eta 
-bys id: gen d = (dtemp >4)
-bys id: replace d=1 if d[_n-1]==1
-drop dtemp
-
-*create y
-bys id: gen y = d + .25*eta + .2*year + alpha + rnormal(0,1)
-
-*create dummmies for time period of event and pre/post
-bys id: gen event = d-d[_n-1]
-recode event (.=0)
-foreach n of num 1(1)5{
-  bys id: gen t_`n'=event[_n+`n']
-  bys id: gen t`n'=event[_n-`n']
-}
-recode t* (.=0)
-
-*create instruments
-foreach n of num 1(1)5 {
-  bys id: gen d_lead`n'=F`n'.d
-  bys id: replace d_lead`n'=1 if d_lead`n'[_n-1]==1
-}
-recode d* (.=0)
-
-*Add dummies for both sides of eventplot
-bys id: gen t_6=-d_lead5
-bys id: replace t5=1 if t5[_n-1]==1
-recode t5 (.=0)
-
-*labeling for figures
-label var t_6 "-6+"
-label var t_5 "-5"
-label var t_4 "-4"
-label var t_3 "-3"
-label var t_2 "-2"
-label var t_1 "-1"
-label var t1 "1"
-label var t2 "2"
-label var t3 "3"
-label var t4 "4"
-label var t5 "5+"
-
-*keep sample with enough lead and lag
-keep if year>6 & year<16
-*pre-trends comparison
-areg y t_6 t_5 t_4 t_3 t_2 event t1 t2 t3 t4 t5 i.year, absorb(id) vce(cluster id)
-coefplot, keep(t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5) vertical graphregion(color(white)) title("Naive") saving(nocontrol.gph, replace)
-
-areg y t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5 eta i.year, absorb(id) vce(cluster id)
-coefplot, keep(t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5) vertical graphregion(color(white)) title("Ideal") saving(eta.gph, replace)
-
-areg y t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5 x i.year, absorb(id) vce(cluster id)
-coefplot, keep(t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5) vertical graphregion(color(white)) title("Proxy") saving(proxy.gph, replace)
-
-xi: xtivreg2 y t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5 (x=d_lead1) i.year, fe cluster(id)
-coefplot, keep(t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5) vertical graphregion(color(white)) title("2SLS") saving(panel2sls.gph, replace)
-
-graph combine nocontrol.gph eta.gph proxy.gph panel2sls.gph, col(2) graphregion(color(white))
-graph export preevent_trend.png, replace
-
-rm nocontrol.gph
-rm eta.gph
-rm proxy.gph
-rm panel2sls.gph
-```
-
-```{r, echo=FALSE, fig.align='center', out.width="70%"}
-   knitr::include_graphics('./preevent_trend.png')
-```
-
-# A mini-version simulation of @freyaldenhoven2019pre: ATE
-```{stata second, collectcode=TRUE}
-*Not mitigating non-parallel trend
-areg y d i.year, absorb(id) vce(cluster id)
-*FE2SLS
-xi: xtivreg2 y d (x=d_lead1) i.year, fe cluster(id)
-```
-
-# Panel IV example 2: Bartik/Shift-share IV
+# Panel IV example 1: Bartik/Shift-share IV
 * Named after @bartik1991benefits, also known as "Shift-share" IV.
 * The idea is to combine "aggregated/macro-level shocks" and a measure for "heterogeneous (local) exposures" and use this combination as an "instrument".
 * I like the framework of @goldsmith2020bartik, so I will form our discussion around it (two other related papers are @adao2019shift and @borusyak2020quasi -- please do check out if you are interested in this literature)
@@ -386,6 +253,141 @@ $$
 * Check the correlations between initial characteristics and initial shares, $z_{lk0}$: Visualize the source of variation, and potentially can control for the characteristics that is correlated with the shares (the correlated initial characteristic times time dummies).
 * Testing for pre-trends.
 * Use many instruments (e.g. $z_{lk0} \times \mathbb{1}_{t}(t=s)$) and compare or do over-identification test.
+
+# Pre-event trends: Going back to the parallel/common trend assumption
+* Motivation: What if the parallel/common trend assumption falls apart?
+* One way is to control for observables -- conditional parallel/common trend [e.g. @callaway2020difference].
+* Denote $y$ as the outcome, $d$ as the treatment, $x$ as the observable control, and $w$ as the unobservable confounder (assume the within transformation). Here is my attempt on drawing DAG for this problem (Full disclosure -- I am as new to DAG as you are so this needs some verification):
+
+```{r dag, fig.align='center', out.width="50%"}
+library(dagitty)
+library(ggdag)
+
+dag <- dagitty("dag{y1 <- w1 -> d1
+                d1 -> y1
+                w1 -> x1
+               }")
+ggdag(dag, layout = "circle") +
+  theme_dag()
+```
+
+# Panel IV example 2: Pre-event trends [@freyaldenhoven2019pre]
+* Again, an attempt to draw a DAG to show the IV approach can work:
+```{r dag2, fig.align='center', out.width="50%"}
+library(dagitty)
+library(ggdag)
+
+dag <- dagitty("dag{y1 <- w1 -> d1
+                d1 -> y1
+                w1 -> x1
+                w1 -> w2
+                w2 -> d2
+               }")
+ggdag(dag, layout = "circle") +
+  theme_dag()
+```
+
+* Obviously, using the observable control is fine if the observable $x$ **perfectly** explains the unobservable confounder, $w$. If not, we have so-called **regression diultion/measurement error** bias.
+* The **key** idea of @freyaldenhoven2019pre: Use the **lead(s)** of the treatment variable as **instruments**.
+* Practically, one can do the following (again, all variables are within transformed): regress $y$ on $d$ and $x$ but **instrument** $x$ using the **leads** of $d$.
+
+# A mini-version simulation of @freyaldenhoven2019pre: Pre-trend
+```{stata first, collectcode=TRUE, results="hide"}
+clear
+set seed 11123
+set obs 500
+
+egen id = seq()
+bys id: gen alpha = rnormal(0,1) 
+expand 20
+sort id
+by id: gen year=_n
+xtset id year
+
+*create eta
+bys id: gen eta=0 if _n==1
+bys id: replace eta=eta[_n-1]+rnormal(0,1) if _n>1
+*create x
+bys id: gen x = eta + rnormal(0,2)
+*create z
+bys id: gen dtemp = eta 
+bys id: gen d = (dtemp >4)
+bys id: replace d=1 if d[_n-1]==1
+drop dtemp
+
+*create y
+bys id: gen y = d + .25*eta + .2*year + alpha + rnormal(0,1)
+
+*create dummmies for time period of event and pre/post
+bys id: gen event = d-d[_n-1]
+recode event (.=0)
+foreach n of num 1(1)5{
+  bys id: gen t_`n'=event[_n+`n']
+  bys id: gen t`n'=event[_n-`n']
+}
+recode t* (.=0)
+
+*create instruments
+foreach n of num 1(1)5 {
+  bys id: gen d_lead`n'=F`n'.d
+  bys id: replace d_lead`n'=1 if d_lead`n'[_n-1]==1
+}
+recode d* (.=0)
+
+*Add dummies for both sides of eventplot
+bys id: gen t_6=-d_lead5
+bys id: replace t5=1 if t5[_n-1]==1
+recode t5 (.=0)
+
+*labeling for figures
+label var t_6 "-6+"
+label var t_5 "-5"
+label var t_4 "-4"
+label var t_3 "-3"
+label var t_2 "-2"
+label var t_1 "-1"
+label var t1 "1"
+label var t2 "2"
+label var t3 "3"
+label var t4 "4"
+label var t5 "5+"
+
+*keep sample with enough lead and lag
+keep if year>6 & year<16
+*pre-trends comparison
+areg y t_6 t_5 t_4 t_3 t_2 event t1 t2 t3 t4 t5 i.year, absorb(id) vce(cluster id)
+coefplot, keep(t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5) vertical graphregion(color(white)) title("Naive") saving(nocontrol.gph, replace)
+
+areg y t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5 eta i.year, absorb(id) vce(cluster id)
+coefplot, keep(t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5) vertical graphregion(color(white)) title("Ideal") saving(eta.gph, replace)
+
+areg y t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5 x i.year, absorb(id) vce(cluster id)
+coefplot, keep(t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5) vertical graphregion(color(white)) title("Proxy") saving(proxy.gph, replace)
+
+xi: xtivreg2 y t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5 (x=d_lead1) i.year, fe cluster(id)
+coefplot, keep(t_6 t_5 t_4 t_3 event t1 t2 t3 t4 t5) vertical graphregion(color(white)) title("2SLS") saving(panel2sls.gph, replace)
+
+graph combine nocontrol.gph eta.gph proxy.gph panel2sls.gph, col(2) graphregion(color(white))
+graph export preevent_trend.png, replace
+
+rm nocontrol.gph
+rm eta.gph
+rm proxy.gph
+rm panel2sls.gph
+```
+
+```{r, echo=FALSE, fig.align='center', out.width="70%"}
+   knitr::include_graphics('./preevent_trend.png')
+```
+
+# A mini-version simulation of @freyaldenhoven2019pre: ATE
+```{stata second, collectcode=TRUE}
+*Not mitigating non-parallel trend
+areg y d i.year, absorb(id) vce(cluster id)
+*FE2SLS
+xi: xtivreg2 y d (x=d_lead1) i.year, fe cluster(id)
+```
+
 
 # What else...?
 * Survey: [Click here](https://kstate.qualtrics.com/jfe/form/SV_0cXZVbMH9TBeOTI)
