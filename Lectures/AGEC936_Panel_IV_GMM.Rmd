@@ -48,7 +48,7 @@ $$
 d_{i}=\beta+\gamma z_{i}+\eta_{i}
 \end{align}
 $$
-  1. Exclusion restriction: $E(u_{i}|z_{i})=0$
+  1. Exclusion restriction: $E(\varepsilon_{i}|z_{i})=0$
   2. Relevancy: $Cov(d_i,z_i) \neq 0$
   
 * Now, let's think about the identifying assumptions for IV estimator in the context of **Panel FE** model
@@ -287,7 +287,7 @@ ggdag(dag, layout = "circle") +
   theme_dag()
 ```
 
-* Obviously, using the observable control is fine if the observable $x$ **perfectly** explains the unobservable confounder, $w$. If not, we have so-called **regression diultion/measurement error** bias.
+* Obviously, using the observable control is fine if the observable $x$ **perfectly** explains the unobservable confounder, $w$. If not, we have so-called **regression dilution/measurement error** bias.
 * The **key** idea of @freyaldenhoven2019pre: Use the **lead(s)** of the treatment variable as **instruments**.
 * Practically, one can do the following (again, all variables are within transformed): regress $y$ on $d$ and $x$ but **instrument** $x$ using the **leads** of $d$.
 
