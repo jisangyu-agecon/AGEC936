@@ -1,7 +1,7 @@
 ---
-title: "AGEC 936 - Module 3"
-subtitle: "Introduction of Panel Data Analysis"
+title: "AGEC 936 - Module 1"
 author: "Jisang Yu <br> Kansas State University"
+subtitle: "Panel Data Analysis"
 output:
  slidy_presentation:
    font_adjustment: -1
@@ -14,59 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(Statamarkdown)
 ```
 
-
-# Introduction: Key materials 
-
-* Slides 
-
-* Readings
-
-* Useful textbooks (no need to purchase, The Mixtape and The Effect are freely available online)
-
-  + Cameron, A.C. and Trivedi, P.K., 2005. Microeconometrics: Methods and Applications.
-  + Cunningham, S., 2021, Causal Inference: The Mixtape, [link](https://mixtape.scunning.com/)
-  + Hungington-Klein, N., 2022, The Effect: An Introduction to Research Design and Causality, [link](https://theeffectbook.net/)
-
-# Introduction: Assignments
-
-* Problem set (most likely one)
-
-* Referee report (5 page max): Choose an empirical paper that utilizes panel data and does a causal analysis based on panel data approaches. Choose from major economics or agricultural economics journals (limit the time period to post-2010). Please submit the citation of the paper of your choice by **11$^{th}$ of March**. Your referee report is due **25$^{th}$ of March**. Your referee report should contain
-
-  + A brief summary of the paper (0.5 page)
-  + Describe the main empirical specification and the identification strategy of the paper (1 -- 1.5 page)
-  + Your criticism on the identification strategy (1 page)
-  + Discuss possible alternative approaches (1 page)
-  + Conclude with the lessons you learned (1 page)
-
-# Introduction: What we will cover
-
-1. Understanding panel data and causal inference
-
-2. Fixed effects and Difference-in-Differences
-
-3. Synthetic control
-
-4. Panel IV/GMM
-
-5. Shift-share design
-
-6. *Any other panel-related topics you are interested in? (Let me know by coming Friday)*
-
-* Guest Lecture on publishing (Dr. Jesse Tack, March 23rd)
-
-# Introduction: My goals here are...
-
-* To bring various (and mostly recent) empirical issues related to panel data analyses to your attention
-
-* To help you become a critical consumer and a careful producer of empirical studies
-
-* Not necessarily "teach" you new methods -- I will provide various frameworks for carefully thinking about these empirical issues and point you to the relevant literature.
-
-*These being said, you may will leave this module with more questions than answers after this module...*
-
 # Panel data: an introduction
-
 - Data structure
 
 $$
@@ -440,6 +388,6 @@ $$
 
 
 # Next week
-[DID and TWFE](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html)
+[DID and TWFE](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE.html)
 
 # References

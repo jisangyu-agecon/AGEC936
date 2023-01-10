@@ -1,7 +1,7 @@
 ---
-title: "AGEC 936 - Module 3"
-subtitle: "Difference-in-Differences (DID)<br>Two-way Fixed Effects (TWFE)"
+title: "AGEC 936 - Module 1"
 author: "Jisang Yu<br>Kansas State University"
+subtitle: "Difference-in-Differences (DID)<br>Two-way Fixed Effects (TWFE)"
 output:
  slidy_presentation:
    font_adjustment: -1
@@ -15,7 +15,6 @@ library(Statamarkdown)
 ```
 
 # This week
-* (Previous week: [Panel data introduction](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_Panel_Intro.html))
 * Difference-in-differences (DID) in potential outcome framework
 * Two-way Fixed Effects (TWFE)
 * Parallel trend assumption
@@ -48,7 +47,7 @@ $$
 $$
 E(y_{i}|d_i=1)-E(y_{i}|d_i=0) \\
 =E(y_i(0)+(y_i(1)-y_i(0))|d_i=1)-E(y_i(0)|d_i=0) \\
-=\underbrace{\{E(y_i(1)|d_i=1)-E(y_i(0)|d_i=1)\}}_{ATT}+\underbrace{\{E(y_i(0)|d_i=1)-E(y_i(0)|d_i=0)\}}_{(Selection)\; Bias}.
+=\left({E(y_i(1)|d_i=1)-E(y_i(0)|d_i=1)\right)+\left(E(y_i(0)|d_i=1)-E(y_i(0)|d_i=0)\right).
 $$
 If the **Bias** term is non-zero, what should we do?
 

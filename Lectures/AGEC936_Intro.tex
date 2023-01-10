@@ -1,0 +1,395 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  ignorenonframetext,
+]{beamer}
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{part title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{part title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\newif\ifbibliography
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newlength{\cslentryspacingunit} % times entry-spacing
+\setlength{\cslentryspacingunit}{\parskip}
+\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
+ {% don't indent paragraphs
+  \setlength{\parindent}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+  \let\oldpar\par
+  \def\par{\hangindent=\cslhangindent\oldpar}
+  \fi
+  % set entry spacing
+  \setlength{\parskip}{#2\cslentryspacingunit}
+ }%
+ {}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={AGEC 936 - Module 1},
+  pdfauthor={Jisang Yu   Kansas State University},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{AGEC 936 - Module 1}
+\subtitle{Introduction of Causal Inference}
+\author{Jisang Yu Kansas State University}
+\date{}
+
+\begin{document}
+\frame{\titlepage}
+
+\begin{frame}{Introduction: Key materials}
+\protect\hypertarget{introduction-key-materials}{}
+\begin{itemize}
+\item
+  Slides
+\item
+  Readings
+\item
+  Useful references (no need to purchase, The Mixtape and The Effect are
+  freely available online)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Cunningham, S., 2021, Causal Inference: The Mixtape,
+    \href{https://mixtape.scunning.com/}{link}
+  \item
+    Hungington-Klein, N., 2022, The Effect: An Introduction to Research
+    Design and Causality, \href{https://theeffectbook.net/}{link}
+  \item
+    Cameron, A.C. and Trivedi, P.K., 2005. Microeconometrics: Methods
+    and Applications.\\
+  \item
+    Angrist, J.D. and Pischke, J.S., 2009. Mostly harmless econometrics:
+    An empiricist's companion. Princeton university press.
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Introduction: Assignments}
+\protect\hypertarget{introduction-assignments}{}
+\begin{itemize}
+\item
+  Problem set (most likely one)
+\item
+  Referee report (5 page max) and Presentation (Group assignment):
+  Choose an empirical paper that utilizes a causal analysis. Choose from
+  major economics or agricultural economics journals or NBER working
+  papers (limit the time period to post-2010). Please submit the
+  citation of the paper of your choice by \textbf{30\(^{th}\) of
+  January}. Your referee report is due \textbf{17\(^{th}\) of February}.
+  Your referee report should contain
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A brief summary of the paper (0.5 page)
+  \item
+    Describe the main empirical specification and the identification
+    strategy of the paper (1 -- 1.5 page)
+  \item
+    Your criticism on the identification strategy (1 page)
+  \item
+    Discuss possible alternative approaches (1 page)
+  \item
+    Conclude with the lessons you learned (1 page)
+  \end{itemize}
+\end{itemize}
+
+Presentations will be held on \textbf{15th} and \textbf{17th} of
+\textbf{February} (15 minutes each).
+\end{frame}
+
+\begin{frame}{Introduction: What we will cover}
+\protect\hypertarget{introduction-what-we-will-cover}{}
+\begin{enumerate}
+\item
+  Understanding causal inference
+\item
+  Fixed effects and Difference-in-Differences
+\item
+  Synthetic control
+\item
+  Panel IV/GMM
+\item
+  Shift-share design
+\item
+  \emph{Any other causal inference-related topics you are interested in?
+  (Let me know by coming Friday)}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Introduction: My goals here are\ldots{}}
+\protect\hypertarget{introduction-my-goals-here-are}{}
+\begin{itemize}
+\item
+  To bring various (and mostly recent) empirical issues related to
+  causal inference to your attention
+\item
+  To help you become a critical consumer and a careful producer of
+  empirical studies
+\item
+  Not necessarily ``teach'' you new methods -- I will provide various
+  frameworks for carefully thinking about these empirical issues and
+  point you to the relevant literature.
+\end{itemize}
+
+\emph{These being said, you may will leave this module with more
+questions than answers after this module\ldots{}}
+\end{frame}
+
+\begin{frame}{Causal inference: an introduction}
+\protect\hypertarget{causal-inference-an-introduction}{}
+Following the framework of Angrist and Pischke (2008), suppose we have a
+binary treatment variable:
+
+\[
+D_i=\{0,\;1\} 
+\] and the outcome of interest is denoted as \(Y_i\) (For example, in
+the book, health status of individual \(i\) is \(Y_i\)). And the
+potential outcomes for individual \(i\) are denoted as
+
+\[
+Y_{0i}\;if\;D_i=0, \\
+Y_{1i}\;if\;D_i=1. \\
+\]
+
+The causal effect of the treatment \(D\) is the difference between
+\(Y_{0i}\) and \(Y_{1i}\).
+
+\emph{Can we observe both \(Y_{0i}\) and \(Y_{1i}\) (Rubin (1974))?}
+\end{frame}
+
+\begin{frame}{What are we observing in practice}
+\protect\hypertarget{what-are-we-observing-in-practice}{}
+We normally observe \[
+Y_i=Y_{0i}+(Y_{1i}-Y_{0i})D_{i}.
+\]
+
+The average treatment (or causal) effect (ATE) is defined as
+\begin{equation}
+E(Y_{1i}-Y_{0i})=E(Y_{1i})-E(Y_{0i}).
+\end{equation}
+
+What we observe is \begin{equation}
+E(Y_{i}|D_i=1)-E(Y_{i}|D_i=0) (\#eq:OD)
+\end{equation}
+
+\emph{Is the observed difference ATE?}
+
+\emph{When does the observed difference become ATE?}
+\end{frame}
+
+\begin{frame}{Selection Bias}
+\protect\hypertarget{selection-bias}{}
+\emph{What happens if \(Y_{1i}\), \(Y_{0i}\), and \(D_i\) are not
+independent?}
+
+\begin{equation}
+E(Y_{i}|D_i=1)-E(Y_{i}|D_i=0) \\
+=E(Y_{0i}+(Y_{1i}-Y_{0i})|D_i=1)-E(Y_{0i}|D_i=0) \\
+=\underbrace{(E(Y_{1i}|D_i=1)-E(Y_{0i}|D_i=1))}_\text{Average Treatment Effect on Treated (ATT)}+\underbrace{(E(Y_{0i}|D_i=1)-E(Y_{0i}|D_i=0))}_\text{Selection Bias}.
+\end{equation}
+
+\emph{How do we interpret ``ATT''?}
+\end{frame}
+
+\begin{frame}{Regression representation}
+\protect\hypertarget{regression-representation}{}
+We can rewrite \[
+Y_i=Y_{0i}+(Y_{1i}-Y_{0i})D_{i}.
+\] as the following regression equation:
+
+\[
+Y_i=\alpha+\rho D_{i}+\varepsilon_i
+\]
+
+and we know that OLS estimates of \(\rho\) is
+
+\[
+\hat{\rho}=\frac{\sum (D_i - \bar{D})(Y_i-\bar{Y})}{\sum (D_i - \bar{D})^2} 
+\]
+
+\[
+E(\hat{\rho})=E\left(\frac{\sum (D_i - \bar{D})\left(\rho (D_i-\bar{D})+\varepsilon_i \right)}{\sum (D_i - \bar{D})^2} \right)\\
+=E\left(\frac{\sum (D_i - \bar{D})\left(\rho (D_i-\bar{D})\right)}{\sum (D_i - \bar{D})^2}\right)+E\left(\frac{\sum \left(\varepsilon_i (D_i-\bar{D})\right)}{\sum (D_i - \bar{D})^2} \right)\\
+=\rho+E\left(\frac{\sum \left(\varepsilon_i (D_i-\bar{D})\right)}{\sum (D_i - \bar{D})^2} \right)\\
+=\rho+\frac{Cov(\varepsilon_i,\;D_i)}{Var(D_i)}
+\] \emph{What is the selection bias term here?}
+\end{frame}
+
+\begin{frame}{Conditional Independence (Rosenbaum and Rubin (1983))}
+\protect\hypertarget{conditional-independence-rosenbaum1983central}{}
+Let us denote an observable characteristic of individual \(i\) as
+\(X_i\). Now, what we observe is \[
+E(Y_i|D_i=1,\;X_i)-E(Y_i|D_i=0,\;X_i)= \\
+E(Y_{1i}|D_i=1,\;X_i)-E(Y_{0i}|D_i=0,\;X_i).
+\]
+
+Conditional independence assumption, i.e.~conditional on \(X_i\),
+\((Y_{0i},\;Y_{1i})\), and \(D_i\) are independent, implies \[
+E(Y_{0i}|D_i=0,\;X_i)=E(Y_{0i}|D_i=1,\;X_i)=E(Y_{0i}|X_i), \\
+E(Y_{1i}|D_i=1,\;X_i)=E(Y_{1i}|D_i=0,\;X_i)=E(Y_{1i}|X_i). \\
+\]
+
+Because of the conditional independence, the observed difference becomes
+\[
+E(Y_{1i}|D_i=1,\;X_i)-E(Y_{0i}|D_i=0,\;X_i)= \\
+E(Y_{1i}|D_i=1,\;X_i)-E(Y_{0i}|D_i=1,\;X_i)= \\
+E(Y_{1i}-Y_{0i}|D_i=1,\;X_i).
+\]
+
+By the law of iterated expectation, we have \[
+E(E(Y_{1i}-Y_{0i}|D_i=1,\;X_i))=E(Y_{1i}-Y_{0i}|D_i=1).
+\]
+\end{frame}
+
+\begin{frame}{Matching (Angrist (1998))}
+\protect\hypertarget{matching-angrist1998}{}
+For the simplicity, let us assume that \(X_i\) is also binary (also,
+assume that there is at least one observation for each pair of
+\((D_i,\;X_i)\)). Using the law of iterated expectation, the ATT can be
+represented as
+
+\[
+E(Y_{1i}-Y_{0i}|D_i=1)=\\
+E(E(Y_{1i}-Y_{0i}|D_i=1,\;X_i))=\\
+E(Y_{1i}-Y_{0i}|D_i=1,\;X_i=0) \times P(X_i=0|D_i=1)+ \\
+E(Y_{1i}-Y_{0i}|D_i=1,\;X_i=1) \times P(X_i=1|D_i=1).
+\]
+
+In Angrist (1998), conditional treatment effects (on the treated) are
+estimated by taking the differences between the earnings of veterans and
+the earnings of nonveterans conditional on \(X_i\). The weights
+(conditional probabilities) are the population distribution of \(X_i\)s
+among veterans.
+\end{frame}
+
+\begin{frame}{Regression}
+\protect\hypertarget{regression}{}
+We can write down \(Y_i\) as \[
+Y_i=\beta_0+\beta_1 X_i+ \beta_2 D_i+\epsilon_i.
+\]
+
+Following Angrist (1998), the regression coefficient \(\beta_2\), is \[
+\beta_2=\frac{E(Y_{1i}-Y_{0i}|D_i=1,\;X_i=0) \times P(D_i=1|X_i=0)(1-P(D_i=1|X_i=0))P(X_i=0)}{E(P(D_i=1|X_i)(1-P(D_i=1|X_i)))}+\\
+\frac{E(Y_{1i}-Y_{0i}|D_i=1,\;X_i=1) \times P(D_i=1|X_i=1)(1-P(D_i=1|X_i=1))P(X_i=1)}{E(P(D_i=1|X_i)(1-P(D_i=1|X_i)))}.
+\]
+\end{frame}
+
+\begin{frame}{Next slides}
+\protect\hypertarget{next-slides}{}
+\href{https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html}{DID
+and TWFE}
+\end{frame}
+
+\begin{frame}{References}
+\protect\hypertarget{references}{}
+\hypertarget{refs}{}
+\begin{CSLReferences}{1}{0}
+\leavevmode\vadjust pre{\hypertarget{ref-angrist1998}{}}%
+Angrist, Joshua D. 1998. {``Estimating the Labor Market Impact of
+Voluntary Military Service Using Social Security Data on Military
+Applicants.''} \emph{Econometrica}, 249--88.
+
+\leavevmode\vadjust pre{\hypertarget{ref-angrist2008mostly}{}}%
+Angrist, Joshua D, and Jörn-Steffen Pischke. 2008. \emph{Mostly Harmless
+Econometrics: An Empiricist's Companion}. Princeton university press.
+
+\leavevmode\vadjust pre{\hypertarget{ref-rosenbaum1983central}{}}%
+Rosenbaum, Paul R, and Donald B Rubin. 1983. {``The Central Role of the
+Propensity Score in Observational Studies for Causal Effects.''}
+\emph{Biometrika}, 41--55.
+
+\leavevmode\vadjust pre{\hypertarget{ref-rubin1974estimating}{}}%
+Rubin, Donald B. 1974. {``Estimating Causal Effects of Treatments in
+Randomized and Nonrandomized Studies.''} \emph{Journal of Educational
+Psychology} 66 (5): 688.
+
+\end{CSLReferences}
+\end{frame}
+
+\end{document}
