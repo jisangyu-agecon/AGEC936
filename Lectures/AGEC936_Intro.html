@@ -576,7 +576,7 @@ each).</p>
 <h1>Introduction: What we will cover</h1>
 <ol style="list-style-type: decimal">
 <li><p>Understanding causal inference</p></li>
-<li><p>Panel Data Analysis</p></li>
+<li><p>Panel data analysis</p></li>
 <li><p>Fixed effects and Difference-in-Differences</p></li>
 <li><p>Synthetic control</p></li>
 <li><p>Panel IV/GMM</p></li>
@@ -599,15 +599,17 @@ you to the relevant literature.</p></li>
 <p><em>These being said, you may will leave this module with more
 questions than answers after this module…</em></p>
 </div>
-<div id="causal-inference-an-introduction" class="slide section level1">
-<h1>Causal inference: an introduction</h1>
+<div id="causal-inference-introduction" class="slide section level1">
+<h1>Causal inference: Introduction</h1>
 <p>Following the framework of <span class="citation">Angrist and Pischke
-(2008)</span>, suppose we have a binary treatment variable:</p>
+(2008)</span>, suppose we have a <em>binary</em> treatment variable (we
+are goint to work with <em>binary</em> treatment cases unless I state
+otherwise):</p>
 <p><span class="math display">\[
 D_i=\{0,\;1\}
 \]</span> and the outcome of interest is denoted as <span class="math inline">\(Y_i\)</span> (For example, in the book, health
-status of individual <span class="math inline">\(i\)</span> is <span class="math inline">\(Y_i\)</span>). And the potential outcomes for
-individual <span class="math inline">\(i\)</span> are denoted as</p>
+status of individual <span class="math inline">\(i\)</span> is <span class="math inline">\(Y_i\)</span>).</p>
+<p>And the potential outcomes for individual <span class="math inline">\(i\)</span> are denoted as</p>
 <p><span class="math display">\[
 Y_{0i}\;if\;D_i=0, \\
 Y_{1i}\;if\;D_i=1. \\
@@ -621,17 +623,17 @@ Y_{1i}\;if\;D_i=1. \\
 <p>We normally observe <span class="math display">\[
 Y_i=Y_{0i}+(Y_{1i}-Y_{0i})D_{i}.
 \]</span></p>
-<p>The average treatment (or causal) effect (ATE) is defined as <span class="math display">\[\begin{equation}
+<p>The average treatment (or causal) effect (ATE) is defined as <span class="math display">\[
 E(Y_{1i}-Y_{0i})=E(Y_{1i})-E(Y_{0i}).
-\end{equation}\]</span></p>
-<p>What we observe is <span class="math display">\[\begin{equation}
-E(Y_{i}|D_i=1)-E(Y_{i}|D_i=0) (\#eq:OD)
-\end{equation}\]</span></p>
+\]</span></p>
+<p>What we observe is <span class="math display">\[
+E(Y_{i}|D_i=1)-E(Y_{i}|D_i=0)
+\]</span></p>
 <p><em>Is the observed difference ATE?</em></p>
 <p><em>When does the observed difference become ATE?</em></p>
 </div>
 <div id="selection-bias" class="slide section level1">
-<h1>Selection Bias</h1>
+<h1>Selection bias</h1>
 <p><em>What happens if</em> <span class="math inline">\(Y_{1i}\)</span>,
 <span class="math inline">\(Y_{0i}\)</span>, and <span class="math inline">\(D_i\)</span> are not independent?</p>
 <p><span class="math display">\[
@@ -643,7 +645,17 @@ E(Y_{i}|D_i=1)-E(Y_{i}|D_i=0) \\
 the average treatment effect on the treated (ATT).</p>
 <p>The second term, <span class="math inline">\(\left(E(Y_{0i}|D_i=1)-E(Y_{0i}|D_i=0)\right)\)</span>,
 is so-called selection bias.</p>
-<p><em>How do we interpret ``ATT”?</em></p>
+<p><em>How do we interpret “ATT”?</em></p>
+</div>
+<div id="ate-versus-att" class="slide section level1">
+<h1>ATE versus ATT</h1>
+<p>Recall that the ATE is defined as <span class="math display">\[
+E(Y_{1i}-Y_{0i})=E(Y_{1i})-E(Y_{0i}).
+\]</span></p>
+<p>The ATT is <span class="math display">\[
+E(Y_{1i}|D_i=1)-E(Y_{0i}|D_i=1)
+\]</span></p>
+<p><strong>When ATT becomes ATE?</strong></p>
 </div>
 <div id="regression-representation" class="slide section level1">
 <h1>Regression representation</h1>
@@ -670,7 +682,7 @@ E(\hat{\rho})=E\left(\frac{\sum (D_i - \bar{D})\left(\rho
 \]</span> <em>What is the selection bias term here?</em></p>
 </div>
 <div id="conditional-independence-rosenbaum1983central" class="slide section level1">
-<h1>Conditional Independence (<span class="citation">Rosenbaum and Rubin
+<h1>Conditional independence (<span class="citation">Rosenbaum and Rubin
 (1983)</span>)</h1>
 <p>Let us denote an observable characteristic of individual <span class="math inline">\(i\)</span> as <span class="math inline">\(X_i\)</span>. Now, what we observe is <span class="math display">\[
 E(Y_i|D_i=1,\;X_i)-E(Y_i|D_i=0,\;X_i)= \\
@@ -690,13 +702,22 @@ E(Y_{1i}-Y_{0i}|D_i=1,\;X_i).
 E(E(Y_{1i}-Y_{0i}|D_i=1,\;X_i))=E(Y_{1i}-Y_{0i}|D_i=1).
 \]</span></p>
 </div>
+<div id="sutva" class="slide section level1">
+<h1>SUTVA</h1>
+<p><strong>Stable Unit Treatment Value Assumption</strong></p>
+<p>Assignment to Treatment to one unit cannot affect the potential
+outcomes of the other unit.</p>
+<p>In other words, <strong>no spillovers</strong>.</p>
+<p>An essential assumption for causal inference analyses.</p>
+</div>
 <div id="angrist1998" class="slide section level1">
 <h1><span class="citation">Angrist (1998)</span></h1>
 <ul>
-<li>Matching For the simplicity, let us assume that <span class="math inline">\(X_i\)</span> is also binary (also, assume that
-there is at least one observation for each pair of <span class="math inline">\((D_i,\;X_i)\)</span>). Using the law of iterated
-expectation, the ATT can be represented as</li>
+<li>Matching</li>
 </ul>
+<p>For the simplicity, let us assume that <span class="math inline">\(X_i\)</span> is also binary (also, assume that
+there is at least one observation for each pair of <span class="math inline">\((D_i,\;X_i)\)</span>). Using the law of iterated
+expectation, the ATT can be represented as</p>
 <p><span class="math display">\[
 E(Y_{1i}-Y_{0i}|D_i=1)=\\
 E(E(Y_{1i}-Y_{0i}|D_i=1,\;X_i))=\\
@@ -710,10 +731,11 @@ nonveterans conditional on <span class="math inline">\(X_i\)</span>. The
 weights (conditional probabilities) are the population distribution of
 <span class="math inline">\(X_i\)</span>s among veterans.</p>
 <ul>
-<li>Regression We can write down <span class="math inline">\(Y_i\)</span> as <span class="math display">\[
-Y_i=\beta_0+\beta_1 X_i+ \beta_2 D_i+\epsilon_i.
-\]</span></li>
+<li>Regression</li>
 </ul>
+<p>We can write down <span class="math inline">\(Y_i\)</span> as <span class="math display">\[
+Y_i=\beta_0+\beta_1 X_i+ \beta_2 D_i+\epsilon_i.
+\]</span></p>
 <p>Following <span class="citation">Angrist (1998)</span>, the
 regression coefficient <span class="math inline">\(\beta_2\)</span>, is
 <span class="math display">\[
@@ -723,19 +745,31 @@ P(D_i=1|X_i=0)(1-P(D_i=1|X_i=0))P(X_i=0)}{E(P(D_i=1|X_i)(1-P(D_i=1|X_i)))}+\\
 P(D_i=1|X_i=1)(1-P(D_i=1|X_i=1))P(X_i=1)}{E(P(D_i=1|X_i)(1-P(D_i=1|X_i)))}.
 \]</span></p>
 </div>
-<div id="simulation-exercise-simplified-version-of-angrist1998" class="slide section level1">
-<h1>Simulation exercise (Simplified version of <span class="citation">Angrist (1998)</span>)</h1>
+<div id="a-note-on-simulations" class="slide section level1">
+<h1>A note on simulations</h1>
+<ul>
+<li><p>A proper simulation normally relies on Monte Carlo method, that
+is, you repeat an experiment multiple times (say 100, 500, or 1000) with
+different random draws.</p></li>
+<li><p>In this module, I use simulations as an illustrative tool. That
+being said, I am going to only do a single round of
+experiments.</p></li>
+</ul>
+</div>
+<div id="simulation-exercise-motivated-by-angrist1998" class="slide section level1">
+<h1>Simulation exercise: motivated by <span class="citation">Angrist
+(1998)</span></h1>
 <p>Suppose we have 100 individuals. For each individual, we observe
 three variables: ``Actual” earning <span class="math inline">\(y_i\)</span>, veteran status <span class="math inline">\(D_i\)</span>, and test score group status <span class="math inline">\(X_i\)</span>.</p>
 <ul>
 <li>Actual earning <span class="math inline">\(Y_i\)</span>: Continuous
-and in dollars}</li>
+and in dollars</li>
 <li>Veteran status <span class="math inline">\(D_i\)</span>: Binary,
-<span class="math inline">\(D_i=1\)</span> if an individual <span class="math inline">\(i\)</span> is a veteran and <span class="math inline">\(D_i=0\)</span> if an individual <span class="math inline">\(i\)</span> is a non-veteran.}</li>
+<span class="math inline">\(D_i=1\)</span> if an individual <span class="math inline">\(i\)</span> is a veteran and <span class="math inline">\(D_i=0\)</span> if an individual <span class="math inline">\(i\)</span> is a non-veteran.</li>
 <li>Test score group status <span class="math inline">\(X_i\)</span>:
 Binary, <span class="math inline">\(X_i=1\)</span> if an individual
 <span class="math inline">\(i\)</span> is in a high score group and
-<span class="math inline">\(X_i=0\)</span> if an individual <span class="math inline">\(i\)</span> is in a low score group.}</li>
+<span class="math inline">\(X_i=0\)</span> if an individual <span class="math inline">\(i\)</span> is in a low score group.</li>
 </ul>
 <p>If veteran status is randomly assigned across all 100 individuals,
 then we have unconditional independence. In such case, the causal effect
@@ -749,7 +783,7 @@ reflects one’s ability to earn more, the observed difference, ignoring
 measure on the causal effect.</p>
 <p>However, conditional on <span class="math inline">\(X_i\)</span>, the
 assignment of veteran status is still random. Thus, we can use matching
-or regression estimates (Stata example).</p>
+or regression estimates to estimate the treatment effects:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>*Homogeneous impact across <span class="kw">two</span> groups</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>*Sample <span class="kw">size</span> 100</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>*Same weights <span class="kw">for</span> the <span class="kw">two</span> groups</span>
@@ -809,7 +843,7 @@ or regression estimates (Stata example).</p>
 ------------------------------------------------------------------------------
 
 
------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
 -&gt; group = 0
 
       Source |       SS           df       MS      Number of obs   =        50
@@ -826,7 +860,7 @@ or regression estimates (Stata example).</p>
        _cons |   .4996683    .003033   164.74   0.000       .49357    .5057665
 ------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
 -&gt; group = 1
 
       Source |       SS           df       MS      Number of obs   =        50
@@ -913,7 +947,7 @@ or regression estimates (Stata example).</p>
 ------------------------------------------------------------------------------
 
 
------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
 -&gt; group = 0
 
       Source |       SS           df       MS      Number of obs   =        70
@@ -930,7 +964,7 @@ or regression estimates (Stata example).</p>
        _cons |   .4960149   .0017664   280.81   0.000     .4924901    .4995397
 ------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
 -&gt; group = 1
 
       Source |       SS           df       MS      Number of obs   =        30
@@ -961,7 +995,173 @@ or regression estimates (Stata example).</p>
        group |   .4021262   .0022561   178.24   0.000     .3976484     .406604
        _cons |   .4974374   .0016883   294.63   0.000     .4940866    .5007883
 ------------------------------------------------------------------------------</code></pre>
-<p>#Propensity Scores</p>
+</div>
+<div id="propensity-scores" class="slide section level1">
+<h1>Propensity scores</h1>
+<p>It is hard to apply (exact) matching estimator when you have many
+pre-determined covariates. Alternatively, we can use the propensity
+score:</p>
+<p><span class="math display">\[
+p(X_{1i}, ...., X_{ni})=Prob(D_i=1|X_{1i}, ...., X_{ni})
+\]</span></p>
+<p>where <span class="math inline">\(X_{1i}, ...., X_{ni}\)</span> are
+pre-treatment control variables and <span class="math inline">\(D_i\)</span> is a dummy variable for the
+treatment.</p>
+<p><strong>Propensity Score Theorem</strong></p>
+<p>If conditional independence holds for a set of covariates, <span class="math inline">\(X_{1i}, ...., X_{ni}\)</span>, i.e., the potential
+outcomes are orthogonal to the treatment conditional on the covariates,
+then conditional independence holds for the propensity score, <span class="math inline">\(p(X_{1i}, ...., X_{ni})\)</span></p>
+</div>
+<div id="how-do-we-use-propensity-scores" class="slide section level1">
+<h1>How do we use propensity scores?</h1>
+<p>Normally, we follow a two-step approach:</p>
+<ol style="list-style-type: decimal">
+<li>Estimate the propensity score (e.g., logit or probit), which is the
+probability of the treatment</li>
+<li>Use the propensity score for matching or use as a weight for a
+weighting scheme.</li>
+</ol>
+<p><strong>Propensity score matching estimator</strong></p>
+<p>We can estimate the conditional ATT by:</p>
+<p><span class="math display">\[
+\hat{ATT}=\frac{1}{|N_T|}\sum_{i \in
+N_T}\left(Y_i-\frac{1}{|J_i|}\sum_{j \in J} Y_j\right)
+\]</span></p>
+<p>where <span class="math inline">\(J_i\)</span> is the set of
+comparison units that are matched to the treated unit <span class="math inline">\(i\)</span> using the propensity score (we can also
+estimate ATE – we just need to estimate the average treatment effect on
+untreated (ATU) and take the average of the ATT and the ATE) and <span class="math inline">\(N_T\)</span> is the set that denotes the treated
+group.</p>
+<p><strong>Inverse probability weighting</strong></p>
+<p>The conditional ATT estimated by inverse probability weighting
+is:</p>
+<p><span class="math display">\[
+\hat{ATT}=\frac{1}{|N|}\sum_{i}\frac{(D_i-\hat{p}(X_{1i},...,X_{ni}))Y_i}{(1-\hat{p}(X_{1i},...,X_{ni}))\frac{|N_T|}{|N|}}
+\]</span></p>
+<p>where <span class="math inline">\(\hat{p}\)</span> is the estimated
+propensity score.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>*Sample <span class="kw">size</span> 100</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>*Different weights between the <span class="kw">two</span> groups)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">clear</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 100</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 1234</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> x=rnormal()</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">e</span>=0.01*rnormal()</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="kw">egen</span> no=<span class="fu">rank</span>(x)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">group</span>=0</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> <span class="fu">group</span>=1 <span class="kw">if</span> no&lt;31</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="kw">bys</span> <span class="fu">group</span>: <span class="kw">egen</span> new_no=<span class="fu">rank</span>(x)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> treatment=0</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> treatment=1 <span class="kw">if</span> new_no&lt;41 &amp; <span class="fu">group</span>==0</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> treatment=1 <span class="kw">if</span> new_no&lt;11 &amp; <span class="fu">group</span>==1</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>=0.5+0.4*<span class="fu">group</span>+0.5*treatment+<span class="fu">e</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>*psmatching (ATT)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>teffects psmatch (<span class="fu">y</span>) (treatment <span class="fu">group</span>), atet</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>*inverse probability weighting (ATT)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>teffects ipw (<span class="fu">y</span>) (treatment <span class="fu">group</span>), atet</span></code></pre></div>
+<pre><code>Number of observations (_N) was 0, now 100.
+
+
+
+
+
+
+(30 real changes made)
+
+
+
+(40 real changes made)
+
+(10 real changes made)
+
+
+
+Treatment-effects estimation                   Number of obs      =        100
+Estimator      : propensity-score matching     Matches: requested =          1
+Outcome model  : matching                                     min =         10
+Treatment model: logit                                        max =         40
+------------------------------------------------------------------------------
+             |              AI robust
+           y | Coefficient  std. err.      z    P&gt;|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+ATET         |
+   treatment |
+   (1 vs 0)  |    .503655   .0020545   245.14   0.000     .4996282    .5076819
+------------------------------------------------------------------------------
+
+
+Iteration 0:   EE criterion =  6.896e-20  
+Iteration 1:   EE criterion =  3.618e-32  
+
+Treatment-effects estimation                    Number of obs     =        100
+Estimator      : inverse-probability weights
+Outcome model  : weighted mean
+Treatment model: logit
+------------------------------------------------------------------------------
+             |               Robust
+           y | Coefficient  std. err.      z    P&gt;|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+ATET         |
+   treatment |
+   (1 vs 0)  |    .503655   .0020534   245.28   0.000     .4996305    .5076796
+-------------+----------------------------------------------------------------
+POmean       |
+   treatment |
+          0  |   .5771514   .0229986    25.10   0.000     .5320749    .6222279
+------------------------------------------------------------------------------</code></pre>
+</div>
+<div id="regression-discontinuity-design-rdd" class="slide section level1">
+<h1>Regression Discontinuity Design (RDD)</h1>
+<p>There are many circumstances that the assignment of the treatment is
+based on some cutoff points. Consider the following data generating
+process:</p>
+<p><span class="math display">\[
+Y_i=\alpha+\rho D_{i}+\varepsilon_i
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\varepsilon_i=f(X_i)+u_i
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+D_i=
+\begin{cases}
+1\;if\;X_i&gt;c \\
+0\;otherwise
+\end{cases}
+.
+\]</span></p>
+<p>If <span class="math inline">\(X_i\)</span> is continuous
+(particularly at <span class="math inline">\(X_i=c\)</span>), we can
+estimate the average treatment effect at the cutoff:</p>
+<p><span class="math display">\[
+\rho=\lim_{x\downarrow c} E(Y_i | X_i=x) - \lim_{x\uparrow c} E(Y_i |
+X_i=x).
+\]</span></p>
+<p>Nonparametric approaches (Kernel density estimation) or OLS
+estimation with (high-order) polynomials and interaction terms are often
+used. <span class="citation">Lee and Lemieuxa (2010)</span> is a good
+review article on RDD (See <span class="citation">Filmer and Schady
+(2011)</span> or <span class="citation">Pan, Smith, and Sulaiman
+(2018)</span> for an example).</p>
+</div>
+<div id="some-considerations-on-rdd" class="slide section level1">
+<h1>Some considerations on RDD</h1>
+<ul>
+<li><p>Sharp versus Fuzzy designs</p></li>
+<li><p>Manipulation/anticipation</p></li>
+<li><p>Property of “running variable” (the eligibility
+variable)</p></li>
+<li><p>Need enough observations around the cutoff</p></li>
+<li><p>Be careful with polynomials! See <a href="https://statmodeling.stat.columbia.edu/2013/08/05/evidence-on-the-impact/">this
+post</a> and <a href="https://statmodeling.stat.columbia.edu/2019/06/25/another-regression-discontinuity-disaster-and/">this
+post</a> by Andrew Gelman.</p></li>
+</ul>
 </div>
 <div id="next-slides" class="slide section level1">
 <h1>Next slides</h1>
@@ -980,6 +1180,23 @@ Applicants.”</span> <em>Econometrica</em>, 249–88.
 Angrist, Joshua D, and Jörn-Steffen Pischke. 2008. <em>Mostly Harmless
 Econometrics: An Empiricist’s Companion</em>. Princeton university
 press.
+</div>
+<div id="ref-filmer2011does" class="csl-entry">
+Filmer, Deon, and Norbert Schady. 2011. <span>“Does More Cash in
+Conditional Cash Transfer Programs Always Lead to Larger Impacts on
+School Attendance?”</span> <em>Journal of Development Economics</em> 96
+(1): 150–57.
+</div>
+<div id="ref-lee2010regression" class="csl-entry">
+Lee, David S, and Thomas Lemieuxa. 2010. <span>“Regression Discontinuity
+Designs in Economics.”</span> <em>Journal of Economic Literature</em> 48
+(2): 281–355.
+</div>
+<div id="ref-pan2018agricultural" class="csl-entry">
+Pan, Yao, Stephen C Smith, and Munshi Sulaiman. 2018.
+<span>“Agricultural Extension and Technology Adoption for Food Security:
+Evidence from Uganda.”</span> <em>American Journal of Agricultural
+Economics</em> 100 (4): 1012–31.
 </div>
 <div id="ref-rosenbaum1983central" class="csl-entry">
 Rosenbaum, Paul R, and Donald B Rubin. 1983. <span>“The Central Role of

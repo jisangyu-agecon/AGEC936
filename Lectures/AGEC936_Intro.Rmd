@@ -62,7 +62,7 @@ minutes each).
 
 1.  Understanding causal inference
 
-2.  Panel Data Analysis
+2.  Panel data analysis
 
 3.  Fixed effects and Difference-in-Differences
 
@@ -89,16 +89,17 @@ minutes each).
 *These being said, you may will leave this module with more questions
 than answers after this module...*
 
-# Causal inference: an introduction
+# Causal inference: Introduction
 
-Following the framework of @angrist2008mostly, suppose we have a binary
-treatment variable:
+Following the framework of @angrist2008mostly, suppose we have a *binary*
+treatment variable (we are goint to work with *binary* treatment cases unless I state otherwise):
 
 $$
 D_i=\{0,\;1\} 
 $$ and the outcome of interest is denoted as $Y_i$ (For example, in the
-book, health status of individual $i$ is $Y_i$). And the potential
-outcomes for individual $i$ are denoted as
+book, health status of individual $i$ is $Y_i$). 
+
+And the potential outcomes for individual $i$ are denoted as
 
 $$
 Y_{0i}\;if\;D_i=0, \\
@@ -117,19 +118,20 @@ Y_i=Y_{0i}+(Y_{1i}-Y_{0i})D_{i}.
 $$
 
 The average treatment (or causal) effect (ATE) is defined as
-\begin{equation}
+$$
 E(Y_{1i}-Y_{0i})=E(Y_{1i})-E(Y_{0i}).
-\end{equation}
+$$
 
-What we observe is \begin{equation}
-E(Y_{i}|D_i=1)-E(Y_{i}|D_i=0) (\#eq:OD)
-\end{equation}
+What we observe is 
+$$
+E(Y_{i}|D_i=1)-E(Y_{i}|D_i=0)
+$$
 
 *Is the observed difference ATE?*
 
 *When does the observed difference become ATE?*
 
-# Selection Bias
+# Selection bias
 
 *What happens if* $Y_{1i}$, $Y_{0i}$, and $D_i$ are not independent?
 
@@ -143,7 +145,21 @@ We call the first term, $\left(E(Y_{1i}|D_i=1)-E(Y_{0i}|D_i=1)\right)$, the aver
 
 The second term, $\left(E(Y_{0i}|D_i=1)-E(Y_{0i}|D_i=0)\right)$, is so-called selection bias.
 
-*How do we interpret \`\`ATT"?*
+*How do we interpret "ATT"?*
+
+# ATE versus ATT
+
+Recall that the ATE is defined as
+$$
+E(Y_{1i}-Y_{0i})=E(Y_{1i})-E(Y_{0i}).
+$$
+
+The ATT is 
+$$
+E(Y_{1i}|D_i=1)-E(Y_{0i}|D_i=1)
+$$
+
+**When ATT becomes ATE?**
 
 # Regression representation
 
@@ -168,7 +184,7 @@ E(\hat{\rho})=E\left(\frac{\sum (D_i - \bar{D})\left(\rho (D_i-\bar{D})+\varepsi
 =\rho+\frac{Cov(\varepsilon_i,\;D_i)}{Var(D_i)}
 $$ *What is the selection bias term here?*
 
-# Conditional Independence (@rosenbaum1983central)
+# Conditional independence (@rosenbaum1983central)
 
 Let us denote an observable characteristic of individual $i$ as $X_i$.
 Now, what we observe is $$
@@ -193,9 +209,20 @@ By the law of iterated expectation, we have $$
 E(E(Y_{1i}-Y_{0i}|D_i=1,\;X_i))=E(Y_{1i}-Y_{0i}|D_i=1).
 $$
 
+# SUTVA
+
+**Stable Unit Treatment Value Assumption**
+
+Assignment to Treatment to one unit cannot affect the potential outcomes of the other unit.
+
+In other words, **no spillovers**.
+
+An essential assumption for causal inference analyses.
+
 # @angrist1998
 
 * Matching
+
 For the simplicity, let us assume that $X_i$ is also binary (also,
 assume that there is at least one observation for each pair of
 $(D_i,\;X_i)$). Using the law of iterated expectation, the ATT can be
@@ -215,6 +242,7 @@ the earnings of nonveterans conditional on $X_i$. The weights
 among veterans.
 
 * Regression
+
 We can write down $Y_i$ as $$
 Y_i=\beta_0+\beta_1 X_i+ \beta_2 D_i+\epsilon_i.
 $$
@@ -224,19 +252,25 @@ Following @angrist1998, the regression coefficient $\beta_2$, is $$
 \frac{E(Y_{1i}-Y_{0i}|D_i=1,\;X_i=1) \times P(D_i=1|X_i=1)(1-P(D_i=1|X_i=1))P(X_i=1)}{E(P(D_i=1|X_i)(1-P(D_i=1|X_i)))}.
 $$
 
-# Simulation exercise (Simplified version of @angrist1998)
+# A note on simulations
+
+* A proper simulation normally relies on Monte Carlo method, that is, you repeat an experiment multiple times (say 100, 500, or 1000) with different random draws.
+
+* In this module, I use simulations as an illustrative tool. That being said, I am going to only do a single round of experiments.
+
+# Simulation exercise: motivated by @angrist1998
 
 Suppose we have 100 individuals. For each individual, we observe three variables: ``Actual" earning $y_i$, veteran status $D_i$, and test score group status $X_i$.
 
-+ Actual earning $Y_i$: Continuous and in dollars}
-+ Veteran status $D_i$: Binary, $D_i=1$ if an individual $i$ is a veteran and $D_i=0$ if an individual $i$ is a non-veteran.}
-+ Test score group status $X_i$: Binary, $X_i=1$ if an individual $i$ is in a high score group and $X_i=0$ if an individual $i$ is in a low score group.}
++ Actual earning $Y_i$: Continuous and in dollars
++ Veteran status $D_i$: Binary, $D_i=1$ if an individual $i$ is a veteran and $D_i=0$ if an individual $i$ is a non-veteran.
++ Test score group status $X_i$: Binary, $X_i=1$ if an individual $i$ is in a high score group and $X_i=0$ if an individual $i$ is in a low score group.
 
 If veteran status is randomly assigned across all 100 individuals, then we have unconditional independence. In such case, the causal effect of military service on earning is $E(Y_i|D_i=1)-E(Y_i|D_i=0)$.
 
 Now, suppose 50 individuals are in the high test score group and the other 50 individuals are in the low test score group. And the government decided to randomly enlist 30 individuals from the high test score group and 20 individuals from the low test score group. If the test score reflects one's ability to earn more, the observed difference, ignoring $X_i$, no longer provides a good measure on the causal effect.
 
-However, conditional on $X_i$, the assignment of veteran status is still random. Thus, we can use matching or regression estimates (Stata example).
+However, conditional on $X_i$, the assignment of veteran status is still random. Thus, we can use matching or regression estimates to estimate the treatment effects:
 
 ```{stata homogeneous, collectcode=TRUE}
 *Homogeneous impact across two groups
@@ -298,7 +332,118 @@ bys group: reg y treatment
 reg y treatment group
 ```
 
-#Propensity Scores
+# Propensity scores
+
+It is hard to apply (exact) matching estimator when you have many pre-determined covariates. Alternatively, we can use the propensity score:
+
+$$
+p(X_{1i}, ...., X_{ni})=Prob(D_i=1|X_{1i}, ...., X_{ni})
+$$
+
+where $X_{1i}, ...., X_{ni}$ are pre-treatment control variables and $D_i$ is a dummy variable for the treatment.
+
+**Propensity Score Theorem**
+
+If conditional independence holds for a set of covariates, $X_{1i}, ...., X_{ni}$, i.e., the potential outcomes are orthogonal to the treatment conditional on the covariates, then conditional independence holds for the propensity score, $p(X_{1i}, ...., X_{ni})$
+
+# How do we use propensity scores?
+
+Normally, we follow a two-step approach:
+
+1. Estimate the propensity score (e.g., logit or probit), which is the probability of the treatment
+2. Use the propensity score for matching or use as a weight for a weighting scheme.
+
+**Propensity score matching estimator**
+
+We can estimate the conditional ATT by:
+
+$$
+\hat{ATT}=\frac{1}{|N_T|}\sum_{i \in N_T}\left(Y_i-\frac{1}{|J_i|}\sum_{j \in J} Y_j\right)
+$$
+
+where $J_i$ is the set of comparison units that are matched to the treated unit $i$ using the propensity score (we can also estimate ATE -- we just need to estimate the average treatment effect on untreated (ATU) and take the average of the ATT and the ATE) and $N_T$ is the set that denotes the treated group.
+
+**Inverse probability weighting**
+
+The conditional ATT estimated by inverse probability weighting is:
+
+$$
+\hat{ATT}=\frac{1}{|N|}\sum_{i}\frac{(D_i-\hat{p}(X_{1i},...,X_{ni}))Y_i}{(1-\hat{p}(X_{1i},...,X_{ni}))\frac{|N_T|}{|N|}}
+$$
+
+where $\hat{p}$ is the estimated propensity score.
+
+```{stata psscore, collectcode=TRUE}
+*Sample size 100
+*Different weights between the two groups)
+clear 
+set obs 100
+set seed 1234
+gen x=rnormal()
+gen e=0.01*rnormal()
+egen no=rank(x)
+gen group=0
+replace group=1 if no<31
+
+bys group: egen new_no=rank(x)
+
+gen treatment=0
+replace treatment=1 if new_no<41 & group==0
+replace treatment=1 if new_no<11 & group==1
+
+gen y=0.5+0.4*group+0.5*treatment+e
+
+*psmatching (ATT)
+teffects psmatch (y) (treatment group), atet
+
+*inverse probability weighting (ATT)
+teffects ipw (y) (treatment group), atet
+```
+
+# Regression Discontinuity Design (RDD)
+
+There are many circumstances that the assignment of the treatment is based on some cutoff points. Consider the following data generating process:
+
+$$
+Y_i=\alpha+\rho D_{i}+\varepsilon_i
+$$
+
+where 
+
+$$
+\varepsilon_i=f(X_i)+u_i
+$$
+
+and
+
+$$
+D_i=
+\begin{cases}
+1\;if\;X_i>c \\
+0\;otherwise
+\end{cases}
+.
+$$
+
+If $X_i$ is continuous (particularly at $X_i=c$), we can estimate the average treatment effect at the cutoff:
+
+$$
+\rho=\lim_{x\downarrow c} E(Y_i | X_i=x) - \lim_{x\uparrow c} E(Y_i | X_i=x). 
+$$
+
+Nonparametric approaches (Kernel density estimation) or OLS estimation with (high-order) polynomials and interaction terms are often used. @lee2010regression is a good review article on RDD (See @filmer2011does or @pan2018agricultural for an example).
+
+# Some considerations on RDD
+
+* Sharp versus Fuzzy designs
+
+* Manipulation/anticipation
+
+* Property of "running variable" (the eligibility variable)
+
+* Need enough observations around the cutoff
+
+* Be careful with polynomials! See [this post](https://statmodeling.stat.columbia.edu/2013/08/05/evidence-on-the-impact/) and [this post](https://statmodeling.stat.columbia.edu/2019/06/25/another-regression-discontinuity-disaster-and/) by Andrew Gelman.
 
 # Next slides
 
