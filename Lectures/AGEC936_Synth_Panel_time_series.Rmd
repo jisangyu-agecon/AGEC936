@@ -1,7 +1,7 @@
 ---
-title: "AGEC 936 - Module 3"
-subtitle: "Synthetic Control Methods<br>Panel Time Series"
-author: "Jisang Yu<br>Kansas State University"
+title: "AGEC 936 - Module 1"
+author: "Jisang Yu <br> Kansas State University"
+subtitle: "Synthetic Control Methods"
 output:
  slidy_presentation:
    font_adjustment: -1
@@ -13,11 +13,6 @@ bibliography: references.bib
 knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 library(Statamarkdown)
 ```
-
-# This week
-* Previous week ([DID and TWFE](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_DD_FE_Synth.html))
-* Synthetic control methods
-* Some time-series considerations
 
 # When do DinD research designs work
 * Parallel trend assumption

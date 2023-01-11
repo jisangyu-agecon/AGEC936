@@ -68,9 +68,7 @@ minutes each).
 
 4.  Synthetic control
 
-5.  Panel IV/GMM
-
-6.  Shift-share design
+5.  Panel IV/GMM/Shift-share design (if time permits)
 
 *Any other causal inference-related topics you are interested in? (Let me know by coming Friday)*
 
@@ -88,6 +86,21 @@ minutes each).
 
 *These being said, you may will leave this module with more questions
 than answers after this module...*
+
+# A quick note: Model versus Estimator
+
+- (Econometric) Model: A specification on the relationships among the variables of interest. It can be characterized by a set of parameters and variables.
+  
+  + Examples: Linear, Logit, Probit, Gravity, ...
+
+- Estimator: A function that maps *sample* to a set of *estimates* (for corresponding parameters)
+
+  + Examples: OLS, MLE, GMM, ...
+  
+Phrases like *MLE model* does not make much sense. 
+
+Also, try to be explicit on the model and the estimator you use in your manuscript (instead of just stating *I use (a certain R/Stata package)*...)
+  
 
 # Causal inference: Introduction
 
@@ -138,7 +151,7 @@ $$
 $$
 E(Y_{i}|D_i=1)-E(Y_{i}|D_i=0) \\
 =E(Y_{0i}+(Y_{1i}-Y_{0i})|D_i=1)-E(Y_{0i}|D_i=0) \\
-=\left(E(Y_{1i}|D_i=1)-E(Y_{0i}|D_i=1)\right)+\left(E(Y_{0i}|D_i=1)-E(Y_{0i}|D_i=0)\right).
+=\underbrace{\left(E(Y_{1i}|D_i=1)-E(Y_{0i}|D_i=1)\right)}_{ATT}+\underbrace{\left(E(Y_{0i}|D_i=1)-E(Y_{0i}|D_i=0)\right)}_{\text{Selection Bias}}.
 $$
 
 We call the first term, $\left(E(Y_{1i}|D_i=1)-E(Y_{0i}|D_i=1)\right)$, the average treatment effect on the treated (ATT).
@@ -159,7 +172,7 @@ $$
 E(Y_{1i}|D_i=1)-E(Y_{0i}|D_i=1)
 $$
 
-**When ATT becomes ATE?**
+*When ATT becomes ATE?*
 
 # Regression representation
 
@@ -184,7 +197,7 @@ E(\hat{\rho})=E\left(\frac{\sum (D_i - \bar{D})\left(\rho (D_i-\bar{D})+\varepsi
 =\rho+\frac{Cov(\varepsilon_i,\;D_i)}{Var(D_i)}
 $$ *What is the selection bias term here?*
 
-# Conditional independence (@rosenbaum1983central)
+# Conditional independence (@dawid1979conditional)
 
 Let us denote an observable characteristic of individual $i$ as $X_i$.
 Now, what we observe is $$
@@ -342,7 +355,7 @@ $$
 
 where $X_{1i}, ...., X_{ni}$ are pre-treatment control variables and $D_i$ is a dummy variable for the treatment.
 
-**Propensity Score Theorem**
+**Propensity Score Theorem (@rosenbaum1983central)**
 
 If conditional independence holds for a set of covariates, $X_{1i}, ...., X_{ni}$, i.e., the potential outcomes are orthogonal to the treatment conditional on the covariates, then conditional independence holds for the propensity score, $p(X_{1i}, ...., X_{ni})$
 
@@ -431,7 +444,7 @@ $$
 \rho=\lim_{x\downarrow c} E(Y_i | X_i=x) - \lim_{x\uparrow c} E(Y_i | X_i=x). 
 $$
 
-Nonparametric approaches (Kernel density estimation) or OLS estimation with (high-order) polynomials and interaction terms are often used. @lee2010regression is a good review article on RDD (See @filmer2011does or @pan2018agricultural for an example).
+Nonparametric approaches (Kernel density estimation) or OLS estimation with (high-order) polynomials and interaction terms are often used. @lee2010regression is a good review article on RDD (See @filmer2011does or @pan2018agricultural for examples).
 
 # Some considerations on RDD
 

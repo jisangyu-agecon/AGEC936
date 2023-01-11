@@ -582,12 +582,13 @@ did_multiplegt(prf_data, "lnvalue", "fips", "t", "index", brep=50)
   + @callaway2020difference: **did** (R and Stata - see [here](https://github.com/NickCH-K/did))
   
 # Another agricultural economics example
-* [The effect of PRF availability on the Conservation Reserve Program enrollment](https://ambrook.com/research/the-conservation-reserve-program-is-competing-with-pasture-insurance-for-farmer-participation)
+* @yu2022competing
 
 ```{r, echo=FALSE, fig.align='center', out.width="70%"}
    knitr::include_graphics('./raw_att.png')
 ```
 
+* Also see the [blog post](https://ambrook.com/research/the-conservation-reserve-program-is-competing-with-pasture-insurance-for-farmer-participation)
 
 # Next week
 [Panel Time Series/Synthetic Control](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_Synth_Panel_time_series.html)

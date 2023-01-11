@@ -579,8 +579,7 @@ each).</p>
 <li><p>Panel data analysis</p></li>
 <li><p>Fixed effects and Difference-in-Differences</p></li>
 <li><p>Synthetic control</p></li>
-<li><p>Panel IV/GMM</p></li>
-<li><p>Shift-share design</p></li>
+<li><p>Panel IV/GMM/Shift-share design (if time permits)</p></li>
 </ol>
 <p><em>Any other causal inference-related topics you are interested in?
 (Let me know by coming Friday)</em></p>
@@ -598,6 +597,26 @@ you to the relevant literature.</p></li>
 </ul>
 <p><em>These being said, you may will leave this module with more
 questions than answers after this module…</em></p>
+</div>
+<div id="a-quick-note-model-versus-estimator" class="slide section level1">
+<h1>A quick note: Model versus Estimator</h1>
+<ul>
+<li><p>(Econometric) Model: A specification on the relationships among
+the variables of interest. It can be characterized by a set of
+parameters and variables.</p>
+<ul>
+<li>Examples: Linear, Logit, Probit, Gravity, …</li>
+</ul></li>
+<li><p>Estimator: A function that maps <em>sample</em> to a set of
+<em>estimates</em> (for corresponding parameters)</p>
+<ul>
+<li>Examples: OLS, MLE, GMM, …</li>
+</ul></li>
+</ul>
+<p>Phrases like <em>MLE model</em> does not make much sense.</p>
+<p>Also, try to be explicit on the model and the estimator you use in
+your manuscript (instead of just stating <em>I use (a certain R/Stata
+package)</em>…)</p>
 </div>
 <div id="causal-inference-introduction" class="slide section level1">
 <h1>Causal inference: Introduction</h1>
@@ -639,7 +658,8 @@ E(Y_{i}|D_i=1)-E(Y_{i}|D_i=0)
 <p><span class="math display">\[
 E(Y_{i}|D_i=1)-E(Y_{i}|D_i=0) \\
 =E(Y_{0i}+(Y_{1i}-Y_{0i})|D_i=1)-E(Y_{0i}|D_i=0) \\
-=\left(E(Y_{1i}|D_i=1)-E(Y_{0i}|D_i=1)\right)+\left(E(Y_{0i}|D_i=1)-E(Y_{0i}|D_i=0)\right).
+=\underbrace{\left(E(Y_{1i}|D_i=1)-E(Y_{0i}|D_i=1)\right)}_{ATT}+\underbrace{\left(E(Y_{0i}|D_i=1)-E(Y_{0i}|D_i=0)\right)}_{\text{Selection
+Bias}}.
 \]</span></p>
 <p>We call the first term, <span class="math inline">\(\left(E(Y_{1i}|D_i=1)-E(Y_{0i}|D_i=1)\right)\)</span>,
 the average treatment effect on the treated (ATT).</p>
@@ -655,7 +675,7 @@ E(Y_{1i}-Y_{0i})=E(Y_{1i})-E(Y_{0i}).
 <p>The ATT is <span class="math display">\[
 E(Y_{1i}|D_i=1)-E(Y_{0i}|D_i=1)
 \]</span></p>
-<p><strong>When ATT becomes ATE?</strong></p>
+<p><em>When ATT becomes ATE?</em></p>
 </div>
 <div id="regression-representation" class="slide section level1">
 <h1>Regression representation</h1>
@@ -681,9 +701,9 @@ E(\hat{\rho})=E\left(\frac{\sum (D_i - \bar{D})\left(\rho
 =\rho+\frac{Cov(\varepsilon_i,\;D_i)}{Var(D_i)}
 \]</span> <em>What is the selection bias term here?</em></p>
 </div>
-<div id="conditional-independence-rosenbaum1983central" class="slide section level1">
-<h1>Conditional independence (<span class="citation">Rosenbaum and Rubin
-(1983)</span>)</h1>
+<div id="conditional-independence-dawid1979conditional" class="slide section level1">
+<h1>Conditional independence (<span class="citation">Dawid
+(1979)</span>)</h1>
 <p>Let us denote an observable characteristic of individual <span class="math inline">\(i\)</span> as <span class="math inline">\(X_i\)</span>. Now, what we observe is <span class="math display">\[
 E(Y_i|D_i=1,\;X_i)-E(Y_i|D_i=0,\;X_i)= \\
 E(Y_{1i}|D_i=1,\;X_i)-E(Y_{0i}|D_i=0,\;X_i).
@@ -1007,7 +1027,8 @@ p(X_{1i}, ...., X_{ni})=Prob(D_i=1|X_{1i}, ...., X_{ni})
 <p>where <span class="math inline">\(X_{1i}, ...., X_{ni}\)</span> are
 pre-treatment control variables and <span class="math inline">\(D_i\)</span> is a dummy variable for the
 treatment.</p>
-<p><strong>Propensity Score Theorem</strong></p>
+<p><strong>Propensity Score Theorem (<span class="citation">Rosenbaum
+and Rubin (1983)</span>)</strong></p>
 <p>If conditional independence holds for a set of covariates, <span class="math inline">\(X_{1i}, ...., X_{ni}\)</span>, i.e., the potential
 outcomes are orthogonal to the treatment conditional on the covariates,
 then conditional independence holds for the propensity score, <span class="math inline">\(p(X_{1i}, ...., X_{ni})\)</span></p>
@@ -1148,7 +1169,7 @@ estimation with (high-order) polynomials and interaction terms are often
 used. <span class="citation">Lee and Lemieuxa (2010)</span> is a good
 review article on RDD (See <span class="citation">Filmer and Schady
 (2011)</span> or <span class="citation">Pan, Smith, and Sulaiman
-(2018)</span> for an example).</p>
+(2018)</span> for examples).</p>
 </div>
 <div id="some-considerations-on-rdd" class="slide section level1">
 <h1>Some considerations on RDD</h1>
@@ -1180,6 +1201,11 @@ Applicants.”</span> <em>Econometrica</em>, 249–88.
 Angrist, Joshua D, and Jörn-Steffen Pischke. 2008. <em>Mostly Harmless
 Econometrics: An Empiricist’s Companion</em>. Princeton university
 press.
+</div>
+<div id="ref-dawid1979conditional" class="csl-entry">
+Dawid, A Philip. 1979. <span>“Conditional Independence in Statistical
+Theory.”</span> <em>Journal of the Royal Statistical Society: Series B
+(Methodological)</em> 41 (1): 1–15.
 </div>
 <div id="ref-filmer2011does" class="csl-entry">
 Filmer, Deon, and Norbert Schady. 2011. <span>“Does More Cash in
