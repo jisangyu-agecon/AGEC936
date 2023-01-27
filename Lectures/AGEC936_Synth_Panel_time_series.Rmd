@@ -308,10 +308,11 @@ abline(v=1970,lty=3,col=1)
 lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
 ```
 
-# Some recent applications in agricultural/applied economics
+# Some recent applications in agricultural/environmental/applied economics
 * Immigration enforcement on agriculture (labor, crop production, and profitability): @luo2021stringent (replication data/code available at [the AJAE article website](https://onlinelibrary.wiley.com/doi/full/10.1111/ajae.12271))
 * Economic/health effects of the environmental or natural disaster: @guilfoos2018economic, @mohan2017economic, and @coffman2012hurricane
 * Impacts of trade or economic liberalization: @olper2018trade and @billmeier2013assessing
+* Impacts of carbon taxes on CO2 emissions: @andersson2019carbon
 
 # Things to consider [@abadie2021using]
 * See the latest review of @abadie2021using

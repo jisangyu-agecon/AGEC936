@@ -590,6 +590,35 @@ did_multiplegt(prf_data, "lnvalue", "fips", "t", "index", brep=50)
 
 * Also see the [blog post](https://ambrook.com/research/the-conservation-reserve-program-is-competing-with-pasture-insurance-for-farmer-participation)
 
+# Continuous (or non-binary) treatment (@callaway2021difference)
+* Define the parameter of interest
+  + Dose-response function/ATT of dose $d$
+  $$
+  ATT(d|D=d)=E(y_t(d)-y_t(0)|D=d)
+  $$
+  + Average Causal Response (ACR) a la @angrist1995two
+  $$
+  ACR=\frac{\partial ATE(d)}{\partial d}
+  $$
+  where $$ATE(d)=E(y_t(d)-y_t(0))$$
+  
+* Stronger parallel trends assumptions needed
+  $$
+  E(y_t(d)-y_{t-1}(0))=E(y_t(d)-y_{t-1}(0)|D=d) \text{ for all } d \in D
+  $$
+
+* Regression approach via TWFE can be misleading even with the stronger parallel trends assumptions are met. (not as severe as the staggered DID case)
+
+* More readings on this:
+  + [Summary blog post by Callaway](https://bcallaway11.github.io/posts/five-minute-did-continuous-treatment)
+  
+  + Fuzzy DID: @de2018fuzzy
+  
+  + Linear panel/exposure variations: @sun2022linear
+  
+  + General cases for Continuous treatment/DID: @callaway2021difference and @de2022difference
+
+
 # Next week
 [Panel Time Series/Synthetic Control](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_Synth_Panel_time_series.html)
 
