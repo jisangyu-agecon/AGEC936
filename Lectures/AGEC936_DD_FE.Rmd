@@ -47,7 +47,7 @@ $$
 $$
 E(y_{i}|d_i=1)-E(y_{i}|d_i=0) \\
 =E(y_i(0)+(y_i(1)-y_i(0))|d_i=1)-E(y_i(0)|d_i=0) \\
-=\left({E(y_i(1)|d_i=1)-E(y_i(0)|d_i=1)\right)+\left(E(y_i(0)|d_i=1)-E(y_i(0)|d_i=0)\right).
+=(E(y_i(1)|d_i=1)-E(y_i(0)|d_i=1))+(E(y_i(0)|d_i=1)-E(y_i(0)|d_i=0)).
 $$
 If the **Bias** term is non-zero, what should we do?
 
