@@ -361,7 +361,7 @@ plot %>%
 
 * Can we still use TWFE?: Several recent papers show when and how TWFE can fail
   + @de2020two
-  + @goodman2021difference (or [Mixtape's version of this](https://mixtape.scunning.com/difference-in-differences.html?panelset=r-code&panelset1=r-code2#twoway-fixed-effects-with-differential-timing))
+  + @goodman2021difference (or [Mixtape's version of this](https://mixtape.scunning.com/09-difference_in_differences#twoway-fixed-effects-with-differential-timing))
   + [Guide by Callaway and Sant'Anna](https://bcallaway11.github.io/did/articles/multi-period-did.html)
   + @borusyak2017revisiting
   + @sun2020estimating
@@ -415,6 +415,8 @@ $$
 w_{i2}=\frac{\epsilon_{2}}{\frac{\sum_{i:d_{i2}=1}\epsilon_{2}}{\sum_i d_{i2}}}=1
 $$
 TWFE works!
+
+* Also, see @sperlich2015modeling. We can approach the gap between TWFE and DID as a model misspecification problem.
 
 # @de2020two $DID_M$ estimator
 * **The intuition**: Use the weighted average of i) "treatment effects" in groups who switch-in from $d_{it-1}=0$ to $d_{it}=1$ and ii) "treatment effects" in groups who switch-out from $d_{it-1}=1$ to $d_{it}=0$. For i), the benchmark group is $d_{it-1}=d_{it}=0$ and for ii), the benchmark group is $d_{it-1}=d_{it}=1$. 
