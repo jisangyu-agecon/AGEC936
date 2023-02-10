@@ -1,6 +1,6 @@
 ---
 title: "AGEC 936 - Module 3"
-subtitle: "Panel IV/GMM<br>Shift-share Design"
+subtitle: "IV/GMM/Shift-share Design"
 author: "Jisang Yu<br>Kansas State University"
 output:
  slidy_presentation:
@@ -16,10 +16,102 @@ library(Statamarkdown)
 
 # This week
 * ([Panel Time Series/Synthetic Control](https://jisangyu-agecon.github.io/AGEC936/Lectures/AGEC936_Synth_Panel_time_series.html))
-* Revisiting IV in the context of Panel FE set-up
+* Brief overview of Instrumental Variables
+* IV in the context of Panel FE set-up
 * Panel IV example 1: Bartik/Shift-share IV
-* Guest lecture
 * Panel IV example 2: Pre-event trends
+
+# Instrumental Variable
+* The "identification" problem
+```{r dagendo, fig.align='center', out.width="50%"}
+library(dagitty)
+library(ggdag)
+dag <- dagitty('dag{
+                d [pos="0,1"]
+                u [pos="1,0"]
+                y [pos="2,1"]
+                d <- u -> y
+                d -> y
+               }')
+ggdag(dag, layout = "circle") +
+  theme_dag()
+```
+
+* Solution: Instrumental Variable approach
+```{r dagiv, fig.align='center', out.width="50%"}
+library(dagitty)
+library(ggdag)
+
+dag <- dagitty('dag{
+                d [pos="1,1"]
+                u [pos="2,0"]
+                y [pos="3,1"]
+                z [pos="0,1"]
+                d <- u -> y
+                d -> y
+                z -> d
+               }')
+ggdag(dag, layout = "circle") +
+  theme_dag()
+```
+
+# Basic structure and two key assumptions
+$$
+\begin{align}
+y_{i}=\alpha+\rho d_{i}+\epsilon_{i}
+\end{align}
+$$
+$$
+\begin{align}
+d_{i}=\beta+\pi z_{i}+\varepsilon_{i}
+\end{align}
+$$
+
+* The (2SLS) instrumental variable estimator is
+
+$$
+\begin{align}
+\hat{\rho}_{iv}=\frac{\sum (z_i - \bar{z})(y_i-\bar{y})}{\sum (z_i-\bar{z})(d_i - \bar{d})} 
+\end{align}
+$$
+
+\noindent We can show that $$\text{plim} {\rho}_{iv}=\rho$$.
+
+* Key assumptions
+
+  + The instrument only affects the outcome through the regressor (exclusion restriction): $$E(z_i \epsilon_i)=0$$
+  + The instrument is correlated with the regressor (relevance/strength of the instrument): $$Cov(z_i,d_i)\neq 0$$
+
+
+# Exclusion Restriction
+
+* It is very difficult to ensure the exclusion restriction. 
+
+* Is the randomness in $z$ enough? 
+
+* Can we test for the exclusion restriction assumption?
+
+* Exclusion restriction tests when you have many instruments AND at least some valid instruments: See the literature on Mendelian randomization (see @kang2016instrumental, @windmeijer2019use, @goh2022causal).
+
+# Weak Instruments
+
+Recall that the (2SLS) instrumental variable estimator is
+
+$$
+\begin{align}
+\hat{\rho}_{iv}=\frac{\sum (z_i - \bar{z})(y_i-\bar{y})}{\sum (z_i-\bar{z})(d_i - \bar{d})} 
+\end{align}
+$$
+
+* As $Cov(z_i,d_i)$ becomes zero,$\hat{\rho}_{iv}$ is undefined. Why?
+
+* Can we test for the presence of weak IV? Yes, we can test the null of the coefficients of instruments jointly equal to zero in the first-stage regression. Large F-statistics indicate strong instruments.
+
+* The rule-of-thumb threshold of 10: Recent studies (see @lee2022valid) argue that we need a stronger F-statistics.
+
+* Error structures matter for the reliability of first-stage F-statistics based tests - Need for robust tests: See @olea2013robust.
+
+# Heterogeneous Effects and Local Average Treatment Effect
 
 # Revisiting IV in the context of Panel FE set-up
 * Revisiting the identifying assumptions for Panel FE estimator
