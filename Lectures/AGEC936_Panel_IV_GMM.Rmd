@@ -75,7 +75,10 @@ $$
 \end{align}
 $$
 
-\noindent We can show that $$\text{plim} {\rho}_{iv}=\rho$$.
+\noindent We can show that 
+$$\text{plim} {\rho}_{iv}=\rho.$$
+
+* Similar results for GMM (Efficiency differs based on the error structure).
 
 * Key assumptions
 
@@ -112,6 +115,17 @@ $$
 * Error structures matter for the reliability of first-stage F-statistics based tests - Need for robust tests: See @olea2013robust.
 
 # Heterogeneous Effects and Local Average Treatment Effect
+
+* IV (2SLS/GMM) gives a reliable estimate on the ATE when effects are homogeneous.
+
+* What if the treatment effect is heterogeneous? 
+
+  + IV estimate is interpreted as Local Average Treatment Effect (LATE): But it requires monotonicity (e.g., $d_i(z_i=1)>d_i(z_i=0)$)
+  + Why is this "Local"?: Identification is based on the subset of the sample.
+  + See @angrist1996identification on IV and LATE.
+  + See @blandhol2022tsls on 2SLS and LATE with covariates
+  
+* Identification vs External Validity
 
 # Revisiting IV in the context of Panel FE set-up
 * Revisiting the identifying assumptions for Panel FE estimator
