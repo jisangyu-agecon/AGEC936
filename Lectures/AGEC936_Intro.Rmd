@@ -44,8 +44,8 @@ library(Statamarkdown)
     Choose an empirical paper that utilizes a causal analysis. Choose
     from major economics or agricultural economics journals or NBER
     working papers (limit the time period to post-2010). Please submit
-    the citation of the paper of your choice by **30**$^{th}$ of
-    January. Your referee report is due **17**$^{th}$ of February. Your
+    the citation of the paper of your choice by **9**$^{th}$ of
+    Feb. Your referee report is due **28**$^{th}$ of Feb. Your
     referee report should contain
 
     -   A brief summary of the paper (0.5 page)
@@ -55,8 +55,7 @@ library(Statamarkdown)
     -   Discuss possible alternative approaches (1 page)
     -   Conclude with the lessons you learned (1 page)
 
-Presentations will be held on **15th** and **17th** of **February** (15
-minutes each).
+Presentation date: TBD  (15 minutes each).
 
 # Introduction: What we will cover
 
