@@ -1,5 +1,5 @@
 ---
-title: "AGEC 936 - Module 3"
+title: "AGEC 936 - Module 2"
 subtitle: "IV/GMM/Shift-share Design"
 author: "Jisang Yu<br>Kansas State University"
 output:

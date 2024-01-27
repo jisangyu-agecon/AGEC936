@@ -1,5 +1,5 @@
 ---
-title: "AGEC 936 - Module 1"
+title: "AGEC 936 - Module 2"
 author: "Jisang Yu <br> Kansas State University"
 subtitle: Introduction of Causal Inference
 output:
