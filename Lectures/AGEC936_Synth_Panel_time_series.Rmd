@@ -311,7 +311,7 @@ lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
 # Some recent applications in agricultural/environmental/applied economics
 * Immigration enforcement on agriculture (labor, crop production, and profitability): @luo2021stringent (replication data/code available at [the AJAE article website](https://onlinelibrary.wiley.com/doi/full/10.1111/ajae.12271))
 * Economic/health effects of the environmental or natural disaster: @guilfoos2018economic, @mohan2017economic, and @coffman2012hurricane
-* Impacts of trade or economic liberalization: @olper2018trade and @billmeier2013assessing
+* Impacts of trade or economic liberalization: Ijaz and Yu (forthcoming, JAAEA), @olper2018trade, and @billmeier2013assessing
 * Impacts of carbon taxes on CO2 emissions: @andersson2019carbon
 
 # Things to consider [@abadie2021using]
@@ -338,6 +338,17 @@ lines(Year,hat.Y.1t.scm1,col=4,lwd=2,lty=1)
   + Bayesian approaches: e.g. @goh2022synthetic and @amjad2018robust
 * Extension to disaggregated data: @ben2021synthetic, @abadie2021penalized, and @arkhangelsky2021
 
+# Synthetic Difference-in-Differences (@arkhangelsky2021)
+* Basic ideas
+  + Obtain unit weights (denoted as $\omega$) by solving similar optimization problem as the synthetic control method.
+  + Obtain time weights (denoted as $\lambda$) -- similar to the unit weights but the goal is to create ``synthetic post".
+  + Estimate the weighted DID regression (weighted TWFE)
+
+* Advantage: Arguably more robust compared to SC or DID
+
+* Inference: Jackknife, Bootstrap, or Placebo
+
+* Implementation: See [Github link](https://github.com/synth-inference/synthdid/)
 
 # Some time-series considerations in Panel data setting
 * Panel unit root test
