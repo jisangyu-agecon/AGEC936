@@ -497,7 +497,7 @@ xi: xtivreg2 y d (x=d_lead1) i.year, fe cluster(id)
 
 # What else...?
 * Survey: [Click here](https://kstate.qualtrics.com/jfe/form/SV_0cXZVbMH9TBeOTI)
-* Questions?
+* Questions/comments?
 
 # References
 
