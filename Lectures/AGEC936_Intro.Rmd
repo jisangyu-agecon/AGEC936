@@ -1,5 +1,5 @@
 ---
-title: "AGEC 936 - Module 2"
+title: "AGEC 936 - Module 1"
 author: "Jisang Yu <br> Kansas State University"
 subtitle: Introduction of Causal Inference
 output:
@@ -38,24 +38,7 @@ library(Statamarkdown)
 
 # Introduction: Assignments
 
--   Problem set (most likely one)
-
--   Referee report (5 page max) and Presentation (Group assignment):
-    Choose an empirical paper that utilizes a causal analysis. Choose
-    from major economics or agricultural economics journals or NBER
-    working papers (limit the time period to post-2010). Please submit
-    the citation of the paper of your choice by **9**$^{th}$ of
-    Feb. Your referee report is due **28**$^{th}$ of Feb. Your
-    referee report should contain
-
-    -   A brief summary of the paper (0.5 page)
-    -   Describe the main empirical specification and the identification
-        strategy of the paper (1 -- 1.5 page)
-    -   Your criticism on the identification strategy (1 page)
-    -   Discuss possible alternative approaches (1 page)
-    -   Conclude with the lessons you learned (1 page)
-
-Presentation date: TBD  (15 minutes each).
+-   Problem set 1
 
 # Introduction: What we will cover
 

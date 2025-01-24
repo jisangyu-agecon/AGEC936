@@ -1,5 +1,5 @@
 ---
-title: "AGEC 936 - Module 2"
+title: "AGEC 936 - Module 1"
 author: "Jisang Yu<br>Kansas State University"
 subtitle: "Difference-in-Differences (DID)<br>Two-way Fixed Effects (TWFE)"
 output:

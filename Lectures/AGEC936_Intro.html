@@ -8,7 +8,7 @@
   <meta name="author" content="Jisang Yu   Kansas State University" />
   <meta name="copyright" content="AGEC 936 - Jisang Yu" />
   <meta name="font-size-adjustment" content="-1" />
-  <title>AGEC 936 - Module 2</title>
+  <title>AGEC 936 - Module 1</title>
   <style type="text/css">
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -523,7 +523,7 @@ list-style-type: none;
 </head>
 <body>
 <div class="slide titlepage">
-  <h1 class="title">AGEC 936 - Module 2</h1>
+  <h1 class="title">AGEC 936 - Module 1</h1>
   <h1 class="subtitle">Introduction of Causal Inference</h1>
   <p class="author">
 Jisang Yu <br> Kansas State University
@@ -551,24 +551,8 @@ An empiricist’s companion. Princeton university press.</li>
 <div id="introduction-assignments" class="slide section level1">
 <h1>Introduction: Assignments</h1>
 <ul>
-<li><p>Problem set (most likely one)</p></li>
-<li><p>Referee report (5 page max) and Presentation (Group assignment):
-Choose an empirical paper that utilizes a causal analysis. Choose from
-major economics or agricultural economics journals or NBER working
-papers (limit the time period to post-2010). Please submit the citation
-of the paper of your choice by <strong>9</strong><span class="math inline">\(^{th}\)</span> of Feb. Your referee report is due
-<strong>28</strong><span class="math inline">\(^{th}\)</span> of
-Feb. Your referee report should contain</p>
-<ul>
-<li>A brief summary of the paper (0.5 page)</li>
-<li>Describe the main empirical specification and the identification
-strategy of the paper (1 – 1.5 page)</li>
-<li>Your criticism on the identification strategy (1 page)</li>
-<li>Discuss possible alternative approaches (1 page)</li>
-<li>Conclude with the lessons you learned (1 page)</li>
-</ul></li>
+<li>Problem set 1</li>
 </ul>
-<p>Presentation date: TBD (15 minutes each).</p>
 </div>
 <div id="introduction-what-we-will-cover" class="slide section level1">
 <h1>Introduction: What we will cover</h1>
@@ -802,35 +786,35 @@ measure on the causal effect.</p>
 <p>However, conditional on <span class="math inline">\(X_i\)</span>, the
 assignment of veteran status is still random. Thus, we can use matching
 or regression estimates to estimate the treatment effects:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>*Homogeneous impact across <span class="kw">two</span> groups</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>*Sample <span class="kw">size</span> 100</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>*Same weights <span class="kw">for</span> the <span class="kw">two</span> groups</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">clear</span> </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 100</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 1234</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">k</span>=rnormal()</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">e</span>=0.01*rnormal()</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">egen</span> no=<span class="fu">rank</span>(<span class="kw">k</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">group</span>=0</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> <span class="fu">group</span>=1 <span class="kw">if</span> no&lt;51</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">bys</span> <span class="fu">group</span>: <span class="kw">egen</span> new_no=<span class="fu">rank</span>(<span class="kw">k</span>)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> treatment=0</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> treatment=1 <span class="kw">if</span> new_no&lt;41 &amp; <span class="fu">group</span>==0</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> treatment=1 <span class="kw">if</span> new_no&lt;11 &amp; <span class="fu">group</span>==1</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>=0.5+0.4*<span class="fu">group</span>+0.5*treatment+<span class="fu">e</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="kw">keep</span> <span class="fu">y</span> <span class="fu">group</span> treatment</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> treatment</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>*matching</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="kw">bys</span> <span class="fu">group</span>: <span class="kw">reg</span> <span class="fu">y</span> treatment</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>*regression</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> treatment <span class="fu">group</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>*Homogeneous impact across <span class="kw">two</span> groups</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>*Sample <span class="kw">size</span> 100</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>*Same weights <span class="kw">for</span> the <span class="kw">two</span> groups</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="kw">clear</span> </span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 100</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 1234</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">k</span>=rnormal()</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">e</span>=0.01*rnormal()</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="kw">egen</span> no=<span class="fu">rank</span>(<span class="kw">k</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">group</span>=0</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="kw">replace</span> <span class="fu">group</span>=1 <span class="kw">if</span> no&lt;51</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="kw">bys</span> <span class="fu">group</span>: <span class="kw">egen</span> new_no=<span class="fu">rank</span>(<span class="kw">k</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="kw">gen</span> treatment=0</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="kw">replace</span> treatment=1 <span class="kw">if</span> new_no&lt;41 &amp; <span class="fu">group</span>==0</span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="kw">replace</span> treatment=1 <span class="kw">if</span> new_no&lt;11 &amp; <span class="fu">group</span>==1</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>=0.5+0.4*<span class="fu">group</span>+0.5*treatment+<span class="fu">e</span></span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a><span class="kw">keep</span> <span class="fu">y</span> <span class="fu">group</span> treatment</span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> treatment</span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a>*matching</span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a><span class="kw">bys</span> <span class="fu">group</span>: <span class="kw">reg</span> <span class="fu">y</span> treatment</span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>*regression</span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> treatment <span class="fu">group</span></span></code></pre></div>
 <pre><code>Number of observations (_N) was 0, now 100.
 
 
@@ -861,7 +845,7 @@ or regression estimates to estimate the treatment effects:</p>
 ------------------------------------------------------------------------------
 
 
----------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
 -&gt; group = 0
 
       Source |       SS           df       MS      Number of obs   =        50
@@ -878,7 +862,7 @@ or regression estimates to estimate the treatment effects:</p>
        _cons |   .4996683    .003033   164.74   0.000       .49357    .5057665
 ------------------------------------------------------------------------------
 
----------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
 -&gt; group = 1
 
       Source |       SS           df       MS      Number of obs   =        50
@@ -909,32 +893,32 @@ or regression estimates to estimate the treatment effects:</p>
        group |   .4014979   .0025028   160.42   0.000     .3965305    .4064654
        _cons |   .5002614   .0024523   204.00   0.000     .4953943    .5051284
 ------------------------------------------------------------------------------</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>*Sample <span class="kw">size</span> 100</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>*Different weights between the <span class="kw">two</span> groups)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">clear</span> </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 100</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 1234</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> x=rnormal()</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">e</span>=0.01*rnormal()</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">egen</span> no=<span class="fu">rank</span>(x)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">group</span>=0</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> <span class="fu">group</span>=1 <span class="kw">if</span> no&lt;31</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">bys</span> <span class="fu">group</span>: <span class="kw">egen</span> new_no=<span class="fu">rank</span>(x)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> treatment=0</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> treatment=1 <span class="kw">if</span> new_no&lt;41 &amp; <span class="fu">group</span>==0</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> treatment=1 <span class="kw">if</span> new_no&lt;11 &amp; <span class="fu">group</span>==1</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>=0.5+0.4*<span class="fu">group</span>+0.5*treatment+<span class="fu">e</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> treatment</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>*matching</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="kw">bys</span> <span class="fu">group</span>: <span class="kw">reg</span> <span class="fu">y</span> treatment</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>*regression</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> treatment <span class="fu">group</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>*Sample <span class="kw">size</span> 100</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>*Different weights between the <span class="kw">two</span> groups)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="kw">clear</span> </span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 100</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 1234</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="kw">gen</span> x=rnormal()</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">e</span>=0.01*rnormal()</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="kw">egen</span> no=<span class="fu">rank</span>(x)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">group</span>=0</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="kw">replace</span> <span class="fu">group</span>=1 <span class="kw">if</span> no&lt;31</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="kw">bys</span> <span class="fu">group</span>: <span class="kw">egen</span> new_no=<span class="fu">rank</span>(x)</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="kw">gen</span> treatment=0</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="kw">replace</span> treatment=1 <span class="kw">if</span> new_no&lt;41 &amp; <span class="fu">group</span>==0</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="kw">replace</span> treatment=1 <span class="kw">if</span> new_no&lt;11 &amp; <span class="fu">group</span>==1</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>=0.5+0.4*<span class="fu">group</span>+0.5*treatment+<span class="fu">e</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> treatment</span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>*matching</span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="kw">bys</span> <span class="fu">group</span>: <span class="kw">reg</span> <span class="fu">y</span> treatment</span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>*regression</span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> treatment <span class="fu">group</span></span></code></pre></div>
 <pre><code>Number of observations (_N) was 0, now 100.
 
 
@@ -965,7 +949,7 @@ or regression estimates to estimate the treatment effects:</p>
 ------------------------------------------------------------------------------
 
 
----------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
 -&gt; group = 0
 
       Source |       SS           df       MS      Number of obs   =        70
@@ -982,7 +966,7 @@ or regression estimates to estimate the treatment effects:</p>
        _cons |   .4960149   .0017664   280.81   0.000     .4924901    .4995397
 ------------------------------------------------------------------------------
 
----------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
 -&gt; group = 1
 
       Source |       SS           df       MS      Number of obs   =        30
@@ -1059,30 +1043,30 @@ is:</p>
 \]</span></p>
 <p>where <span class="math inline">\(\hat{p}\)</span> is the estimated
 propensity score.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>*Sample <span class="kw">size</span> 100</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>*Different weights between the <span class="kw">two</span> groups)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">clear</span> </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 100</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 1234</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> x=rnormal()</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">e</span>=0.01*rnormal()</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="kw">egen</span> no=<span class="fu">rank</span>(x)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">group</span>=0</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> <span class="fu">group</span>=1 <span class="kw">if</span> no&lt;31</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="kw">bys</span> <span class="fu">group</span>: <span class="kw">egen</span> new_no=<span class="fu">rank</span>(x)</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> treatment=0</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> treatment=1 <span class="kw">if</span> new_no&lt;41 &amp; <span class="fu">group</span>==0</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> treatment=1 <span class="kw">if</span> new_no&lt;11 &amp; <span class="fu">group</span>==1</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>=0.5+0.4*<span class="fu">group</span>+0.5*treatment+<span class="fu">e</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>*psmatching (ATT)</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>teffects psmatch (<span class="fu">y</span>) (treatment <span class="fu">group</span>), atet</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>*inverse probability weighting (ATT)</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>teffects ipw (<span class="fu">y</span>) (treatment <span class="fu">group</span>), atet</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>*Sample <span class="kw">size</span> 100</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>*Different weights between the <span class="kw">two</span> groups)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="kw">clear</span> </span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 100</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 1234</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="kw">gen</span> x=rnormal()</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">e</span>=0.01*rnormal()</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="kw">egen</span> no=<span class="fu">rank</span>(x)</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">group</span>=0</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="kw">replace</span> <span class="fu">group</span>=1 <span class="kw">if</span> no&lt;31</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="kw">bys</span> <span class="fu">group</span>: <span class="kw">egen</span> new_no=<span class="fu">rank</span>(x)</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="kw">gen</span> treatment=0</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="kw">replace</span> treatment=1 <span class="kw">if</span> new_no&lt;41 &amp; <span class="fu">group</span>==0</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="kw">replace</span> treatment=1 <span class="kw">if</span> new_no&lt;11 &amp; <span class="fu">group</span>==1</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>=0.5+0.4*<span class="fu">group</span>+0.5*treatment+<span class="fu">e</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>*psmatching (ATT)</span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>teffects psmatch (<span class="fu">y</span>) (treatment <span class="fu">group</span>), atet</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>*inverse probability weighting (ATT)</span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a>teffects ipw (<span class="fu">y</span>) (treatment <span class="fu">group</span>), atet</span></code></pre></div>
 <pre><code>Number of observations (_N) was 0, now 100.
 
 
@@ -1114,8 +1098,8 @@ ATET         |
 ------------------------------------------------------------------------------
 
 
-Iteration 0:   EE criterion =  6.896e-20  
-Iteration 1:   EE criterion =  3.618e-32  
+Iteration 0:  EE criterion =  6.896e-20  
+Iteration 1:  EE criterion =  3.618e-32  
 
 Treatment-effects estimation                    Number of obs     =        100
 Estimator      : inverse-probability weights
