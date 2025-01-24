@@ -38,7 +38,7 @@ library(Statamarkdown)
 
 # Introduction: Assignments
 
--   Problem set 1
+-   Problem set 1: Due 02/28/2025
 
 # Introduction: What we will cover
 
