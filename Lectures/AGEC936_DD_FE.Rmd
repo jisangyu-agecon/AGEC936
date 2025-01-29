@@ -475,7 +475,7 @@ xtset id t
 xtreg y d i.t, fe
 
 *de Chaisematin & DHaultfoeuille DID estimator
-did_multiplegt y id t d, breps(100)
+did_multiplegt_old y id t d, breps(100)
 ```
 
 # @callaway2020difference: Group-time average treatment effect
@@ -517,11 +517,10 @@ $$
   3. The data span from 2009 to 2012 ($T=4$) and the first year counties have the PRF product available differs.
   4. All counties are "treated" in 2013 and later.
   
-* Let's apply @callaway2020difference and @de2020two
+* Let's apply @callaway2020difference
   
 ```{r prf_example}
 library(did)
-library(DIDmultiplegt)
 library(tidyverse)
 library(foreign)
 library(plm)
@@ -567,9 +566,6 @@ agg.es <- aggte(prf_attgt, type = "dynamic")
 summary(agg.es)
 # plot
 ggdid(agg.es)
-
-# de Chaisemartin and DHautfoeuille DID_M
-did_multiplegt(prf_data, "lnvalue", "fips", "t", "index", brep=50)
 ```
 
 # A couple of notes on @de2020two vs @callaway2020difference
